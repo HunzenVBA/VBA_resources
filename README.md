@@ -1,2 +1,3 @@
 # VBA_resources
-Collection of genral VBA code
+Collection of general VBA code
+
