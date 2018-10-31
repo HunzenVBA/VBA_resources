@@ -4,7 +4,7 @@ Sub test()
 'WB öffnen, letzte Zeile beschreiben, nochmal neue letzte Zeile beschreiben, speichern
 Application.DisplayAlerts = False
 
-'Dim lastWrittenRow As Integer
+Dim lastWrittenRow As Long
 Dim newWkb As Workbook
 Set newWkb = Workbooks.Open("C:\Users\Apr17\Documents\VBA\SavedWB.xlsm")
 
