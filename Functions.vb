@@ -137,3 +137,32 @@ Function WriteZeitstempelToControlSheet()
         Set r = ControlSheet.Range("A3", ControlSheet.Range("A3").Offset(Dimension1 - 1, Dimension2 - 1))
         r.Value = collZeitstempel
 End Function
+
+Option Explicit
+
+Sub FindMinInCellRange()
+
+    Dim rngSearch As Range
+    Dim Zelle As Range
+    Dim arrRange As Variant
+    Dim collSearch As Collection
+    Dim i As Long
+    Dim j As Long
+    Dim counter As Long
+    
+    Set collSearch = New Collection
+    Set rngSearch = ActiveSheet.Range("C1:D" & fLastWrittenRow(ActiveSheet, 4))
+    
+    arrRange = rngSearch.Value2
+    counter = 0
+    j = 2
+    For i = 1 To UBound(arrRange, 1)
+        If arrRange(i, 1) = "Prep" Then
+            counter = counter + 1
+            collSearch.Add (arrRange(i, 2))  'Alle Zeitwerte übernehmen bei denen Funktion = Prep ist
+        End If
+    Next i
+    
+    Debug.Print Application.Min(CollectionToArray(collSearch))
+ 
+End Sub
