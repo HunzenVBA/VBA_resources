@@ -138,8 +138,6 @@ Function WriteZeitstempelToControlSheet()
         r.Value = collZeitstempel
 End Function
 
-Option Explicit
-
 Sub FindMinInCellRange()
 
     Dim rngSearch As Range
