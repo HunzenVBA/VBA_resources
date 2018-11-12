@@ -12,17 +12,25 @@ Public ZeitstempelWS2               As String
 Public ZeitstempelWS3               As String
 Public ZeitstempelWS4               As String
 
-'Directories
-'work
-Public Const strYardFile As String = "C:\Users\denizku\Documents\Inbound\Unprocessed\mail511218\Brueckenuebersicht.xlsm"
-Public Const strUnprocessedFile As String = "C:\Users\denizku\Documents\Inbound\Unprocessed\mail511218\Unprocessed Unitbasis.xlsm"
-Public Const strDMdata As String = "\\ant\dept-eu\DTM2\DTM2-Inbound\extern\Flowmanagement\Daten\DM-data.xlsx"
-Public Const strDMdataSicherung As String = "\\ant\dept-eu\DTM2\DTM2-Inbound\extern\Flowmanagement\Daten\DM-data_Sicherung.xlsx"
-Public Const strDockmasterFile As String = "\\ant\dept-eu\DTM2\DTM2-Inbound\extern\#New Volume Count\Dockmaster.xlsm"
+''Directories
+''work
+'Public Const strYardFile As String = "C:\Users\Apr17\Documents\VBA\unprocessedbrckenbersicht\Brueckenuebersicht_Dummy _neu.xlsm"
+'Public Const strUnprocessedFile As String = "C:\Users\Apr17\Documents\VBA\unprocessedbrckenbersicht\Unprocessed Unitbasis - Kopie _neu.xlsm"
+'Public Const strDMdata As String = "C:\Users\Apr17\Documents\VBA\unprocessedbrckenbersicht\DM-data.xlsx"
+'Public Const strDMdataSicherung As String = "C:\Users\Apr17\Documents\VBA\unprocessedbrckenbersicht\DM-data_Sicherung.xlsx"
+'Public Const strDockmasterFile As String = "C:\Users\Apr17\Documents\VBA\unprocessedbrckenbersicht\Dockmaster.xlsm"
+'
+''work
+'Public Const strYardFile As String = "C:\Users\denizku\Documents\Inbound\Unprocessed\mail 01112018\Brueckenuebersicht_Dummy _neu.xlsm"
+'Public Const strUnprocessedFile As String = "C:\Users\denizku\Documents\Inbound\Unprocessed\mail 01112018\Unprocessed Unitbasis - Kopie _neu.xlsm"
+'Public Const strDMdata As String = "\\ant\dept-eu\DTM2\DTM2-Inbound\extern\Flowmanagement\Daten\DM-data.xlsx"
+'Public Const strDMdataSicherung As String = "\\ant\dept-eu\DTM2\DTM2-Inbound\extern\Flowmanagement\Daten\DM-data_Sicherung.xlsx"
+'Public Const strDockmasterFile As String = "\\ant\dept-eu\DTM2\DTM2-Inbound\extern\#New Volume Count\Dockmaster.xlsm"
 
 'home2
-Public Const strYardFile As String = "C:\Users\Apr17\Documents\VBA\unprocessed2\Brueckenuebersicht.xlsm"
-Public Const strUnprocessedFile As String = "C:\Users\Apr17\Documents\VBA\unprocessed2\Unprocessed Unitbasis.xlsm"
-Public Const strDMdata As String = "C:\Users\Apr17\Documents\VBA\unprocessed2\DM-data.xlsx"
-Public Const strDMdataSicherung As String = "C:\Users\Apr17\Documents\VBA\unprocessed2\DM-data_Sicherung.xlsx"
-Public Const strDockmasterFile As String = "C:\Users\Apr17\Documents\VBA\unprocessed2\Dockmaster.xlsm"
+Public Const strYardFile As String = "C:\Users\Apr17\Documents\VBA\Inbound\SwapFiles\Brueckenuebersicht.xlsm"
+Public Const strUnprocessedFile As String = "C:\Users\Apr17\Documents\VBA\Inbound\SwapFiles\Unprocessed Unitbasis.xlsm"
+Public Const strDMdata As String = "C:\Users\Apr17\Documents\VBA\Inbound\SwapFiles\DM-data.xlsx"
+Public Const strDMdataSicherung As String = "C:\Users\Apr17\Documents\VBA\Inbound\SwapFiles\DM-data_Sicherung.xlsx"
+Public Const strDockmasterFile As String = "C:\Users\Apr17\Documents\VBA\Inbound\SwapFiles\Dockmaster.xlsm"
+Public Const strYardFileName as string = "Brueckenuebersicht"
