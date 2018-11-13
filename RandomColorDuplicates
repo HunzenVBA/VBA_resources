@@ -1,0 +1,28 @@
+Sub RndColorDupe(ws As Worksheet, col As Integer)
+    Dim lLastRow As Long
+    Dim lRow As Long
+    Dim rRange As Range
+    Dim strName As String
+    Dim lColor As Long
+    Dim Dict As Object
+    Dim ws As Worksheet
+    
+    Set Dict = CreateObject("Scripting.Dictionary")
+     
+    lLastRow = ws.Cells(Rows.Count, col).End(xlUp)(2, 1).Row
+    Set rRange = Range("P1:P" & lLastRow - 1)
+     
+    With WorksheetFunction
+        For lRow = 2 To lLastRow
+            strName = Cells(lRow, col)
+            If .CountIf(rRange, strName) > 1 Then
+            
+                If Not Dict.exists(strName) Then
+                    lColor = Int((56 * Rnd) + 1)
+                    Dict.Add strName, lColor
+                End If
+                ws.Cells(lRow, col).Interior.ColorIndex = Dict.Item(strName)
+                 
+            End If
+        Next lRow
+    End With
