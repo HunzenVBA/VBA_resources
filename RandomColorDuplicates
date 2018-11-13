@@ -1,16 +1,17 @@
-Sub RndColorDupe(ws As Worksheet, col As Integer)
+Sub RndColorDupeWS2(ws As Worksheet, col As Integer)
+
     Dim lLastRow As Long
     Dim lRow As Long
     Dim rRange As Range
     Dim strName As String
     Dim lColor As Long
     Dim Dict As Object
-    Dim ws As Worksheet
+
     
     Set Dict = CreateObject("Scripting.Dictionary")
      
     lLastRow = ws.Cells(Rows.Count, col).End(xlUp)(2, 1).Row
-    Set rRange = Range("P1:P" & lLastRow - 1)
+    Set rRange = Range("H1:H" & lLastRow - 1)
      
     With WorksheetFunction
         For lRow = 2 To lLastRow
@@ -26,3 +27,4 @@ Sub RndColorDupe(ws As Worksheet, col As Integer)
             End If
         Next lRow
     End With
+End Sub
