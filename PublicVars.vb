@@ -3,14 +3,25 @@ Option Explicit
 Public time                         As Date
 Public StartTimerVar                As Date
 Public EndTimerVar                  As Date
-Public ws                           As Worksheet
 Public qt                           As QueryTable
 'Public Zeitstempel As String
-Public i                            As Integer
 Public ZeitstempelWS1               As String
 Public ZeitstempelWS2               As String
 Public ZeitstempelWS3               As String
 Public ZeitstempelWS4               As String
+Public ws                           As Worksheet
+Public ws1                          As Worksheet
+Public ws2                          As Worksheet
+Public ws3                          As Worksheet
+Public ws4                          As Worksheet
+Public ws5                          As Worksheet
+Public ws6                          As Worksheet
+Public ws7                          As Worksheet
+Public qT                           As QueryTable
+Public qts                          As QueryTables
+Public StartTime                    As Double
+Public SecondsElapsed               As Double
+Public currProcedureName            As String
 
 ''Directories
 ''work
