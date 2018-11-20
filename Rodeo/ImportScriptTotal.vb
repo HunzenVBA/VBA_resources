@@ -82,8 +82,10 @@ Sub RodeoAddQueryTotal()
     importWS.Cells(lastrow + 2, 1).Value = URL
     importWS.Cells(lastrow + 3, 1).Value = Format(Now, "DD.MM.YYYY HH:MM") 'Zeitstempel Werte eintragen
 
-    counter = Format(Now, "DDMM_HHSS")
+'    Call fDeleteAllQueries
+    counter = Format(Now, "DDMM_HHmm")
     importWS.Name = "RodeoTotal" & counter
+    ImportWbk.Save
 '    Determine how many seconds code took to run
 '************************************************************
     SecondsElapsed = Round(Timer - StartTime, 1)
