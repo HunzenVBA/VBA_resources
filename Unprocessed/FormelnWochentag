@@ -1,0 +1,7 @@
+=WENN(WOCHENTAG(HEUTE())>=5;WENN(E2<=HEUTE()-4;1;0);WENN(E2<=HEUTE()-3;1;0))
+
+
+=WENN(WOCHENTAG(HEUTE())>=5;WENN(E849<=HEUTE()-3;1;0);WENN(E849<=HEUTE()-4;1;0))
+
+Tag um 1 noch weiter reduziert. Jetzt solllte es gehen
+=WENN(WOCHENTAG(HEUTE())>=5;WENN(D3<=HEUTE()-2;1;0);WENN(D3<=HEUTE()-3;1;0))
