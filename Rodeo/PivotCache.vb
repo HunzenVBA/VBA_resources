@@ -14,8 +14,6 @@ Dim pT As PivotTable
 
     Debug.Print ThisWorkbook.PivotCaches.Count
     Debug.Print pC.MemoryUsed, pC.RecordCount, pC.Version
-
-
 End Sub
 
 Sub AddPTandPivotCache()
@@ -23,7 +21,6 @@ Sub AddPTandPivotCache()
 Dim ws As Worksheet
 Dim pC As PivotCache
 Dim pT As PivotTable
-
 
     Set pC = ThisWorkbook.PivotCaches.Create( _
     SourceType:=xlDatabase, _
@@ -35,12 +32,8 @@ Dim pT As PivotTable
     TableDestination:=ActiveCell, _
     TableName:= "ImportPivot2")
 
-
-
     Debug.Print ThisWorkbook.PivotCaches.Count
     Debug.Print pC.MemoryUsed, pC.RecordCount, pC.Version
-
-
 End Sub
 
 Sub CreatePTUsingExistingPivotCache()
