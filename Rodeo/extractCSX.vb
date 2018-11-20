@@ -12,27 +12,47 @@ Sub CopycsxAndTimestamp()
     Dim counter As String
     Dim csxWbk As Workbook
 
-    Dim csxData As Range
-    Dim OuterScannableData As Range
-    Dim OuterContainerData As Range
-    Dim WorkpoolData As Range
+    Dim csxData As Variant
+    Dim OuterScannableData As Variant
+    Dim OuterContainerData As Variant
+    Dim WorkpoolData As Variant
+
+    'check if files are open
+    If IsWorkBookOpen(strcsxStampsFile) Then
+    Workbooks(strcsxStampsFileName).Close
+    If IsWorkBookOpen(strRodeoHistoryFile) Then
+    Workbooks(strRodeoHistoryFile).Close
+
+    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
+    Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
 
 
-    Set ImportWbk = Workbooks.Open(Filename:=strRodeoHistoryFile, UpdateLinks:=False)
-    Set csxWbk = Workbooks.Open(Filename:=strcsxStampsFile, UpdateLinks:=False)
+'
+'    For Each importWS In ImportWbk.Worksheets
+'        ImportWbk.Activate
+'        Debug.Print importWS.Name
+'        Debug.Print ImportWbk.Name
+'        Debug.Print csxWbk.Name
+'        lastrow = fLastWrittenRow(importWS, 1)
+'        Debug.Print lastrow
+'        importWS.Range("Z3").Value2 = "Hello"
+'    Next importWS
+'
 
     For Each importWS In ImportWbk.Worksheets
         timeStampscsx = Right(importWS.Name, 9)
         lastrow = fLastWrittenRow(importWS, 1)
 
-        Set csxData = ImportWbk.importWS.Range("I1:I" & lastrow)
-        Set OuterScannableData = ImportWbk.importWS.Range("")
-        Set OuterContainerData = ImportWbk.importWS.Range("")
-        Set WorkpoolData = ImportWbk.importWS.Range("")
+        csxData = importWS.Range("I1:I" & lastrow).Value2
+        OuterScannableData = importWS.Range("J1:J" & lastrow).Value2
+        OuterContainerData = importWS.Range("K1:K" & lastrow).Value2
+        WorkpoolData = importWS.Range("O1:O" & lastrow).Value2
 
-        For currentrow = 2 To lastrow
-                importWS.Range("I1:I" & lastrow).Copy
-        Next currentrow
+        csxWbk.Worksheets(1).Range("A1:A" & lastrow).Value2 = csxData
+        csxWbk.Worksheets(1).Range("B1:B" & lastrow).Value2 = OuterScannableData
+        csxWbk.Worksheets(1).Range("C1:C" & lastrow).Value2 = OuterContainerData
+        csxWbk.Worksheets(1).Range("D1:D" & lastrow).Value2 = WorkpoolData
+
     Next importWS
 
 
