@@ -22,35 +22,19 @@ Sub CopycsxAndTimestamp()
     Set csxWbk = Workbooks(strcsxStampsFileName)
     On Error GoTo 0
 
-'    If ImportWbk Then
-'        ImportWbk.Close SaveChanges:=False
-'    End If
-'    If csxWbk Then
-'        csxWbk.Close SaveChanges:=False
-'    End If
-
-    If IsWorkBookOpen(strcsxStampsFile) Then
-    Workbooks(strcsxStampsFileName).Close
+    If ImportWbk Is Nothing Then
+        Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
+    Else
+        ImportWbk.Close SaveChanges:=False
     End If
-    If IsWorkBookOpen(strRodeoHistoryFile) Then
-    Workbooks(strRodeoHistoryFile).Close
+    If csxWbk Is Nothing Then
+        Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
+    Else
+        csxWbk.Close SaveChanges:=False
     End If
 
-    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
-
-
-'
-'    For Each importWS In ImportWbk.Worksheets
-'        ImportWbk.Activate
-'        Debug.Print importWS.Name
-'        Debug.Print ImportWbk.Name
-'        Debug.Print csxWbk.Name
-'        lastrow = fLastWrittenRow(importWS, 1)
-'        Debug.Print lastrow
-'        importWS.Range("Z3").Value2 = "Hello"
-'    Next importWS
-'
+    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
 
     For Each importWS In ImportWbk.Worksheets
         For counter = 1 To ImportWbk.Worksheets.Count
