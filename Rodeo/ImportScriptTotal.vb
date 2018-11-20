@@ -12,6 +12,8 @@ Sub RodeoAddQueryTotal()
     Dim DelRange As Range
     Dim URL As String
     Dim qtRodeoTotal As QueryTable
+    Dim ImportWbk As Workbook
+    Dim counter As String
 
 '    Call NameWorksheets
     'Namensausgabe des Subs im Direktfenster, zur Info/Debugging
@@ -19,7 +21,11 @@ Sub RodeoAddQueryTotal()
     Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
     Debug.Print Now
     'assign importWS = Importsheet
-    Set importWS = ThisWorkbook.Worksheets("RodeoTotal")
+
+    Set ImportWbk = Workbooks.Open(Filename:=strRodeoHistoryFile, UpdateLinks:=False)
+    ImportWbk.Worksheets.Add
+    Set importWS = ActiveSheet
+'    Set importWS = ThisWorkbook.Worksheets("RodeoTotal")
     'Initialize error handling
         On Error GoTo Whoa
     'Remember time when macro starts
@@ -76,6 +82,8 @@ Sub RodeoAddQueryTotal()
     importWS.Cells(lastrow + 2, 1).Value = URL
     importWS.Cells(lastrow + 3, 1).Value = Format(Now, "DD.MM.YYYY HH:MM") 'Zeitstempel Werte eintragen
 
+    counter = Format(Now, "DDMM_HHSS")
+    importWS.Name = "RodeoTotal" & counter
 '    Determine how many seconds code took to run
 '************************************************************
     SecondsElapsed = Round(Timer - StartTime, 1)
