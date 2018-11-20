@@ -1,6 +1,11 @@
 Option Explicit
 
-Public Const strRodeoHistoryFile As String = "C:\Users\denizku\Documents\Rodeo\RodeoImportHistory.xlsx"
+'Public Const strRodeoHistoryFile As String = "C:\Users\denizku\Documents\Rodeo\RodeoImportHistory.xlsx"
+'Public Const strcsxStampsFile As String = "C:\Users\denizku\Documents\Rodeo\csxStamps.xlsx"
+
+'Home'
+Public Const strRodeoHistoryFile As String = "C:\Users\Apr17\Documents\VBA\Rodeo\RodeoImportHistory.xlsx"
+Public Const strcsxStampsFile As String = "C:\Users\Apr17\Documents\VBA\Rodeo\csxStamps.xlsx"
 
 
 
