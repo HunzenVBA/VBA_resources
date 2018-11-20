@@ -14,7 +14,10 @@ Dim pT As PivotTable
 
     Debug.Print ThisWorkbook.PivotCaches.Count
     Debug.Print pC.MemoryUsed, pC.RecordCount, pC.Version
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4f177e21d73ac7efdd137d6df5b0939160e6eda5
 End Sub
 
 Sub AddPTandPivotCache()
@@ -35,7 +38,10 @@ Dim pT As PivotTable
 
     Debug.Print ThisWorkbook.PivotCaches.Count
     Debug.Print pC.MemoryUsed, pC.RecordCount, pC.Version
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4f177e21d73ac7efdd137d6df5b0939160e6eda5
 End Sub
 
 Sub CreatePTUsingExistingPivotCache()
