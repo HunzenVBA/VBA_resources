@@ -10,7 +10,6 @@
             Debug.Print Item
 '            Debug.Print newDictionary.Items funktioniert nicht
          Next Item
-         
-         
-        
 
+
+        
