@@ -97,11 +97,11 @@ Sub CopycsxAndTimestamp()
                     csxDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
                 End If
             Next uniqueRow
-        csxWbk.Worksheets(FilteredUnique).Range("A1:A" & counter).Value2 = app.Transpose(csxDataFiltered)
-        csxWbk.Worksheets(FilteredUnique).Range("B1:B" & counter).Value2 = app.Transpose(OuterScannableDataFiltered)
-        csxWbk.Worksheets(FilteredUnique).Range("C1:C" & counter).Value2 = app.Transpose(OuterContainerDataFiltered)
-        csxWbk.Worksheets(FilteredUnique).Range("D1:D" & counter).Value2 = app.Transpose(WorkpoolDataFiltered)
-        csxWbk.Worksheets(FilteredUnique).Range("e1:e" & counter).Value2 = timeStampscsx
+
+            With csxDict
+                csxWbk.Worksheets("FilteredUnique").Cells(2, 1).Resize(.Count, 1) = Application.Transpose(.Keys)
+                csxWbk.Worksheets("FilteredUnique").Cells(2, 2).Resize(.Count, 1) = Application.Transpose(.Items)
+            End With
 
         Erase csxDataFiltered
         Erase OuterScannableDataFiltered
