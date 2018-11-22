@@ -8,6 +8,7 @@ Sub CopycsxAndTimestamp()
     Dim lrow As Long
     Dim dataSetWorkpool As String
     Dim dataSetcsx As String
+    Dim wscounter As Integer
 
 
     Dim ImportWbk As Workbook
@@ -74,11 +75,11 @@ Sub CopycsxAndTimestamp()
         ReDim OuterScannableDataFiltered(1 To 1, 1 To 1)
         ReDim OuterContainerDataFiltered(1 To 1, 1 To 1)
         ReDim WorkpoolDataFiltered(1 To 1, 1 To 1)
-            For counter = 1 To ImportWbk.Worksheets.Count
+            For counter = 1 To lastrow
                     'watch-variables
                     dataSetWorkpool = WorkpoolData(counter, 1)
                     dataSetcsx = csxData(counter, 1)
-                If WorkpoolData(counter, 1) <> "Palletized" Or WorkpoolData(counter, 1) <> "Loaded" Or WorkpoolData(counter, 1) <> "TransshipSorted" Then
+                If WorkpoolData(counter, 1) <> "Palletized" And WorkpoolData(counter, 1) <> "Loaded" And WorkpoolData(counter, 1) <> "TransshipSorted" Then
                     'Resize arrays by value=counter on each hit of conditions
                     ReDim Preserve csxDataFiltered(1 To 1, 1 To counter)
                     ReDim Preserve OuterScannableDataFiltered(1 To 1, 1 To counter)
@@ -92,7 +93,7 @@ Sub CopycsxAndTimestamp()
                     OuterContainerDataFiltered(1, counter) = OuterContainerData(counter, 1)
                     WorkpoolDataFiltered(1, counter) = WorkpoolData(counter, 1)
                 End If
-            Next counter
+            Next wscounter
         csxWbk.Worksheets(4).Range("A1:A" & counter).Value2 = app.Transpose(csxDataFiltered)
         csxWbk.Worksheets(4).Range("B1:B" & counter).Value2 = app.Transpose(OuterScannableDataFiltered)
         csxWbk.Worksheets(4).Range("C1:C" & lastrow).Value2 = app.Transpose(OuterContainerDataFiltered)
