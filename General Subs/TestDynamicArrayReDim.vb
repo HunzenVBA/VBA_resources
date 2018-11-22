@@ -4,7 +4,6 @@ Dim counter As Long
 ReDim testarray(1 To 5)
 
 For counter = 1 To 10
-
     ReDim Preserve testarray(1 To counter)
     testarray(counter) = counter
 Next counter
