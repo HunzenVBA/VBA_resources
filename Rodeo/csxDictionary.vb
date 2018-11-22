@@ -2,90 +2,111 @@ Option Explicit
 
 Sub CopycsxAndTimestamp()
 
-Application.ScreenUpdating = False
     Dim importWS As Worksheet
     Dim lastrow As Long
     Dim currentrow As Long
+    Dim lrow As Long
+    Dim dataSetWorkpool As String
+    Dim dataSetcsx As String
+    Dim uniqueRow As Long
+
 
     Dim ImportWbk As Workbook
     Dim counter As Long
     Dim csxWbk As Workbook
 
-    Dim csxData As Variant
-    Dim OuterScannableData As Variant
-    Dim OuterContainerData As Variant
-    Dim WorkpoolData As Variant
+    Dim slice
+    Dim app As Application
+
+'    Dim csxData(1 To 1) As Variant
+'    Dim csxDataFiltered(1 To 1) As Variant
+'    Dim OuterScannableData(1 To 1) As Variant
+'    Dim OuterScannableDataFiltered(1 To 1) As Variant
+'    Dim OuterContainerData(1 To 1) As Variant
+'    Dim WorkpoolData(1 To 1) As Variant
+    Dim testarray As Variant
     Dim timeStampscsx As Variant
-
-    Dim lRow As Long
-    Dim lCol As Long
-
     Dim csxDict As Dictionary
 
     Set csxDict = New Dictionary
+
+
 '    'check if files are open
-    On Error Resume Next
-    Set ImportWbk = Workbooks(strRodeoHistoryFileName)
-    Set csxWbk = Workbooks(strcsxStampsFileName)
-    On Error GoTo 0
+'    On Error Resume Next
+'    Set ImportWbk = Workbooks(strRodeoHistoryFileName)
+'    Set csxWbk = Workbooks(strcsxStampsFileName)
+'    On Error GoTo 0
 
-    If ImportWbk Is Nothing Then
-        Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
-    Else
-        ImportWbk.Close SaveChanges:=False
-    End If
-    If csxWbk Is Nothing Then
-        Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
-    Else
-        csxWbk.Close SaveChanges:=False
-    End If
+'    If ImportWbk Is Nothing Then
+'        Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
+'    Else
+'        ImportWbk.Close SaveChanges:=False
+'    End If
+'    If csxWbk Is Nothing Then
+'        Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
+'    Else
+'        csxWbk.Close SaveChanges:=False
+'    End If
 
-    Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
+'    Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
+    Set app = Application
     Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
-
+    Set ImportWbk = Workbooks(strRodeoHistoryFileName)
     For Each importWS In ImportWbk.Worksheets
-            timeStampscsx = Right(importWS.Name, 9)
-            lastrow = fLastWrittenRow(importWS, 1)
+        timeStampscsx = Right(importWS.Name, 9)
+        lastrow = fLastWrittenRow(importWS, 1)
 
-            csxData = importWS.Range("I1:I" & lastrow).Value2
-            OuterScannableData = importWS.Range("J1:J" & lastrow).Value2
-            OuterContainerData = importWS.Range("K1:K" & lastrow).Value2
-            WorkpoolData = importWS.Range("O1:O" & lastrow).Value2
+        ReDim csxData(1 To lastrow, 1)
+        ReDim csxDataFiltered(1 To lastrow, 1)
+        ReDim OuterScannableData(1 To lastrow, 1)
+        ReDim OuterScannableDataFiltered(1 To lastrow, 1)
+        ReDim OuterContainerData(1 To lastrow, 1)
+        ReDim WorkpoolData(1 To lastrow, 1)
+        'Fill arrays with values'
+        csxData = importWS.Range("I1:I" & lastrow).Value2
+        OuterScannableData = importWS.Range("J1:J" & lastrow).Value2
+        OuterContainerData = importWS.Range("K1:K" & lastrow).Value2
+        WorkpoolData = importWS.Range("O1:O" & lastrow).Value2
 
-'            importWS.Range("A1:A" & lastrow).Value2 = csxData
-'            csxWbk.Worksheets(counter).Range("B1:B" & lastrow).Value2 = OuterScannableData
-'            csxWbk.Worksheets(counter).Range("C1:C" & lastrow).Value2 = OuterContainerData
-'            csxWbk.Worksheets(counter).Range("D1:D" & lastrow).Value2 = WorkpoolData
-'            csxWbk.Worksheets(counter).Range("e1:e" & lastrow).Value2 = timeStampscsx
+        ReDim csxDataFiltered(1 To 1, 1 To 1)
+        ReDim OuterScannableDataFiltered(1 To 1, 1 To 1)
+        ReDim OuterContainerDataFiltered(1 To 1, 1 To 1)
+        ReDim WorkpoolDataFiltered(1 To 1, 1 To 1)
+            For lrow = 1 To lastrow
+                    'watch-variables
+                    dataSetWorkpool = WorkpoolData(lrow, 1)
+                    dataSetcsx = csxData(lrow, 1)
+                If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" And WorkpoolData(lrow, 1) <> "TransshipSorted" Then
+                    'Resize arrays by value=counter on each hit of conditions
+                    counter = counter + 1
+                    ReDim Preserve csxDataFiltered(1 To 1, 1 To counter)
+                    ReDim Preserve OuterScannableDataFiltered(1 To 1, 1 To counter)
+                    ReDim Preserve OuterContainerDataFiltered(1 To 1, 1 To counter)
+                    ReDim Preserve WorkpoolDataFiltered(1 To 1, 1 To counter)
 
-            'If csx doesnt exist in range, then add to dict
-            For lRow = LBound(csxData, 1) To UBound(csxData, 1)
-                If Not csxDict.Exists(csxData(lRow, 1)) Then
-                    Debug.Print csxData(lRow, 1) & "  " & timeStampscsx
-                    csxDict.Add csxData(lRow, 1), OuterScannableData(lRow, 1)
+                    'Fill new row of array with value on hit conditions
+                    csxDataFiltered(1, counter) = csxData(lrow, 1)
+                    OuterScannableDataFiltered(1, counter) = OuterScannableData(lrow, 1)
+                    OuterContainerDataFiltered(1, counter) = OuterContainerData(lrow, 1)
+                    WorkpoolDataFiltered(1, counter) = WorkpoolData(lrow, 1)
                 End If
-            Next lRow
+            Next lrow
 
-            Debug.Print "Dictionary unique csx count: " & csxDict.Count
+            For uniqueRow = LBound(csxDataFiltered, 2) To UBound(csxDataFiltered, 2)
+                If Not csxDict.Exists(csxDataFiltered(1, uniqueRow)) Then
+                    csxDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
+                End If
+            Next uniqueRow
+        csxWbk.Worksheets(FilteredUnique).Range("A1:A" & counter).Value2 = app.Transpose(csxDataFiltered)
+        csxWbk.Worksheets(FilteredUnique).Range("B1:B" & counter).Value2 = app.Transpose(OuterScannableDataFiltered)
+        csxWbk.Worksheets(FilteredUnique).Range("C1:C" & counter).Value2 = app.Transpose(OuterContainerDataFiltered)
+        csxWbk.Worksheets(FilteredUnique).Range("D1:D" & counter).Value2 = app.Transpose(WorkpoolDataFiltered)
+        csxWbk.Worksheets(FilteredUnique).Range("e1:e" & counter).Value2 = timeStampscsx
 
-            Erase csxData
-            Erase OuterScannableData
-            Erase OuterContainerData
-            Erase WorkpoolData
+        Erase csxDataFiltered
+        Erase OuterScannableDataFiltered
+        Erase OuterContainerDataFiltered
+        Erase WorkpoolDataFiltered
 '            Erase timeStampscsx
     Next importWS
-
-'
-'    For lastrow = 0 To csxDict.Count - 1
-'        csxWbk.Worksheets(1).Range("A" & (lastrow)) = csxDict.Keys(lastrow)
-'        csxWbk.Worksheets(1).Range("B" & (lastrow)) = csxDict.Items(lastrow)
-'    Next lastrow
-
-    With csxDict
-        csxWbk.Worksheets(2).Cells(1, 1).Resize(.Count, 1) = Application.Transpose(.Keys)
-        csxWbk.Worksheets(2).Cells(1, 2).Resize(.Count, 1) = Application.Transpose(.Items)
-    End With
-
-
-
 End Sub

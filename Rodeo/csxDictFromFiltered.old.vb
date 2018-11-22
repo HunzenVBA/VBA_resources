@@ -66,19 +66,14 @@ Application.ScreenUpdating = False
 
             'If csx doesnt exist in range, then add to dict
             For lRow = LBound(csxData, 1) To UBound(csxData, 1)
-
                 If Not csxDict.Exists(csxData(lRow, 1)) Then
                     arDataset = csxData(lRow, 1)
-
                     Debug.Print csxData(lRow, 1) & "  " & timeStampscsx
                     csxDict.Add csxData(lRow, 1), OuterScannableData(lRow, 1)
-
                     dicDataset = csxDict(csxData(lRow, 1))
-
                 Else
                 End If
             Next lRow
-
 
             Debug.Print "Dictionary unique csx count: " & csxDict.Count
 
