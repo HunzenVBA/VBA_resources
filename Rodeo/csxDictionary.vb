@@ -73,6 +73,7 @@ Sub CopycsxAndTimestamp()
         WorkpoolData = importWS.Range("O1:O" & lastrow).Value2
 
         ReDim csxDataFiltered(1 To 1, 1 To 1)
+        ReDim csxDataUniqe(1 To 1, 1 To 1)
         ReDim OuterScannableDataFiltered(1 To 1, 1 To 1)
         ReDim OuterContainerDataFiltered(1 To 1, 1 To 1)
         ReDim WorkpoolDataFiltered(1 To 1, 1 To 1)
@@ -105,12 +106,14 @@ Sub CopycsxAndTimestamp()
                   Debug.Print dataSetcsx
                     csxDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
                     ReDim Preserve OuterContainerDataUnique(1 To 1, counter)
+'                    ReDim Preserve csxDataUniqe(1 To 1, counter)
                     OuterContainerDataUnique(1, counter) = OuterContainerData(uniqueRow, 1)
-                    csxDataUniqe(1, counter) = csxDataFiltered(1, uniqueRow)
+'                    csxDataUniqe(1, counter) = csxDataFiltered(1, uniqueRow)
                 End If
             Next uniqueRow
 
             With csxDict
+                csxWbk.Worksheets("FilteredUnique").Cells.Clear
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 1).Resize(.Count, 1) = Application.Transpose(.Keys)
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 2).Resize(.Count, 1) = Application.Transpose(.Items)
             End With
