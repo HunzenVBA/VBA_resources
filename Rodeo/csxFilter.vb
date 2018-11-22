@@ -5,18 +5,27 @@ Sub CopycsxAndTimestamp()
     Dim importWS As Worksheet
     Dim lastrow As Long
     Dim currentrow As Long
+    Dim lrow As Long
+    Dim dataSetWorkpool As String
+    Dim dataSetcsx As String
+
 
     Dim ImportWbk As Workbook
     Dim counter As Integer
     Dim csxWbk As Workbook
 
-    Dim csxData As Variant
-    Dim csxDataFiltered As Variant
-    Dim OuterScannableData As Variant
-    Dim OuterScannableDataFiltered As Variant
-    Dim OuterContainerData As Variant
-    Dim WorkpoolData As Variant
+    Dim slice
+    Dim app As Application
+
+'    Dim csxData(1 To 1) As Variant
+'    Dim csxDataFiltered(1 To 1) As Variant
+'    Dim OuterScannableData(1 To 1) As Variant
+'    Dim OuterScannableDataFiltered(1 To 1) As Variant
+'    Dim OuterContainerData(1 To 1) As Variant
+'    Dim WorkpoolData(1 To 1) As Variant
+    Dim testarray As Variant
     Dim timeStampscsx As Variant
+
 
 '    'check if files are open
 '    On Error Resume Next
@@ -36,42 +45,64 @@ Sub CopycsxAndTimestamp()
 '    End If
 
 '    Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
+    Set app = Application
+
     Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
 
     Set ImportWbk = Workbooks(strRodeoHistoryFileName)
 
     For Each importWS In ImportWbk.Worksheets
-        For counter = 1 To ImportWbk.Worksheets.Count
-            timeStampscsx = Right(importWS.Name, 9)
-            lastrow = fLastWrittenRow(importWS, 1)
 
-            csxData = importWS.Range("I1:I" & lastrow).Value2
-            OuterScannableData = importWS.Range("J1:J" & lastrow).Value2
-            OuterContainerData = importWS.Range("K1:K" & lastrow).Value2
-            WorkpoolData = importWS.Range("O1:O" & lastrow).Value2
-            csxDataFiltered = csxData
-            OuterScannableDataFiltered = OuterScannableData
+        timeStampscsx = Right(importWS.Name, 9)
+        lastrow = fLastWrittenRow(importWS, 1)
 
-            ReDim csxDataFiltered(0)
-            ReDim OuterScannableDataFiltered(0)
+        ReDim csxData(1 To lastrow, 1)
+        ReDim csxDataFiltered(1 To lastrow, 1)
+        ReDim OuterScannableData(1 To lastrow, 1)
+        ReDim OuterScannableDataFiltered(1 To lastrow, 1)
+        ReDim OuterContainerData(1 To lastrow, 1)
+        ReDim WorkpoolData(1 To lastrow, 1)
 
-        If WorkpoolData(counter, 1) <> "Palletized" Or WorkpoolData(counter, 1) <> "Loaded" Or WorkpoolData(counter, 1) <> "TransshipSorted" Then
-            ReDim Preserve csxDataFiltered(0 To counter)
-            ReDim Preserve OuterScannableDataFiltered(0 To counter)
-            csxDataFiltered(counter) = csxData(counter)
-            OuterScannableDataFiltered(counter) = OuterScannableData(counter)
-        End If
-            csxWbk.Worksheets(counter).Range("A1:A" & lastrow).Value2 = csxDataFiltered
-            csxWbk.Worksheets(counter).Range("B1:B" & lastrow).Value2 = OuterScannableDataFiltered
-            csxWbk.Worksheets(counter).Range("C1:C" & lastrow).Value2 = OuterContainerData
-            csxWbk.Worksheets(counter).Range("D1:D" & lastrow).Value2 = WorkpoolData
-            csxWbk.Worksheets(counter).Range("e1:e" & lastrow).Value2 = timeStampscsx
 
-            Erase csxData
-            Erase OuterScannableData
-            Erase OuterContainerData
-            Erase WorkpoolData
+        csxData = importWS.Range("I1:I" & lastrow).Value2
+        OuterScannableData = importWS.Range("J1:J" & lastrow).Value2
+        OuterContainerData = importWS.Range("K1:K" & lastrow).Value2
+        WorkpoolData = importWS.Range("O1:O" & lastrow).Value2
+
+
+        ReDim csxDataFiltered(1 To 1, 1 To 1)
+        ReDim OuterScannableDataFiltered(1 To 1, 1 To 1)
+        ReDim OuterContainerDataFiltered(1 To 1, 1 To 1)
+        ReDim WorkpoolDataFiltered(1 To 1, 1 To 1)
+            For counter = 1 To ImportWbk.Worksheets.Count
+                    'watch-variables
+                    dataSetWorkpool = WorkpoolData(counter, 1)
+                    dataSetcsx = csxData(counter, 1)
+                If WorkpoolData(counter, 1) <> "Palletized" Or WorkpoolData(counter, 1) <> "Loaded" Or WorkpoolData(counter, 1) <> "TransshipSorted" Then
+                    'Resize arrays by value=counter on each hit of conditions
+                    ReDim Preserve csxDataFiltered(1 To 1, 1 To counter)
+                    ReDim Preserve OuterScannableDataFiltered(1 To 1, 1 To counter)
+                    ReDim Preserve OuterContainerDataFiltered(1 To 1, 1 To counter)
+                    ReDim Preserve WorkpoolDataFiltered(1 To 1, 1 To counter)
+                    
+                    'Fill new row of array with value on hit conditions
+
+                    csxDataFiltered(1, counter) = csxData(counter, 1)
+                    OuterScannableDataFiltered(1, counter) = OuterScannableData(counter, 1)
+                    OuterContainerDataFiltered(1, counter) = OuterContainerData(counter, 1)
+                    WorkpoolDataFiltered(1, counter) = WorkpoolData(counter, 1)
+                End If
+            Next counter
+        csxWbk.Worksheets(4).Range("A1:A" & counter).Value2 = app.Transpose(csxDataFiltered)
+        csxWbk.Worksheets(4).Range("B1:B" & counter).Value2 = app.Transpose(OuterScannableDataFiltered)
+        csxWbk.Worksheets(4).Range("C1:C" & lastrow).Value2 = app.Transpose(OuterContainerDataFiltered)
+        csxWbk.Worksheets(4).Range("D1:D" & lastrow).Value2 = app.Transpose(WorkpoolDataFiltered)
+        csxWbk.Worksheets(4).Range("e1:e" & lastrow).Value2 = timeStampscsx
+
+        Erase csxDataFiltered
+        Erase OuterScannableDataFiltered
+        Erase OuterContainerDataFiltered
+        Erase WorkpoolDataFiltered
 '            Erase timeStampscsx
-        Next counter
     Next importWS
 End Sub
