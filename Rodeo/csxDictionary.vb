@@ -8,6 +8,8 @@ Sub CopycsxAndTimestamp()
     Dim lrow As Long
     Dim dataSetWorkpool As String
     Dim dataSetcsx As String
+    Dim dataSetoutCont As String
+    Dim dataSetoutScan As String
     Dim uniqueRow As Long
 
 
@@ -27,8 +29,12 @@ Sub CopycsxAndTimestamp()
     Dim testarray As Variant
     Dim timeStampscsx As Variant
     Dim csxDict As Dictionary
+    Dim outScanDict As Dictionary
+    Dim outContDict As Dictionary
 
     Set csxDict = New Dictionary
+    Set outScanDict = New Dictionary
+    Set outContDict = New Dictionary
 
 
 '    'check if files are open
@@ -55,29 +61,29 @@ Sub CopycsxAndTimestamp()
     For Each importWS In ImportWbk.Worksheets
         timeStampscsx = Right(importWS.Name, 9)
         lastrow = fLastWrittenRow(importWS, 1)
-
+        'Original Data
         ReDim csxData(1 To lastrow, 1)
         ReDim OuterScannableData(1 To lastrow, 1)
         ReDim OuterContainerData(1 To lastrow, 1)
         ReDim WorkpoolData(1 To lastrow, 1)
+        'Filtered
         ReDim csxDataFiltered(1 To lastrow, 1)
         ReDim OuterScannableDataFiltered(1 To lastrow, 1)
-
+        'Unique csx Arrays
         ReDim csxDataUniqe(1 To lastrow, 1)
         ReDim OuterContainerDataUnique(1 To lastrow, 1)
         ReDim OuterScannableDataUnique(1 To lastrow, 1)
-
         'Fill arrays with values'
         csxData = importWS.Range("I1:I" & lastrow).Value2
         OuterScannableData = importWS.Range("J1:J" & lastrow).Value2
         OuterContainerData = importWS.Range("K1:K" & lastrow).Value2
         WorkpoolData = importWS.Range("O1:O" & lastrow).Value2
-
+        'ReDim Filtered Arrays'
         ReDim csxDataFiltered(1 To 1, 1 To 1)
         ReDim OuterScannableDataFiltered(1 To 1, 1 To 1)
         ReDim OuterContainerDataFiltered(1 To 1, 1 To 1)
         ReDim WorkpoolDataFiltered(1 To 1, 1 To 1)
-
+        'ReDim Unique Arrays'
         ReDim csxDataUniqe(1 To 1, 1 To 1)
         ReDim OuterScannableDataUnique(1 To 1, 1 To 1)
         ReDim OuterContainerDataUnique(1 To 1, 1 To 1)
@@ -86,6 +92,8 @@ Sub CopycsxAndTimestamp()
                     'watch-variables
                     dataSetWorkpool = WorkpoolData(lrow, 1)
                     dataSetcsx = csxData(lrow, 1)
+                    dataSetoutScan = OuterScannableData(lrow, 1)
+                    dataSetoutCont = OuterContainerData(lrow, 1)
                 If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" And WorkpoolData(lrow, 1) <> "TransshipSorted" Then
                     'Resize arrays by value=counter on each hit of conditions
                     counter = counter + 1
@@ -93,7 +101,6 @@ Sub CopycsxAndTimestamp()
                     ReDim Preserve OuterScannableDataFiltered(1 To 1, 1 To counter)
                     ReDim Preserve OuterContainerDataFiltered(1 To 1, 1 To counter)
                     ReDim Preserve WorkpoolDataFiltered(1 To 1, 1 To counter)
-
                     'Fill new row of array with value on hit conditions
                     csxDataFiltered(1, counter) = csxData(lrow, 1)
                     OuterScannableDataFiltered(1, counter) = OuterScannableData(lrow, 1)
@@ -104,25 +111,29 @@ Sub CopycsxAndTimestamp()
             counter = 0
             For uniqueRow = LBound(csxDataFiltered, 2) To UBound(csxDataFiltered, 2)
                 If Not csxDict.Exists(csxDataFiltered(1, uniqueRow)) Then
-                  counter = counter + 1
-                  dataSetcsx = csxDataFiltered(1, counter)
-                  Debug.Print dataSetcsx
+                    counter = counter + 1
+                    dataSetcsx = csxDataFiltered(1, counter)
+                    dataSetoutScan = OuterScannableDataFiltered(1, counter)
+                    dataSetoutCont = OuterContainerDataFiltered(1, counter)
+                    Debug.Print dataSetcsx
                     csxDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
-                    If counter > 1 Then
-                        ReDim Preserve OuterContainerDataUnique(1 To 1, counter)
-                        ReDim Preserve csxDataUniqe(1 To 1, counter)
-                    End If
-                    OuterContainerDataUnique(1, counter) = OuterContainerDataFiltered(uniqueRow, 1)
-                    csxDataUniqe(1, counter) = csxDataFiltered(1, uniqueRow)
+                    outScanDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
+                    outContDict.Add csxDataFiltered(1, uniqueRow), OuterContainerDataFiltered(1, uniqueRow)
                 End If
             Next uniqueRow
-
             With csxDict
                 csxWbk.Worksheets("FilteredUnique").Cells.Clear
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 1).Resize(.Count, 1) = Application.Transpose(.Keys)
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 2).Resize(.Count, 1) = Application.Transpose(.Items)
             End With
-
+            With outScanDict
+                csxWbk.Worksheets("FilteredUnique").Cells(1, 3).Resize(.Count, 1) = Application.Transpose(.Keys)
+                csxWbk.Worksheets("FilteredUnique").Cells(1, 4).Resize(.Count, 1) = Application.Transpose(.Items)
+            End With
+            With outContDict
+                csxWbk.Worksheets("FilteredUnique").Cells(1, 5).Resize(.Count, 1) = Application.Transpose(.Keys)
+                csxWbk.Worksheets("FilteredUnique").Cells(1, 6).Resize(.Count, 1) = Application.Transpose(.Items)
+            End With
         Erase csxDataFiltered
         Erase OuterScannableDataFiltered
         Erase OuterContainerDataFiltered
