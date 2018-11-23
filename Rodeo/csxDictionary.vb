@@ -37,10 +37,12 @@ StartTime = Timer
     Dim csxDict As Dictionary
     Dim outScanDict As Dictionary
     Dim outContDict As Dictionary
+    Dim workpoolDict As Dictionary
 
     Set csxDict = New Dictionary
     Set outScanDict = New Dictionary
     Set outContDict = New Dictionary
+    Set workpoolDict = New Dictionary
     Set collUniqueCounter = New Collection
     Set collImportWSnames = New Collection
     Set collRuntimes = New Collection
@@ -92,6 +94,7 @@ StartTime = Timer
                     ReDim Preserve OuterContainerDataFiltered(1 To 1, 1 To counter)
                     ReDim Preserve WorkpoolDataFiltered(1 To 1, 1 To counter)
                     'Fill new row of array with value on hit conditions
+                    'Transpoe array so you can ReDim last dimension later
                     csxDataFiltered(1, counter) = csxData(lrow, 1)
                     OuterScannableDataFiltered(1, counter) = OuterScannableData(lrow, 1)
                     OuterContainerDataFiltered(1, counter) = OuterContainerData(lrow, 1)
@@ -105,10 +108,12 @@ StartTime = Timer
                     dataSetcsx = csxDataFiltered(1, counter)
                     dataSetoutScan = OuterScannableDataFiltered(1, counter)
                     dataSetoutCont = OuterContainerDataFiltered(1, counter)
-                    Debug.Print dataSetcsx
+                    dataSetWorkpool = WorkpoolDataFiltered(1, counter)
+                    'Add to Dictionaries
                     csxDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
                     outScanDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
                     outContDict.Add csxDataFiltered(1, uniqueRow), OuterContainerDataFiltered(1, uniqueRow)
+                    workpoolDict.Add csxDataFiltered(1, uniqueRow), WorkpoolDataFiltered(1, uniqueRow)
                 End If
             Next uniqueRow
             With csxDict
@@ -123,6 +128,10 @@ StartTime = Timer
             With outContDict
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 5).Resize(.Count, 1) = Application.Transpose(.Keys)
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 6).Resize(.Count, 1) = Application.Transpose(.Items)
+            End With
+            With workpoolDict
+                csxWbk.Worksheets("FilteredUnique").Cells(1, 7).Resize(.Count, 1) = Application.Transpose(.Keys)
+                csxWbk.Worksheets("FilteredUnique").Cells(1, 8).Resize(.Count, 1) = Application.Transpose(.Items)
             End With
     'Collections to track data on each repeat step
     collUniqueCounter.Add csxDict.Count
