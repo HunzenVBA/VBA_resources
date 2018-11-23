@@ -58,10 +58,14 @@ Sub CopycsxAndTimestamp()
 
         ReDim csxData(1 To lastrow, 1)
         ReDim csxDataFiltered(1 To lastrow, 1)
+        ReDim csxDataUniqe(1 To lastrow, 1)
         ReDim OuterScannableData(1 To lastrow, 1)
         ReDim OuterScannableDataFiltered(1 To lastrow, 1)
+        ReDim OuterScannableDataUnique(1 To lastrow, 1)
         ReDim OuterContainerData(1 To lastrow, 1)
+        ReDim OuterContainerDataUnique(1 To lastrow, 1)
         ReDim WorkpoolData(1 To lastrow, 1)
+
         'Fill arrays with values'
         csxData = importWS.Range("I1:I" & lastrow).Value2
         OuterScannableData = importWS.Range("J1:J" & lastrow).Value2
@@ -69,9 +73,12 @@ Sub CopycsxAndTimestamp()
         WorkpoolData = importWS.Range("O1:O" & lastrow).Value2
 
         ReDim csxDataFiltered(1 To 1, 1 To 1)
+        ReDim csxDataUniqe(1 To 1, 1 To 1)
         ReDim OuterScannableDataFiltered(1 To 1, 1 To 1)
         ReDim OuterContainerDataFiltered(1 To 1, 1 To 1)
         ReDim WorkpoolDataFiltered(1 To 1, 1 To 1)
+        ReDim OuterScannableDataUnique(1 To 1, 1)
+        ReDim OuterContainerDataUnique(1 To 1, 1)
             For lrow = 1 To lastrow
                     'watch-variables
                     dataSetWorkpool = WorkpoolData(lrow, 1)
@@ -91,17 +98,25 @@ Sub CopycsxAndTimestamp()
                     WorkpoolDataFiltered(1, counter) = WorkpoolData(lrow, 1)
                 End If
             Next lrow
-
+            counter = 0
             For uniqueRow = LBound(csxDataFiltered, 2) To UBound(csxDataFiltered, 2)
                 If Not csxDict.Exists(csxDataFiltered(1, uniqueRow)) Then
+                  counter = counter + 1
+                  dataSetcsx = csxDataFiltered(1, counter)
+                  Debug.Print dataSetcsx
                     csxDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
+                    ReDim Preserve OuterContainerDataUnique(1 To 1, counter)
+'                    ReDim Preserve csxDataUniqe(1 To 1, counter)
+                    OuterContainerDataUnique(1, counter) = OuterContainerData(uniqueRow, 1)
+'                    csxDataUniqe(1, counter) = csxDataFiltered(1, uniqueRow)
                 End If
             Next uniqueRow
-        csxWbk.Worksheets(FilteredUnique).Range("A1:A" & counter).Value2 = app.Transpose(csxDataFiltered)
-        csxWbk.Worksheets(FilteredUnique).Range("B1:B" & counter).Value2 = app.Transpose(OuterScannableDataFiltered)
-        csxWbk.Worksheets(FilteredUnique).Range("C1:C" & counter).Value2 = app.Transpose(OuterContainerDataFiltered)
-        csxWbk.Worksheets(FilteredUnique).Range("D1:D" & counter).Value2 = app.Transpose(WorkpoolDataFiltered)
-        csxWbk.Worksheets(FilteredUnique).Range("e1:e" & counter).Value2 = timeStampscsx
+
+            With csxDict
+                csxWbk.Worksheets("FilteredUnique").Cells.Clear
+                csxWbk.Worksheets("FilteredUnique").Cells(1, 1).Resize(.Count, 1) = Application.Transpose(.Keys)
+                csxWbk.Worksheets("FilteredUnique").Cells(1, 2).Resize(.Count, 1) = Application.Transpose(.Items)
+            End With
 
         Erase csxDataFiltered
         Erase OuterScannableDataFiltered
