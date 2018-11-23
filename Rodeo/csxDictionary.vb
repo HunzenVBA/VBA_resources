@@ -103,7 +103,7 @@ StartTime = Timer
                     dataSetoutCont = OuterContainerDataFiltered(1, counter)
                     dataSetWorkpool = WorkpoolDataFiltered(1, counter)
                     'Add to Dictionaries
-                    csxDict.Add globalcounter, csxDataFiltered(1, uniqueRow)
+                    csxDict.Add csxDataFiltered(1, uniqueRow), globalcounter
                     outScanDict.Add globalcounter, OuterScannableDataFiltered(1, uniqueRow)
                     outContDict.Add globalcounter, OuterContainerDataFiltered(1, uniqueRow)
                     workpoolDict.Add globalcounter, WorkpoolDataFiltered(1, uniqueRow)
@@ -123,8 +123,8 @@ StartTime = Timer
         Next importWS
     With csxDict
         csxWbk.Worksheets("FilteredUnique").Cells.Clear
-        csxWbk.Worksheets("FilteredUnique").Cells(1, 1).Resize(.Count, 1) = Application.Transpose(.Keys)
-        csxWbk.Worksheets("FilteredUnique").Cells(1, 2).Resize(.Count, 1) = Application.Transpose(.Items)
+        csxWbk.Worksheets("FilteredUnique").Cells(1, 2).Resize(.Count, 1) = Application.Transpose(.Keys)
+        csxWbk.Worksheets("FilteredUnique").Cells(1, 1).Resize(.Count, 1) = Application.Transpose(.Items)
     End With
     With outScanDict
         csxWbk.Worksheets("FilteredUnique").Cells(1, 4).Resize(.Count, 1) = Application.Transpose(.Items)
