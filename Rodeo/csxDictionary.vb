@@ -101,7 +101,6 @@ Sub CopycsxAndTimestamp()
                     ReDim Preserve OuterScannableDataFiltered(1 To 1, 1 To counter)
                     ReDim Preserve OuterContainerDataFiltered(1 To 1, 1 To counter)
                     ReDim Preserve WorkpoolDataFiltered(1 To 1, 1 To counter)
-
                     'Fill new row of array with value on hit conditions
                     csxDataFiltered(1, counter) = csxData(lrow, 1)
                     OuterScannableDataFiltered(1, counter) = OuterScannableData(lrow, 1)
@@ -120,10 +119,8 @@ Sub CopycsxAndTimestamp()
                     csxDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
                     outScanDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
                     outContDict.Add csxDataFiltered(1, uniqueRow), OuterContainerDataFiltered(1, uniqueRow)
-
                 End If
             Next uniqueRow
-
             With csxDict
                 csxWbk.Worksheets("FilteredUnique").Cells.Clear
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 1).Resize(.Count, 1) = Application.Transpose(.Keys)
