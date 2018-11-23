@@ -16,6 +16,8 @@ StartTime = Timer
     Dim dataSetoutScan As String
     Dim uniqueRow As Long
     Dim collUniqueCounter As Collection
+    Dim collImportWSnames As Collection
+    Dim collRuntimes As Collection
 
     Dim ImportWbk As Workbook
     Dim counter As Long
@@ -40,7 +42,8 @@ StartTime = Timer
     Set outScanDict = New Dictionary
     Set outContDict = New Dictionary
     Set collUniqueCounter = New Collection
-
+    Set collImportWSnames = New Collection
+    Set collRuntimes = New Collection
 
     Set app = Application
     Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
@@ -121,9 +124,12 @@ StartTime = Timer
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 5).Resize(.Count, 1) = Application.Transpose(.Keys)
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 6).Resize(.Count, 1) = Application.Transpose(.Items)
             End With
-
+    'Collections to track data on each repeat step
     collUniqueCounter.Add csxDict.Count
+    collImportWSnames.Add importWS.Name
+
     SecondsElapsed = Round(Timer - StartTime, 0)
+    collRuntimes.Add SecondsElapsed
     Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
         Erase csxDataFiltered
         Erase OuterScannableDataFiltered
