@@ -103,40 +103,39 @@ StartTime = Timer
                     dataSetoutCont = OuterContainerDataFiltered(1, counter)
                     dataSetWorkpool = WorkpoolDataFiltered(1, counter)
                     'Add to Dictionaries
-
                     csxDict.Add globalcounter, csxDataFiltered(1, uniqueRow)
                     outScanDict.Add globalcounter, OuterScannableDataFiltered(1, uniqueRow)
                     outContDict.Add globalcounter, OuterContainerDataFiltered(1, uniqueRow)
                     workpoolDict.Add globalcounter, WorkpoolDataFiltered(1, uniqueRow)
                 End If
             Next uniqueRow
-            With csxDict
-                csxWbk.Worksheets("FilteredUnique").Cells.Clear
-                csxWbk.Worksheets("FilteredUnique").Cells(1, 1).Resize(.Count, 1) = Application.Transpose(.Keys)
-                csxWbk.Worksheets("FilteredUnique").Cells(1, 2).Resize(.Count, 1) = Application.Transpose(.Items)
-            End With
-            With outScanDict
-                csxWbk.Worksheets("FilteredUnique").Cells(1, 4).Resize(.Count, 1) = Application.Transpose(.Items)
-            End With
-            With outContDict
-                csxWbk.Worksheets("FilteredUnique").Cells(1, 6).Resize(.Count, 1) = Application.Transpose(.Items)
-            End With
-            With workpoolDict
-                csxWbk.Worksheets("FilteredUnique").Cells(1, 8).Resize(.Count, 1) = Application.Transpose(.Items)
-            End With
-        'Collections to track data on each repeat step
-        collUniqueCounter.Add csxDict.Count
-        collImportWSnames.Add importWS.Name
+                'Collections to track data on each repeat step
+                collUniqueCounter.Add csxDict.Count
+                collImportWSnames.Add importWS.Name
+                SecondsElapsed = Round(Timer - StartTime, 0)
+                collRuntimes.Add SecondsElapsed
+                Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
+                Erase csxDataFiltered
+                Erase OuterScannableDataFiltered
+                Erase OuterContainerDataFiltered
+                Erase WorkpoolDataFiltered
+        '        Erase timeStampscsx
+        Next importWS
+    With csxDict
+        csxWbk.Worksheets("FilteredUnique").Cells.Clear
+        csxWbk.Worksheets("FilteredUnique").Cells(1, 1).Resize(.Count, 1) = Application.Transpose(.Keys)
+        csxWbk.Worksheets("FilteredUnique").Cells(1, 2).Resize(.Count, 1) = Application.Transpose(.Items)
+    End With
+    With outScanDict
+        csxWbk.Worksheets("FilteredUnique").Cells(1, 4).Resize(.Count, 1) = Application.Transpose(.Items)
+    End With
+    With outContDict
+        csxWbk.Worksheets("FilteredUnique").Cells(1, 6).Resize(.Count, 1) = Application.Transpose(.Items)
+    End With
+    With workpoolDict
+        csxWbk.Worksheets("FilteredUnique").Cells(1, 8).Resize(.Count, 1) = Application.Transpose(.Items)
+    End With
 
-        SecondsElapsed = Round(Timer - StartTime, 0)
-        collRuntimes.Add SecondsElapsed
-        Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
-        Erase csxDataFiltered
-        Erase OuterScannableDataFiltered
-        Erase OuterContainerDataFiltered
-        Erase WorkpoolDataFiltered
-'        Erase timeStampscsx
-    Next importWS
     For Each ws In csxWbk.Worksheets
         ws.Cells.Columns.AutoFit
     Next ws
