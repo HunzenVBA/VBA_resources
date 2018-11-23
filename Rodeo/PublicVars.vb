@@ -5,6 +5,8 @@ Public Const strRodeoHistoryFile As String = "C:\Users\denizku\Documents\Rodeo\R
 Public Const strcsxStampsFile As String = "C:\Users\denizku\Documents\Rodeo\csxStamps.xlsx"
 Public Const strRodeoHistoryFileName As String = "RodeoImportHistory.xlsx"
 Public Const strcsxStampsFileName As String = "csxStamps.xlsx"
+Public Const strRodeoPath As String = "C:\Users\denizku\Documents\Rodeo\"
+Public Const strRodeoFiltered1 As String = "C:\Users\denizku\Documents\Rodeo\RodeoOhneLoadedundPalletized.xlsx"
 
 'Home'
 'Public Const strRodeoHistoryFile As String = "C:\Users\Apr17\Documents\VBA\Rodeo\RodeoImportHistory.xlsx"
@@ -25,3 +27,8 @@ Public qts                          As QueryTables
 Public StartTime                    As Double
 Public SecondsElapsed               As Double
 Public currProcedureName            As String
+Public StartTimeAll                 As Double
+Public SecondsElapsedAll            As Double
+Public EndTimerVar                  As Date
+Public time                         As Date
+Public StartTimerVar                As Date
