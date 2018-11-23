@@ -8,6 +8,8 @@ Sub CopycsxAndTimestamp()
     Dim lrow As Long
     Dim dataSetWorkpool As String
     Dim dataSetcsx As String
+    Dim dataSetoutCont As String
+    Dim dataSetoutScan As String
     Dim uniqueRow As Long
 
 
@@ -27,8 +29,12 @@ Sub CopycsxAndTimestamp()
     Dim testarray As Variant
     Dim timeStampscsx As Variant
     Dim csxDict As Dictionary
+    Dim outScanDict As Dictionary
+    Dim outContDict As Dictionary
 
     Set csxDict = New Dictionary
+    Set outScanDict = New Dictionary
+    Set outContDict = New Dictionary
 
 
 '    'check if files are open
@@ -86,6 +92,8 @@ Sub CopycsxAndTimestamp()
                     'watch-variables
                     dataSetWorkpool = WorkpoolData(lrow, 1)
                     dataSetcsx = csxData(lrow, 1)
+                    dataSetoutScan = OuterContainerData(lrow, 1)
+                    dataSetoutCont = OuterContainerData(lrow, 1)
                 If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" And WorkpoolData(lrow, 1) <> "TransshipSorted" Then
                     'Resize arrays by value=counter on each hit of conditions
                     counter = counter + 1
@@ -104,14 +112,18 @@ Sub CopycsxAndTimestamp()
             counter = 0
             For uniqueRow = LBound(csxDataFiltered, 2) To UBound(csxDataFiltered, 2)
                 If Not csxDict.Exists(csxDataFiltered(1, uniqueRow)) Then
-                  counter = counter + 1
-                  dataSetcsx = csxDataFiltered(1, counter)
-                  Debug.Print dataSetcsx
+                    counter = counter + 1
+                    dataSetcsx = csxDataFiltered(1, counter)
+                    dataSetoutScan = OuterScannableDataFiltered(1, counter)
+                    dataSetoutCont = OuterContainerDataFiltered(1, counter)
+                    Debug.Print dataSetcsx
                     csxDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
-                    If counter > 1 Then
+                    outScanDict.Add csxDataFiltered(1, uniqueRow), OuterScannableDataFiltered(1, uniqueRow)
+                    outContDict.Add csxDataFiltered(1, uniqueRow), OuterContainerDataFiltered(1, uniqueRow)
+
                         ReDim Preserve OuterContainerDataUnique(1 To 1, counter)
                         ReDim Preserve csxDataUniqe(1 To 1, counter)
-                    End If
+
                     OuterContainerDataUnique(1, counter) = OuterContainerDataFiltered(uniqueRow, 1)
                     csxDataUniqe(1, counter) = csxDataFiltered(1, uniqueRow)
                 End If
