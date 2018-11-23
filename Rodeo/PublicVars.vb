@@ -32,3 +32,4 @@ Public SecondsElapsedAll            As Double
 Public EndTimerVar                  As Date
 Public time                         As Date
 Public StartTimerVar                As Date
+Public globalcounter                As Long
