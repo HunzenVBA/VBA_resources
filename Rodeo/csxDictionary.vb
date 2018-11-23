@@ -1,6 +1,10 @@
 Option Explicit
 
 Sub CopycsxAndTimestamp()
+Application.ScreenUpdating = False
+StartTime = Timer
+
+
 
     Dim importWS As Worksheet
     Dim lastrow As Long
@@ -11,7 +15,7 @@ Sub CopycsxAndTimestamp()
     Dim dataSetoutCont As String
     Dim dataSetoutScan As String
     Dim uniqueRow As Long
-
+    Dim collUniqueCounter As Collection
 
     Dim ImportWbk As Workbook
     Dim counter As Long
@@ -35,26 +39,9 @@ Sub CopycsxAndTimestamp()
     Set csxDict = New Dictionary
     Set outScanDict = New Dictionary
     Set outContDict = New Dictionary
+    Set collUniqueCounter = New Collection
 
 
-'    'check if files are open
-'    On Error Resume Next
-'    Set ImportWbk = Workbooks(strRodeoHistoryFileName)
-'    Set csxWbk = Workbooks(strcsxStampsFileName)
-'    On Error GoTo 0
-
-'    If ImportWbk Is Nothing Then
-'        Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
-'    Else
-'        ImportWbk.Close SaveChanges:=False
-'    End If
-'    If csxWbk Is Nothing Then
-'        Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
-'    Else
-'        csxWbk.Close SaveChanges:=False
-'    End If
-
-'    Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
     Set app = Application
     Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks(strRodeoHistoryFileName)
@@ -134,6 +121,10 @@ Sub CopycsxAndTimestamp()
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 5).Resize(.Count, 1) = Application.Transpose(.Keys)
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 6).Resize(.Count, 1) = Application.Transpose(.Items)
             End With
+
+    collUniqueCounter.Add csxDict.Count
+    SecondsElapsed = Round(Timer - StartTime, 0)
+    Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
         Erase csxDataFiltered
         Erase OuterScannableDataFiltered
         Erase OuterContainerDataFiltered
