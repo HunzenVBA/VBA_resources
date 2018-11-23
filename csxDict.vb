@@ -4,8 +4,6 @@ Sub CopycsxAndTimestamp()
 Application.ScreenUpdating = False
 StartTime = Timer
 
-
-
     Dim importWS As Worksheet
     Dim lastrow As Long
     Dim currentrow As Long
@@ -19,11 +17,9 @@ StartTime = Timer
     Dim collImportWSnames As Collection
     Dim collRuntimes As Collection
     Dim collWorkpool As Collection
-
     Dim ImportWbk As Workbook
     Dim counter As Long
     Dim csxWbk As Workbook
-
     Dim slice
     Dim app As Application
 
@@ -39,7 +35,7 @@ StartTime = Timer
     Dim outScanDict As Dictionary
     Dim outContDict As Dictionary
     Dim workpoolDict As Dictionary
-
+    
     Set csxDict = New Dictionary
     Set outScanDict = New Dictionary
     Set outContDict = New Dictionary
@@ -48,7 +44,6 @@ StartTime = Timer
     Set collImportWSnames = New Collection
     Set collRuntimes = New Collection
     Set collWorkpool = New Collection
-
     Set app = Application
     Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks(strRodeoHistoryFileName)
@@ -88,7 +83,8 @@ StartTime = Timer
                     dataSetcsx = csxData(lrow, 1)
                     dataSetoutScan = OuterScannableData(lrow, 1)
                     dataSetoutCont = OuterContainerData(lrow, 1)
-                If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" And WorkpoolData(lrow, 1) <> "TransshipSorted" Then
+'                If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" And WorkpoolData(lrow, 1) <> "TransshipSorted" Then
+                If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" Then
                     'Resize arrays by value=counter on each hit of conditions
                     counter = counter + 1
                     ReDim Preserve csxDataFiltered(1 To 1, 1 To counter)
@@ -135,17 +131,20 @@ StartTime = Timer
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 7).Resize(.Count, 1) = Application.Transpose(.Keys)
                 csxWbk.Worksheets("FilteredUnique").Cells(1, 8).Resize(.Count, 1) = Application.Transpose(.Items)
             End With
-    'Collections to track data on each repeat step
-    collUniqueCounter.Add csxDict.Count
-    collImportWSnames.Add importWS.Name
-
-    SecondsElapsed = Round(Timer - StartTime, 0)
-    collRuntimes.Add SecondsElapsed
-    Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
+        'Collections to track data on each repeat step
+        collUniqueCounter.Add csxDict.Count
+        collImportWSnames.Add importWS.Name
+        
+        SecondsElapsed = Round(Timer - StartTime, 0)
+        collRuntimes.Add SecondsElapsed
+        Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
         Erase csxDataFiltered
         Erase OuterScannableDataFiltered
         Erase OuterContainerDataFiltered
         Erase WorkpoolDataFiltered
-'            Erase timeStampscsx
+        Erase timeStampscsx
     Next importWS
+    For Each ws In csxWbk.Worksheets
+        ws.Cells.Columns.AutoFit
+    Next ws
 End Sub
