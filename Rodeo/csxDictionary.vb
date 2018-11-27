@@ -10,8 +10,8 @@ StartTime = Timer
     Dim lrow As Long
     Dim dataSetWorkpool As String
     Dim dataSetcsx As String
-    Dim dataSetoutCont As String
     Dim dataSetoutScan As String
+    Dim dataSetoutCont As String
     Dim uniqueRow As Long
     Dim collUniqueCounter As Collection
     Dim collImportWSnames As Collection
@@ -135,7 +135,6 @@ StartTime = Timer
     With workpoolDict
         csxWbk.Worksheets("FilteredUnique").Cells(1, 8).Resize(.Count, 1) = Application.Transpose(.Items)
     End With
-
     For Each ws In csxWbk.Worksheets
         ws.Cells.Columns.AutoFit
     Next ws
