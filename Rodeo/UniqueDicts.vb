@@ -118,7 +118,7 @@ StartTime = Timer
             Set csxDict = New Dictionary
             cTimestamp = cTimestamp + 1
         Next importWS
-    Set csxBetweenDicts = fJoinDictionaries()
+    Set csxBetweenDicts = fJoinDictionaries(collUniqueDicts)
     For Each ws In csxWbk.Worksheets
         ws.Cells.Columns.AutoFit
     Next ws
