@@ -402,16 +402,46 @@ Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
     Dim DictInColl As Dictionary
     Dim dict1key As Variant
     Dim dict2key As Variant
+    Dim cDict As Integer
+
+    Dim wbkCsxByDict As Workbook
+
+    Set wbkCsxByDict = Workbooks("CsxByDict.xlsm")
+    wbkCsxByDict.Worksheets(1).Cells.ClearContents
+
     Set result = New Dictionary
-    Debug.Print dict1.Items()(1), dict1.Keys()(1)
+'    Debug.Print dict1.Items()(1), dict1.Keys()(1)
     counter = 0
     For Each DictInColl In collOfDicts
         For Each dict1key In DictInColl.Keys
-            If DictInColl.Exists(dict1key) Then
-                counter = counter + 1
-                result.Add dict1key, counter
+            If Not result.Exists(dict1key) Then
+                If DictInColl.Exists(dict1key) Then
+                    counter = counter + 1
+                    result.Add dict1key, counter
+                End If
             End If
         Next dict1key
+    cDict = cDict + 1
+    wbkCsxByDict.Worksheets(1).Cells(1, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
+    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets(1))
     Next DictInColl
     Set fJoinDictionaries = result
+End Function
+
+Function fSortColumnsIndividually(ws As Worksheet)
+
+With ws.Sort
+    .SortFields.Clear
+    .SortFields.Add Range("a1"), xlSortOnValues, xlAscending
+    .SortFields.Add Range("b1"), xlSortOnValues, xlAscending
+    .SortFields.Add Range("c1"), xlSortOnValues, xlAscending
+    .SortFields.Add Range("d1"), xlSortOnValues, xlAscending
+    .SortFields.Add Range("e1"), xlSortOnValues, xlAscending
+    .SetRange ws.Range("A:Z")
+    .Header = xlYes
+    .Orientation = xlTopToBottom
+    .SortMethod = xlPinYin
+    .Apply
+End With
+
 End Function
