@@ -429,19 +429,20 @@ Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
 End Function
 
 Function fSortColumnsIndividually(ws As Worksheet)
+Dim intColumn As Long
 
-With ws.Sort
-    .SortFields.Clear
-    .SortFields.Add Range("a1"), xlSortOnValues, xlAscending
-    .SortFields.Add Range("b1"), xlSortOnValues, xlAscending
-    .SortFields.Add Range("c1"), xlSortOnValues, xlAscending
-    .SortFields.Add Range("d1"), xlSortOnValues, xlAscending
-    .SortFields.Add Range("e1"), xlSortOnValues, xlAscending
-    .SetRange ws.Range("A:Z")
-    .Header = xlYes
-    .Orientation = xlTopToBottom
-    .SortMethod = xlPinYin
-    .Apply
-End With
+    For intColumn = 1 To 10
+
+        With ws.Sort
+            .SortFields.Clear
+            .SortFields.Add Range(Cells(1, intColumn), Cells(fLastWrittenRow(ws, intColumn), intColumn)), xlSortOnValues, xlAscending
+            .SetRange ws.Range(Cells(1, intColumn), Cells(fLastWrittenRow(ws, intColumn), intColumn))
+            .Header = xlYes
+            .Orientation = xlTopToBottom
+            .SortMethod = xlPinYin
+            .Apply
+        End With
+
+    Next intColumn
 
 End Function
