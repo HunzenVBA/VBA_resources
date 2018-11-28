@@ -33,3 +33,5 @@ Public EndTimerVar                  As Date
 Public time                         As Date
 Public StartTimerVar                As Date
 Public globalcounter                As Long
+Public collAllUniqeCSX              As Collection
+Public collUniqueDicts              As Collection

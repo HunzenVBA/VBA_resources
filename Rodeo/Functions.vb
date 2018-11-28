@@ -377,19 +377,41 @@ Function mergeArrays(ByVal arr1 As Variant, ByVal arr2 As Variant) As Variant
         mergeArrays = holdarr
 End Function
 
-Function fJoinDictionaries(dict1 As Dictionary, dict2 As Dictionary) As Dictionary
+Function fJoin2Dictionaries(dict1 As Dictionary, dict2 As Dictionary) As Dictionary
     Dim result As Dictionary
     Dim counter As Long
     Dim uniqueRow As Long
-
+    Dim dict1key As Variant
+    Dim dict2key As Variant
     Set result = New Dictionary
-
+    Debug.Print dict1.Items()(1), dict1.Keys()(1)
     counter = 0
-        For uniqueRow = 1 To dict1.Count
-            If dict2.Exists(dict1(uniqueRow)) Then
+        For Each dict1key In dict1.Keys
+            If dict2.Exists(dict1key) Then
                 counter = counter + 1
-                result.Add dict1(uniqueRow), counter
+                result.Add dict1key, counter
             End If
-        Next uniqueRow
-    Set fCreateUniqueCSXDict = result
+        Next dict1key
+    Set fJoinDictionaries = result
+End Function
+
+Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
+    Dim result As Dictionary
+    Dim counter As Long
+    Dim uniqueRow As Long
+    Dim DictInColl As Dictionary
+    Dim dict1key As Variant
+    Dim dict2key As Variant
+    Set result = New Dictionary
+    Debug.Print dict1.Items()(1), dict1.Keys()(1)
+    counter = 0
+    For Each DictInColl In collOfDicts
+        For Each dict1key In DictInColl.Keys
+            If DictInColl.Exists(dict1key) Then
+                counter = counter + 1
+                result.Add dict1key, counter
+            End If
+        Next dict1key
+    Next DictInColl
+    Set fJoinDictionaries = result
 End Function

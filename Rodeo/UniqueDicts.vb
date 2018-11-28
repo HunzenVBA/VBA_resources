@@ -13,7 +13,7 @@ StartTime = Timer
     Dim dataSetoutScan As String
     Dim dataSetoutCont As String
     Dim uniqueRow As Long
-    Dim collUniqueDicts As Dictionary
+'    Dim collUniqueDicts As Dictionary
     Dim collUniqueCounter As Collection
     Dim collImportWSnames As Collection
     Dim collRuntimes As Collection
@@ -40,7 +40,7 @@ StartTime = Timer
     Set csxBetweenDicts = New Dictionary
     Set collUniqueCounter = New Collection
     Set collImportWSnames = New Collection
-    Set collUniqueDicts = New Dictionary
+    Set collUniqueDicts = New Collection
     Set collRuntimes = New Collection
     Set collWorkpool = New Collection
     Set collUniqeCSXCounter = New Collection
@@ -108,6 +108,7 @@ StartTime = Timer
                 SecondsElapsed = Round(Timer - StartTime, 0)
                 collRuntimes.Add SecondsElapsed
                 collUniqueDicts.Add csxDict, timeStampscsx
+
                 Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
                 Erase csxDataFiltered
 '                Erase OuterScannableDataFiltered
@@ -117,8 +118,7 @@ StartTime = Timer
             Set csxDict = New Dictionary
             cTimestamp = cTimestamp + 1
         Next importWS
-        Debug.Print collUniqueDicts(1)
-    Set csxBetweenDicts = fJoinDictionaries(dict1:=collUniqueDicts(1), dict2:=collUniqueDicts(2))
+    Set csxBetweenDicts = fJoinDictionaries()
     For Each ws In csxWbk.Worksheets
         ws.Cells.Columns.AutoFit
     Next ws
