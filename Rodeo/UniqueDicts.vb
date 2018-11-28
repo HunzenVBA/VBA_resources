@@ -78,7 +78,7 @@ StartTime = Timer
                     dataSetcsx = csxData(lrow, 1)
                     dataSetoutScan = OuterScannableData(lrow, 1)
                     dataSetoutCont = OuterContainerData(lrow, 1)
-'                If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" And WorkpoolData(lrow, 1) <> "TransshipSorted" Then
+                'If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" And WorkpoolData(lrow, 1) <> "TransshipSorted" Then
                 If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" Then
                     'Resize arrays by value=counter on each hit of conditions
                     counter = counter + 1
