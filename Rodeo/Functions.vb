@@ -50,38 +50,6 @@ Sub runStacker()
   Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
 End Sub
 
-Sub NameWorksheets()
-
-    StartTime = Timer
-
-'*****************************************************************************
-'** Benennung der WS nach Position
-    ThisWorkbook.Worksheets(1).Name = "1RodeoImport"
-    ThisWorkbook.Worksheets(2).Name = "2RodeoFormatted"
-    ThisWorkbook.Worksheets(3).Name = "3RodeoLU_Anzahl_Rec"
-    ThisWorkbook.Worksheets(4).Name = "4RodeoTotalImport"
-    ThisWorkbook.Worksheets(5).Name = "5RodeoTotalFormatted"
-    ThisWorkbook.Worksheets(6).Name = "6RodeoCaseRec+General"
-    ThisWorkbook.Worksheets(7).Name = "7Scanpunkte"
-    ThisWorkbook.Worksheets(8).Name = "8"
-'*****************************************************************************
-'** Zuweisung ws-Variablen anhand der Benennung
-    Set ws1 = ThisWorkbook.Worksheets("1RodeoImport")
-    Set ws2 = ThisWorkbook.Worksheets("2RodeoFormatted")
-    Set ws3 = ThisWorkbook.Worksheets("3RodeoLU_Anzahl_Rec")
-    Set ws4 = ThisWorkbook.Worksheets("4RodeoTotalImport")
-    Set ws5 = ThisWorkbook.Worksheets("5RodeoTotalFormatted")
-    Set ws6 = ThisWorkbook.Worksheets("6RodeoCaseRec+General")
-    Set ws7 = ThisWorkbook.Worksheets("7Scanpunkte")
-    Set ws8 = ThisWorkbook.Worksheets("8")
-
-    'Determine how many seconds code took to run
-    SecondsElapsed = Round(Timer - StartTime, 1)
-
-    'Notify user in seconds
-    Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
-
-End Sub
 
 Sub PrintWSnames()
     Debug.Print "WS Nr.|Name"
@@ -189,7 +157,7 @@ End Function
 Function PopulateFullColumn(Col As String)
     ThisWorkbook.ActiveSheet.Range(Col & ":" & Col).Value = "DummyValue"
 End Function
-Function fLastWrittenRow(ws As Worksheet, Column As Integer) As Integer
+Function fLastWrittenRow(ws As Worksheet, Column As Long) As Long
     fLastWrittenRow = ws.Cells(Rows.Count, Column).End(xlUp).Row
 End Function
 Function fStartTimer()
@@ -285,9 +253,8 @@ End Function
     End Function
 
 
-Sub fDeleteAllQueries()
+Sub fDeleteAllQueries(ws As Worksheet)
 Dim qt As QueryTable
-Dim ws As Worksheet
 
 For Each qt In ws.QueryTables
 qt.Delete
@@ -334,4 +301,50 @@ End Function
 Function fWorkbookIsOpen(WorkbookName As String) As Boolean
 On Error Resume Next
 fWorkbookIsOpen = Workbooks(WorkbookName).Name = WorkbookName
+End Function
+
+Function fCreateUniqueCSXDict(inputArray As Variant) As Dictionary
+    Dim result As Dictionary
+    Dim counter As Long
+    Dim uniqueRow As Long
+
+    Set result = New Dictionary
+
+    counter = 0
+        For uniqueRow = LBound(inputArray, 2) To UBound(inputArray, 2)
+            If Not result.Exists(inputArray(1, uniqueRow)) Then
+                counter = counter + 1
+                globalcounter = globalcounter + 1
+                'Add to Dictionary
+                result.Add inputArray(1, uniqueRow), globalcounter
+            End If
+        Next uniqueRow
+    Set fCreateUniqueCSXDict = result
+End Function
+
+Function fCompareIDsbetweenDicts(collOfDicts As Variant) As Dictionary
+    Dim resultDict As Dictionary
+    Dim currIteminColl As Dictionary
+    Dim currKey As Variant
+    Dim cIDsbetweenDicts As Long
+
+    Set resultDict = New Dictionary
+
+    For Each currIteminColl In collOfDicts          'curritem = Dictionary
+        For Each currKey In currIteminColl.Keys         'currkey = csx
+            If Not resultDict.Exists(currKey) Then
+            cIDsbetweenDicts = cIDsbetweenDicts + 1
+                resultDict.Add currKey, cIDsbetweenDicts
+            End If
+        Next currKey
+        Call fAddUniqueCSXcounterToACollection(currIteminColl)
+    Next currIteminColl
+
+    Set fCompareIDsbetweenDicts = resultDict
+End Function
+
+Function fAddUniqueCSXcounterToACollection(DictOfcsx As Dictionary) As Collection
+    Dim resultColl As Collection
+    resultColl.Add DictOfcsx.Count
+    Set fAddUniqueCSXcounterToACollection = resultColl
 End Function

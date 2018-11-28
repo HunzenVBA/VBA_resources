@@ -30,11 +30,13 @@ StartTime = Timer
     Dim outScanDict As Dictionary
     Dim outContDict As Dictionary
     Dim workpoolDict As Dictionary
+    Dim csxBetweenDicts As Dictionary
 
     Set csxDict = New Dictionary
     Set outScanDict = New Dictionary
     Set outContDict = New Dictionary
     Set workpoolDict = New Dictionary
+    Set csxBetweenDicts = New Dictionary
     Set collUniqueCounter = New Collection
     Set collImportWSnames = New Collection
     Set collUniqueDicts = New Dictionary
@@ -96,8 +98,7 @@ StartTime = Timer
                 End If
             Next lrow
             counter = 0
-            Set csxDict = fCreateUniqueCSXDict(csxDataFiltered)
-
+            Set csxDict = fCreateUniqueCSXDict(csxDataFiltered)     'get a Dict of unique values
                 'Collections to track data on each repeat step
                 collUniqueCounter.Add csxDict.Count
                 collImportWSnames.Add importWS.Name
@@ -106,16 +107,14 @@ StartTime = Timer
                 collUniqueDicts.Add csxDict, timeStampscsx
                 Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
                 Erase csxDataFiltered
-                Erase OuterScannableDataFiltered
-                Erase OuterContainerDataFiltered
-                Erase WorkpoolDataFiltered
-
-            csxDict.RemoveAll
+'                Erase OuterScannableDataFiltered
+'                Erase OuterContainerDataFiltered
+'                Erase WorkpoolDataFiltered
+'            csxDict.RemoveAll
+            Set csxDict = New Dictionary
             cTimestamp = cTimestamp + 1
-
-
         Next importWS
-
+    Set csxBetweenDicts = fCompareIDsbetweenDicts(collUniqueDicts)
     For Each ws In csxWbk.Worksheets
         ws.Cells.Columns.AutoFit
     Next ws
