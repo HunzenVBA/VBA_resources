@@ -13,7 +13,7 @@ StartTime = Timer
     Dim dataSetoutScan As String
     Dim dataSetoutCont As String
     Dim uniqueRow As Long
-    Dim collUniqueDicts As Collection
+    Dim collUniqueDicts As Dictionary
     Dim collUniqueCounter As Collection
     Dim collImportWSnames As Collection
     Dim collRuntimes As Collection
@@ -37,6 +37,7 @@ StartTime = Timer
     Set workpoolDict = New Dictionary
     Set collUniqueCounter = New Collection
     Set collImportWSnames = New Collection
+    Set collUniqueDicts = New Dictionary
     Set collRuntimes = New Collection
     Set collWorkpool = New Collection
     Set app = Application
@@ -78,7 +79,7 @@ StartTime = Timer
                     dataSetcsx = csxData(lrow, 1)
                     dataSetoutScan = OuterScannableData(lrow, 1)
                     dataSetoutCont = OuterContainerData(lrow, 1)
-                'If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" And WorkpoolData(lrow, 1) <> "TransshipSorted" Then
+'                If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" And WorkpoolData(lrow, 1) <> "TransshipSorted" Then
                 If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" Then
                     'Resize arrays by value=counter on each hit of conditions
                     counter = counter + 1
@@ -95,21 +96,8 @@ StartTime = Timer
                 End If
             Next lrow
             counter = 0
-            For uniqueRow = LBound(csxDataFiltered, 2) To UBound(csxDataFiltered, 2)
-                If Not csxDict.Exists(csxDataFiltered(1, uniqueRow)) Then
-                    counter = counter + 1
-                    globalcounter = globalcounter + 1
-                    dataSetcsx = csxDataFiltered(1, counter)
-                    dataSetoutScan = OuterScannableDataFiltered(1, counter)
-                    dataSetoutCont = OuterContainerDataFiltered(1, counter)
-                    dataSetWorkpool = WorkpoolDataFiltered(1, counter)
-                    'Add to Dictionaries
-                    csxDict.Add csxDataFiltered(1, uniqueRow), globalcounter
-                    outScanDict.Add globalcounter, OuterScannableDataFiltered(1, uniqueRow)
-                    outContDict.Add globalcounter, OuterContainerDataFiltered(1, uniqueRow)
-                    workpoolDict.Add globalcounter, WorkpoolDataFiltered(1, uniqueRow)
-                End If
-            Next uniqueRow
+            Set csxDict = fCreateUniqueCSXDict(csxDataFiltered)
+
                 'Collections to track data on each repeat step
                 collUniqueCounter.Add csxDict.Count
                 collImportWSnames.Add importWS.Name
@@ -121,17 +109,7 @@ StartTime = Timer
                 Erase OuterScannableDataFiltered
                 Erase OuterContainerDataFiltered
                 Erase WorkpoolDataFiltered
-        '        Erase timeStampscsx
 
-
-            With csxDict
-                csxWbk.Worksheets("UniquesPerStamp").Cells(1, 1 + 3 * cTimestamp) = "ID"
-                csxWbk.Worksheets("UniquesPerStamp").Cells(2, 1 + 3 * cTimestamp).Resize(.Count - 1, 1) = Application.Transpose(.Items) '-1 weil erste Zeile ist Spaltenüberschrift
-                csxWbk.Worksheets("UniquesPerStamp").Cells(1, 2 + 3 * cTimestamp).Resize(.Count, 1) = Application.Transpose(.Keys)
-                'Write timestamps
-                csxWbk.Worksheets("UniquesPerStamp").Cells(2, 3 + 3 * cTimestamp).Resize(.Count - 1, 1) = timeStampscsx
-                csxWbk.Worksheets("UniquesPerStamp").Cells(1, 3 + 3 * cTimestamp) = "Timestamp" & cTimestamp
-            End With
             csxDict.RemoveAll
             cTimestamp = cTimestamp + 1
 
