@@ -18,6 +18,7 @@ StartTime = Timer
     Dim collImportWSnames As Collection
     Dim collRuntimes As Collection
     Dim collWorkpool As Collection
+    Dim collUniqeCSXCounter As Collection
     Dim ImportWbk As Workbook
     Dim counter As Long
     Dim csxWbk As Workbook
@@ -42,8 +43,9 @@ StartTime = Timer
     Set collUniqueDicts = New Dictionary
     Set collRuntimes = New Collection
     Set collWorkpool = New Collection
+    Set collUniqeCSXCounter = New Collection
     Set app = Application
-    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
+'    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks(strRodeoHistoryFileName)
     For Each importWS In ImportWbk.Worksheets
         timeStampscsx = Right(importWS.Name, 9)
@@ -99,6 +101,7 @@ StartTime = Timer
             Next lrow
             counter = 0
             Set csxDict = fCreateUniqueCSXDict(csxDataFiltered)     'get a Dict of unique values
+'            Set collUniqeCSXCounter = fAddUniqueCSXcounterToACollection(csxDict)
                 'Collections to track data on each repeat step
                 collUniqueCounter.Add csxDict.Count
                 collImportWSnames.Add importWS.Name
@@ -114,7 +117,8 @@ StartTime = Timer
             Set csxDict = New Dictionary
             cTimestamp = cTimestamp + 1
         Next importWS
-    Set csxBetweenDicts = fCompareIDsbetweenDicts(collUniqueDicts)
+        Debug.Print collUniqueDicts(1)
+    Set csxBetweenDicts = fJoinDictionaries(dict1:=collUniqueDicts(1), dict2:=collUniqueDicts(2))
     For Each ws In csxWbk.Worksheets
         ws.Cells.Columns.AutoFit
     Next ws

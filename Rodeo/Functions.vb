@@ -327,8 +327,10 @@ Function fCompareIDsbetweenDicts(collOfDicts As Variant) As Dictionary
     Dim currIteminColl As Dictionary
     Dim currKey As Variant
     Dim cIDsbetweenDicts As Long
+    Dim collAllUniqeCSX As Collection
 
     Set resultDict = New Dictionary
+    Set collAllUniqeCSX = New Collection
 
     For Each currIteminColl In collOfDicts          'curritem = Dictionary
         For Each currKey In currIteminColl.Keys         'currkey = csx
@@ -337,14 +339,57 @@ Function fCompareIDsbetweenDicts(collOfDicts As Variant) As Dictionary
                 resultDict.Add currKey, cIDsbetweenDicts
             End If
         Next currKey
-        Call fAddUniqueCSXcounterToACollection(currIteminColl)
+        Set collAllUniqeCSX = fJoinDictionaries
     Next currIteminColl
 
     Set fCompareIDsbetweenDicts = resultDict
 End Function
 
-Function fAddUniqueCSXcounterToACollection(DictOfcsx As Dictionary) As Collection
+Function fAddUniqueCSXcounterToACollection(DictOfcsx As Dictionary) As Long
     Dim resultColl As Collection
+    Set resultColl = New Collection
     resultColl.Add DictOfcsx.Count
     Set fAddUniqueCSXcounterToACollection = resultColl
+End Function
+
+
+Function mergeArrays(ByVal arr1 As Variant, ByVal arr2 As Variant) As Variant
+    Dim holdarr As Variant
+    Dim ub1 As Long
+    Dim ub2 As Long
+    Dim bi As Long
+    Dim i As Long
+    Dim newind As Long
+        ub1 = UBound(arr1) + 1
+        ub2 = UBound(arr2) + 1
+        bi = IIf(ub1 >= ub2, ub1, ub2)
+        ReDim holdarr(ub1 + ub2 - 1)
+        For i = 0 To bi
+            If i < ub1 Then
+                holdarr(newind) = arr1(i)
+                newind = newind + 1
+            End If
+            If i < ub2 Then
+                holdarr(newind) = arr2(i)
+                newind = newind + 1
+            End If
+        Next i
+        mergeArrays = holdarr
+End Function
+
+Function fJoinDictionaries(dict1 As Dictionary, dict2 As Dictionary) As Dictionary
+    Dim result As Dictionary
+    Dim counter As Long
+    Dim uniqueRow As Long
+
+    Set result = New Dictionary
+
+    counter = 0
+        For uniqueRow = 1 To dict1.Count
+            If dict2.Exists(dict1(uniqueRow)) Then
+                counter = counter + 1
+                result.Add dict1(uniqueRow), counter
+            End If
+        Next uniqueRow
+    Set fCreateUniqueCSXDict = result
 End Function
