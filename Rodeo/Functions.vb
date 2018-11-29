@@ -407,7 +407,7 @@ Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
     Dim wbkCsxByDict As Workbook
 
     Set wbkCsxByDict = Workbooks("CsxByDict.xlsm")
-    wbkCsxByDict.Worksheets(1).Cells.ClearContents
+    wbkCsxByDict.Worksheets("outputTestOnSliceCSX").Cells.ClearContents
 
     Set result = New Dictionary
 '    Debug.Print dict1.Items()(1), dict1.Keys()(1)
@@ -422,8 +422,8 @@ Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
             End If
         Next dict1key
     cDict = cDict + 1
-    wbkCsxByDict.Worksheets(1).Cells(1, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
-    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets(1))
+    wbkCsxByDict.Worksheets("outputTestOnSliceCSX").Cells(1, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
+    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("outputTestOnSliceCSX"))
     Next DictInColl
     Set fJoinDictionaries = result
 End Function
@@ -441,4 +441,10 @@ Dim intColumn As Long
             .Apply
         End With
     Next intColumn
+End Function
+
+Function fAutofitWS(ws As Worksheet)
+With ws
+ .Columns.AutoFit
+End With
 End Function
