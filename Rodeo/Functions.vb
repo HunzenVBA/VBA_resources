@@ -311,12 +311,12 @@ Function fCreateUniqueCSXDict(inputArray As Variant) As Dictionary
     Set result = New Dictionary
 
     counter = 0
-        For uniqueRow = LBound(inputArray, 2) To UBound(inputArray, 2)
-            If Not result.Exists(inputArray(1, uniqueRow)) Then
+        For uniqueRow = LBound(inputArray, 1) To UBound(inputArray, 1)
+            If Not result.Exists(inputArray(uniqueRow, 1)) Then
                 counter = counter + 1
                 globalcounter = globalcounter + 1
                 'Add to Dictionary
-                result.Add inputArray(1, uniqueRow), globalcounter
+                result.Add inputArray(uniqueRow, 1), globalcounter
             End If
         Next uniqueRow
     Set fCreateUniqueCSXDict = result
@@ -400,6 +400,7 @@ Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
     Dim counter As Long
     Dim uniqueRow As Long
     Dim DictInColl As Dictionary
+    Dim holdDict As Dictionary
     Dim dict1key As Variant
     Dim dict2key As Variant
     Dim cDict As Integer
@@ -410,21 +411,25 @@ Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
     wbkCsxByDict.Worksheets("outputTestOnSliceCSX").Cells.ClearContents
 
     Set result = New Dictionary
+    Set holdDict = New Dictionary
 '    Debug.Print dict1.Items()(1), dict1.Keys()(1)
     counter = 0
+    cDict = 0
     For Each DictInColl In collOfDicts
+        If cDict < 1 Then
+        Set holdDict = DictInColl
+        End If
         For Each dict1key In DictInColl.Keys
-            If Not result.Exists(dict1key) Then
-                If DictInColl.Exists(dict1key) Then
+            If holdDict.Exists(dict1key) And DictInColl.Exists(dict1key) And Not result.Exists(dict1key) Then
                     counter = counter + 1
                     result.Add dict1key, counter
-                End If
             End If
         Next dict1key
     cDict = cDict + 1
     wbkCsxByDict.Worksheets("outputTestOnSliceCSX").Cells(1, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
-    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("outputTestOnSliceCSX"))
+    wbkCsxByDict.Worksheets("outputTestOnSliceCSX").Cells(1, cDict + 5).Resize(result.Count, 1) = Application.Transpose(result.Keys)
     Next DictInColl
+    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("outputTestOnSliceCSX"))
     Set fJoinDictionaries = result
 End Function
 

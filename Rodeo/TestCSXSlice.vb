@@ -32,44 +32,23 @@ StartTime = Timer
     Set collImportWSnames = New Collection
     Set collUniqueDicts = New Collection
     Set collRuntimes = New Collection
-    Set collWorkpool = New Collection
     Set collUniqeCSXCounter = New Collection
     Set app = Application
 '    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
-    Set ImportWbk = Workbooks("TestOnSliceOfCSX_SampleData.xlsm")
+    Set ImportWbk = Workbooks("TestOnSliceOfCSX_SampleData.xlsx")
     For Each importWS In ImportWbk.Worksheets
         timeStampscsx = Right(importWS.Name, 9)
         lastrow = fLastWrittenRow(importWS, 1)
         'Original Data
         ReDim csxData(1 To lastrow, 1)
-        'Filtered
-        ReDim csxDataFiltered(1 To lastrow, 1)
         'Unique csx Arrays
         ReDim csxDataUniqe(1 To lastrow, 1)
         'Fill arrays with values'
-        csxData = importWS.Range("A1:A" & lastrow).Value2
-        'ReDim Filtered Arrays'
-        ReDim csxDataFiltered(1 To 1, 1 To 1)
+        csxData = importWS.Range("A2:A" & lastrow).Value2
         'ReDim Unique Arrays'
         ReDim csxDataUniqe(1 To 1, 1 To 1)
-
         counter = 0
-            For lrow = 1 To lastrow
-                    'watch-variables
-                    dataSetWorkpool = WorkpoolData(lrow, 1)
-                    dataSetcsx = csxData(lrow, 1)
-'                If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" And WorkpoolData(lrow, 1) <> "TransshipSorted" Then
-                If WorkpoolData(lrow, 1) <> "Palletized" And WorkpoolData(lrow, 1) <> "Loaded" Then
-                    'Resize arrays by value=counter on each hit of conditions
-                    counter = counter + 1
-                    ReDim Preserve csxDataFiltered(1 To 1, 1 To counter)
-                    'Fill new row of array with value on hit conditions
-                    'Transpoe array so you can ReDim last dimension later
-                    csxDataFiltered(1, counter) = csxData(lrow, 1)
-                End If
-            Next lrow
-            counter = 0
-            Set csxDict = fCreateUniqueCSXDict(csxDataFiltered)     'get a Dict of unique values
+            Set csxDict = fCreateUniqueCSXDict(csxData)     'get a Dict of unique values
 '            Set collUniqeCSXCounter = fAddUniqueCSXcounterToACollection(csxDict)
                 'Collections to track data on each repeat step
                 collUniqueCounter.Add csxDict.Count
@@ -79,7 +58,7 @@ StartTime = Timer
                 collUniqueDicts.Add csxDict, timeStampscsx
 
                 Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
-                Erase csxDataFiltered
+                Erase csxData
 '                Erase OuterScannableDataFiltered
 '                Erase OuterContainerDataFiltered
 '                Erase WorkpoolDataFiltered
