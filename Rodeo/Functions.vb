@@ -430,9 +430,7 @@ End Function
 
 Function fSortColumnsIndividually(ws As Worksheet)
 Dim intColumn As Long
-
-    For intColumn = 1 To 10
-
+    For intColumn = 1 To 37
         With ws.Sort
             .SortFields.Clear
             .SortFields.Add Range(Cells(1, intColumn), Cells(fLastWrittenRow(ws, intColumn), intColumn)), xlSortOnValues, xlAscending
@@ -442,7 +440,5 @@ Dim intColumn As Long
             .SortMethod = xlPinYin
             .Apply
         End With
-
     Next intColumn
-
 End Function
