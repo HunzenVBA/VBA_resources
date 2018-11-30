@@ -32,7 +32,7 @@ Application.ScreenUpdating = False
 '**********************************************************************************************************************************
 '   Rodeo link with parameters as shown
 '   URL = "https://tiny.amazon.com/17n4oyxa8/rodeamazDTM2Item"  'dwelling time < 1h
-    URL = "https://tiny.amazon.com/1jxi3kwus/rodeamazDTM2Item" 'dwell time <30min
+    URL = "https://tiny.amazon.com/md8cl8ex/rodeamazDTM2Item" 'dwell time <30min
 
     Debug.Print "URL = " & URL
     Set qtRodeoTotal = importWS.QueryTables.Add(Connection:="URL;" & URL, Destination:=Range("A1"))
@@ -73,7 +73,8 @@ Application.ScreenUpdating = False
     importWS.Cells(lastrow + 3, 1).Value = Format(Now, "DD.MM.YYYY HH:MM") 'Zeitstempel Werte eintragen
     qtDeleteInAllWbks
     counter = Format(Now, "DD.MM_HH.mm.ss")
-    importWS.Name = "RodeoTotal" & counter
+    importWS.Name = "RodeoWkpool" & counter
+    importWS.Columns.AutoFit
 '    ImportWbk.Save
     Exit Sub
 Whoa:
@@ -81,18 +82,19 @@ Whoa:
     Exit Sub
 End Sub
 
-Sub UpdateRodeoTotal()
-'    Runtime Start
-    StartTime = Timer
-    currProcedureName = "UpdateRodeoTotal"
-    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
-    Debug.Print Now
-    With qtRodeoTotal
-        ThisWorkbook.Worksheets("4RodeoTotalImport").QueryTables(1).Refresh
+Sub UpdateRodeoWorkpool()
+StartTime = Timer
+    Dim ws As Worksheet
+    Dim qt As QueryTable
+    Dim ImportWbk As Workbook
+    Set ImportWbk = Workbooks(strRodeoWorkpoolFileName)
+    Set ws = ImportWbk.Worksheets(1)
+    Set qt = ImportWbk.ws.QueryTables(1)
+
+    With qt
+        .Refresh
     End With
-'    Timer end and print
-'************************************************************
+
     SecondsElapsed = Round(Timer - StartTime, 2)
-'    Notify user in seconds
     Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
 End Sub
