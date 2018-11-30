@@ -77,8 +77,9 @@ Application.ScreenUpdating = False
     importWS.Name = "RodeoWkpool" & counter
     Call fDeleteColumns(importWS)
     importWS.Columns.AutoFit
+    Call fRodeoColumnsWidth(importWS)
 '    ImportWbk.Save
-SecondsElapsed = Round(Timer - StartTime, 2)
+SecondsElapsed = Round(Timer - StartTime, 1)
     Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
     Exit Sub
 Whoa:
@@ -105,6 +106,6 @@ StartTime = Timer
     Call fDeleteColumns(importWS)
     importWS.Columns.AutoFit
     Call fRodeoColumnsWidth(importWS)
-    SecondsElapsed = Round(Timer - StartTime, 2)
+    SecondsElapsed = Round(Timer - StartTime, 1)
     Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
 End Sub
