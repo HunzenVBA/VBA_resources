@@ -25,9 +25,6 @@ Application.ScreenUpdating = False
 '    Set importWS = ThisWorkbook.Worksheets("RodeoTotal")
     'Initialize error handling
         On Error GoTo Whoa
-    'Löschen alter Daten auf dem Rodeo Tabellenblatt
-'        importWS.UsedRange.Delete xlUp
-'        importWS.Activate
 
     'Web Query
 '**********************************************************************************************************************************
