@@ -513,8 +513,9 @@ End Function
 
 Function fRodeoColumnsWidth(ws As Worksheet)
 'Use on filtered/deleted columns version of Rodeo
-ws.Columns("A").ColumnWidth = 35
-ws.Columns("B").ColumnWidth = 8
-ws.Columns("G").ColumnWidth = 20
-ws.Columns("L").ColumnWidth = 10
+ws.Columns("A").ColumnWidth = 45        'Transfer Request ID
+ws.Columns("B").ColumnWidth = 12        'Destination
+ws.Columns("G").ColumnWidth = 20        'Scannable ID
+ws.Columns("i").ColumnWidth = 13        'Container Type
+ws.Columns("L").ColumnWidth = 10        'Dwell Time
 End Function
