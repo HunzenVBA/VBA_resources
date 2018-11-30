@@ -418,23 +418,23 @@ Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
     counter = 0
     cDict = 0
     For Each DictInColl In collOfDicts
-        If cDict < 1 Then
+        If cDict < 1 Then                   'für den ersten Durchgang Holddict mit DictinColl füllen
         Set holdDict = DictInColl           'first Dict is a hold dict. All csx of this will remain, but only if they can be found in all other Dicts in Coll
         End If
         For Each dict1key In holdDict.Keys
 
         Debug.Print dict1key
-            If holdDict.Exists(dict1key) And DictInColl.Exists(dict1key) And Not result.Exists(dict1key) Then       'must not exist in result Dict
+            If Not DictInColl.Exists(dict1key) Then       'must not exist in result Dict
                     counter = counter + 1
-                    result.Add dict1key, counter
+                    holdDict.Remove (dict1key)
             End If
         Next dict1key
     cDict = cDict + 1
     wbkCsxByDict.Worksheets("outputTestOnSliceCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
-    wbkCsxByDict.Worksheets("outputTestOnSliceCSX").Cells(2, cDict + 3).Resize(result.Count, 1) = Application.Transpose(result.Keys)
-    result.RemoveAll
+    wbkCsxByDict.Worksheets("outputTestOnSliceCSX").Cells(2, cDict + 3).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
     Next DictInColl
-    Set fJoinDictionaries = result
+    Set result = holdDict
+    Set fJoinDictionaries = result                                      'output result as function value
     Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("outputTestOnSliceCSX"))
 End Function
 
