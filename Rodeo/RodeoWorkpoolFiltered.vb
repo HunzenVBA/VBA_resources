@@ -91,6 +91,7 @@ StartTime = Timer
     Dim importWS As Worksheet
     Dim qt As QueryTable
     Dim ImportWbk As Workbook
+    Dim counter As String
     Set ImportWbk = Workbooks(strRodeoWorkpoolFileName)
     Set importWS = ImportWbk.Worksheets(1)
     Set qt = importWS.QueryTables(1)
@@ -98,6 +99,9 @@ StartTime = Timer
     With qt
         .Refresh
     End With
+    counter = Format(Now, "DD.MM_HH.mm.ss")
+    importWS.Name = "RodeoWkpool" & counter
+
     Call fDeleteColumns(importWS)
     importWS.Columns.AutoFit
     SecondsElapsed = Round(Timer - StartTime, 2)
