@@ -494,6 +494,7 @@ Function fJoinDictionaries(collOfDicts As Collection, collOfDictNames As Collect
         Next dict1key
     cDict = cDict + 1
 '    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
+    Set collOfDictNames = fInvertCollectionItems(collOfDictNames)
     wbkCsxByDict.Worksheets("SliceCSX").Cells(1, cDict).Value2 = collOfDictNames(cDict)
     wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
     Next DictInColl
@@ -516,6 +517,22 @@ Function fRodeoColumnsWidth(ws As Worksheet)
 ws.Columns("A").ColumnWidth = 45        'Transfer Request ID
 ws.Columns("B").ColumnWidth = 12        'Destination
 ws.Columns("G").ColumnWidth = 20        'Scannable ID
+ws.Columns("H").ColumnWidth = 20        'Outer Container Type
 ws.Columns("i").ColumnWidth = 13        'Container Type
 ws.Columns("L").ColumnWidth = 10        'Dwell Time
+End Function
+
+
+Function fInvertCollectionItems(coll As Collection) As Collection
+Dim MyNewCol As New Collection
+Dim obj As Variant
+
+For Each obj In coll
+    If MyNewCol.Count > 0 Then
+        MyNewCol.Add Item:=obj, before:=1
+    Else
+        MyNewCol.Add Item:=obj
+    End If
+Next
+Set fInvertCollectionItems = MyNewCol
 End Function
