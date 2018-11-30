@@ -74,6 +74,9 @@ Application.ScreenUpdating = False
     qtDeleteInAllWbks
     counter = Format(Now, "DD.MM_HH.mm.ss")
     importWS.Name = "RodeoTotal" & counter
+    Call fDeleteColumns(importWS)
+    importWS.Columns.AutoFit
+    Call fRodeoColumnsWidth(importWS)
 '    ImportWbk.Save
 
     Exit Sub

@@ -21,7 +21,8 @@ Anf:
                 'Determine how many seconds code took to run
                 SecondsElapsedAll = Round(Timer - StartTimeAll, 1)
                 'Notify user in seconds
-                Debug.Print "This code ran successfully in " & SecondsElapsedAll & " seconds"
+                'Debug.Print "This code ran successfully in " & SecondsElapsedAll & " seconds"
+                Application.Wait (Now + TimeValue("0:01:00"))      '10 seconds delay between queries
                 Debug.Print "Makro Start Nr.: " & i
         Next i
     Else
@@ -52,9 +53,9 @@ Anf:
                 'Determine how many seconds code took to run
                 SecondsElapsedAll = Round(Timer - StartTimeAll, 1)
                 'Notify user in seconds
-                Debug.Print "This code ran successfully in " & SecondsElapsedAll & " seconds"
+                'Debug.Print "This code ran successfully in " & SecondsElapsedAll & " seconds"
                 Debug.Print "Makro Start Nr.: " & i
-                Application.Wait (10)       '10 seconds delay between queries
+                Application.Wait (Now + TimeValue("0:01:00"))      '10 seconds delay between queries
         Next i
     Else
     MsgBox "Bitte ein Zahl eingeben !", vbInformation
