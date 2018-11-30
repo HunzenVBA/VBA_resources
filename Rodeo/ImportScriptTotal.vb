@@ -5,6 +5,7 @@ Option Explicit
 '************** /Subs in this Module ****************
 
 Sub RodeoAddQueryTotal()
+Application.ScreenUpdating = False
     Dim importWS As Worksheet
     Dim lastrow As Long
     Dim lastcol As Long
@@ -15,24 +16,18 @@ Sub RodeoAddQueryTotal()
     Dim ImportWbk As Workbook
     Dim counter As String
 
-'    Call NameWorksheets
-    'Namensausgabe des Subs im Direktfenster, zur Info/Debugging
-    currProcedureName = "RodeoAddQueryTotal"
-    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
-    Debug.Print Now
     'assign importWS = Importsheet
 
-    Set ImportWbk = Workbooks.Open(Filename:=strRodeoHistoryFile, UpdateLinks:=False)
-    ImportWbk.Worksheets.Add
+'    Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
+    Set ImportWbk = Workbooks(strRodeoHistoryFileName)
+    ImportWbk.Worksheets.Add ImportWbk.Worksheets(1)
     Set importWS = ActiveSheet
 '    Set importWS = ThisWorkbook.Worksheets("RodeoTotal")
     'Initialize error handling
         On Error GoTo Whoa
-    'Remember time when macro starts
-        StartTime = Timer
     'Löschen alter Daten auf dem Rodeo Tabellenblatt
-        importWS.UsedRange.Delete xlUp
-        importWS.Activate
+'        importWS.UsedRange.Delete xlUp
+'        importWS.Activate
 
     'Web Query
 '**********************************************************************************************************************************
@@ -74,7 +69,7 @@ Sub RodeoAddQueryTotal()
 
 '    Delete unused rows
 '**********************************************************************************************************************************
-    Application.ScreenUpdating = False
+
     lastrow = importWS.Range("A1").CurrentRegion.Rows.Count 'Anzahl der bis zur letzten beschriebenen Zeile
     lastcol = importWS.Range("A1").CurrentRegion.Columns.Count 'Anzahl der bis zur letzten beschriebenen Spalte
     importWS.Rows(lastrow & ":" & importWS.Rows.Count).Delete 'Zeilen ab der letzten geschriebenen Zeile löschen um Blattgröße zu minimieren
@@ -82,15 +77,10 @@ Sub RodeoAddQueryTotal()
     importWS.Cells(lastrow + 2, 1).Value = URL
     importWS.Cells(lastrow + 3, 1).Value = Format(Now, "DD.MM.YYYY HH:MM") 'Zeitstempel Werte eintragen
 
-'    Call fDeleteAllQueries
-    counter = Format(Now, "DDMM_HHmm")
+    qtDeleteInAllWbks
+    counter = Format(Now, "DD.MM_HH.mm.ss")
     importWS.Name = "RodeoTotal" & counter
-    ImportWbk.Save
-'    Determine how many seconds code took to run
-'************************************************************
-    SecondsElapsed = Round(Timer - StartTime, 1)
-'    Notify user in seconds
-    Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
+'    ImportWbk.Save
 
     Exit Sub
 
