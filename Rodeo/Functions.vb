@@ -395,7 +395,7 @@ Function fJoin2Dictionaries(dict1 As Dictionary, dict2 As Dictionary) As Diction
     Set fJoinDictionaries = result
 End Function
 
-Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
+Function fJoinDictionariesTestData(collOfDicts As Collection) As Dictionary
     Dim result As Dictionary
     Dim counter As Long
     Dim uniqueRow As Long
@@ -457,4 +457,46 @@ Function fAutofitWS(ws As Worksheet)
 With ws
  .Columns.AutoFit
 End With
+End Function
+Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
+    Dim result As Dictionary
+    Dim counter As Long
+    Dim uniqueRow As Long
+    Dim DictInColl As Dictionary
+    Dim holdDict As Dictionary
+    Dim dict1key As Variant
+    Dim dict2key As Variant
+    Dim cDict As Integer
+    Dim currSheet As Worksheet
+
+    Dim wbkCsxByDict As Workbook
+
+    Set wbkCsxByDict = Workbooks("CsxByDict.xlsm")
+    Set currSheet = Worksheets("SliceCSX")
+    wbkCsxByDict.Worksheets("SliceCSX").Range("A2:F" & fLastWrittenRow(currSheet, 1)).ClearContents
+
+    Set result = New Dictionary
+    Set holdDict = New Dictionary
+'    Debug.Print dict1.Items()(1), dict1.Keys()(1)
+    counter = 0
+    cDict = 0
+    For Each DictInColl In collOfDicts
+        If cDict < 1 Then                   'für den ersten Durchgang Holddict mit DictinColl füllen
+        Set holdDict = DictInColl           'first Dict is a hold dict. All csx of this will remain, but only if they can be found in all other Dicts in Coll
+        End If
+        For Each dict1key In holdDict.Keys
+
+        Debug.Print dict1key
+            If Not DictInColl.Exists(dict1key) Then       'must not exist in result Dict
+                    counter = counter + 1
+                    holdDict.Remove (dict1key)
+            End If
+        Next dict1key
+    cDict = cDict + 1
+    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
+    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict + 3).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
+    Next DictInColl
+    Set result = holdDict
+    Set fJoinDictionaries = result                                      'output result as function value
+    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("SliceCSX"))
 End Function
