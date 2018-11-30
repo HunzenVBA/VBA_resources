@@ -17,7 +17,6 @@ Application.ScreenUpdating = False
     Dim counter As String
 
     'assign importWS = Importsheet
-
 '    Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks(strRodeoHistoryFileName)
     ImportWbk.Worksheets.Add ImportWbk.Worksheets(1)
@@ -37,10 +36,8 @@ Application.ScreenUpdating = False
 
     Debug.Print "URL = " & URL
     Set qtRodeoTotal = importWS.QueryTables.Add(Connection:="URL;" & URL, Destination:=Range("A1"))
-
         With qtRodeoTotal  'Datei und Zielort auswählen
 '        Spaltenbreiten bleiben aktuell erhalten
-
             .Name = "qTRodeoTotal"
             .FieldNames = True
             .RowNumbers = False
@@ -62,7 +59,6 @@ Application.ScreenUpdating = False
             .WebDisableRedirections = False
             .Refresh BackgroundQuery:=False
 '           .PreserveColumnInfo = True '::: liefert im Moment noch Fehler
-
         End With
         'Sortieren nach Spalte dwelling time
         'importWS.Range("DwellTime").Sort Key1:=Range("P1"), Order1:=xlDescending, Header:=xlYes
@@ -73,10 +69,8 @@ Application.ScreenUpdating = False
     lastrow = importWS.Range("A1").CurrentRegion.Rows.Count 'Anzahl der bis zur letzten beschriebenen Zeile
     lastcol = importWS.Range("A1").CurrentRegion.Columns.Count 'Anzahl der bis zur letzten beschriebenen Spalte
     importWS.Rows(lastrow & ":" & importWS.Rows.Count).Delete 'Zeilen ab der letzten geschriebenen Zeile löschen um Blattgröße zu minimieren
-
     importWS.Cells(lastrow + 2, 1).Value = URL
     importWS.Cells(lastrow + 3, 1).Value = Format(Now, "DD.MM.YYYY HH:MM") 'Zeitstempel Werte eintragen
-
     qtDeleteInAllWbks
     counter = Format(Now, "DD.MM_HH.mm.ss")
     importWS.Name = "RodeoTotal" & counter
@@ -96,11 +90,9 @@ Sub UpdateRodeoTotal()
     currProcedureName = "UpdateRodeoTotal"
     Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
     Debug.Print Now
-
     With qtRodeoTotal
         ThisWorkbook.Worksheets("4RodeoTotalImport").QueryTables(1).Refresh
     End With
-
 '    Timer end and print
 '************************************************************
     SecondsElapsed = Round(Timer - StartTime, 2)
