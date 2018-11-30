@@ -7,6 +7,7 @@ Public Const strRodeoHistoryFileName As String = "RodeoImportHistory.xlsx"
 Public Const strcsxStampsFileName As String = "csxStamps.xlsx"
 Public Const strRodeoPath As String = "C:\Users\denizku\Documents\Rodeo\"
 Public Const strRodeoFiltered1 As String = "C:\Users\denizku\Documents\Rodeo\RodeoOhneLoadedundPalletized.xlsx"
+Public Const strRodeoWorkpoolFileName As String = "RodeoWorkpoolFiltered.xlsx"
 
 'Home'
 'Public Const strRodeoHistoryFile As String = "C:\Users\Apr17\Documents\VBA\Rodeo\RodeoImportHistory.xlsx"
