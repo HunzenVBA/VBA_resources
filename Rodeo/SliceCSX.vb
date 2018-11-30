@@ -34,7 +34,7 @@ StartTime = Timer
     Set collUniqeCSXCounter = New Collection
     Set app = Application
 '    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
-    Set ImportWbk = Workbooks(strRodeoHistoryFileName)
+    Set ImportWbk = Workbooks("RodeoImportHistory_3011_1500.xlsx")
     For Each importWS In ImportWbk.Worksheets
         timeStampscsx = Right(importWS.Name, 9)
         lastrow = fLastWrittenRow(importWS, 1)
@@ -43,7 +43,7 @@ StartTime = Timer
         'Unique csx Arrays
         ReDim csxDataUniqe(1 To lastrow, 1)
         'Fill arrays with values'
-        csxData = importWS.Range("i2:i" & lastrow).Value2
+        csxData = importWS.Range("F2:F" & lastrow).Value2
         'ReDim Unique Arrays'
         ReDim csxDataUniqe(1 To 1, 1 To 1)
         counter = 0
