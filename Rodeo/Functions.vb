@@ -458,7 +458,7 @@ With ws
  .Columns.AutoFit
 End With
 End Function
-Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
+Function fJoinDictionaries(collOfDicts As Collection, collOfDictNames As Collection) As Dictionary
     Dim result As Dictionary
     Dim counter As Long
     Dim uniqueRow As Long
@@ -472,8 +472,8 @@ Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
     Dim wbkCsxByDict As Workbook
 
     Set wbkCsxByDict = Workbooks("CsxByDict.xlsm")
-    Set currSheet = Worksheets("SliceCSX")
-    wbkCsxByDict.Worksheets("SliceCSX").Range("A2:F" & fLastWrittenRow(currSheet, 1)).ClearContents
+    Set currSheet = wbkCsxByDict.Worksheets("SliceCSX")
+    wbkCsxByDict.Worksheets("SliceCSX").Range("A2:BB" & fLastWrittenRow(currSheet, 1)).ClearContents
 
     Set result = New Dictionary
     Set holdDict = New Dictionary
@@ -486,17 +486,28 @@ Function fJoinDictionaries(collOfDicts As Collection) As Dictionary
         End If
         For Each dict1key In holdDict.Keys
 
-        Debug.Print dict1key
+'        Debug.Print dict1key
             If Not DictInColl.Exists(dict1key) Then       'must not exist in result Dict
                     counter = counter + 1
                     holdDict.Remove (dict1key)
             End If
         Next dict1key
     cDict = cDict + 1
-    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
-    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict + 3).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
+'    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
+    wbkCsxByDict.Worksheets("SliceCSX").Cells(1, cDict).Value2 = collOfDictNames(cDict)
+    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
     Next DictInColl
     Set result = holdDict
     Set fJoinDictionaries = result                                      'output result as function value
-    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("SliceCSX"))
+'    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("SliceCSX"))         'deactivated for the moment
+End Function
+
+
+Function fDeleteColumns(ws As Worksheet)
+'Delete Status and Process Path columns = because useless
+ws.Range("M1").EntireColumn.Delete Shift:=xlLeft        'Status ist immer Crossdock
+ws.Range("H1").EntireColumn.Delete Shift:=xlLeft        'Pick Priority ist immer Min
+ws.Range("G1").EntireColumn.Delete Shift:=xlLeft        'Process Path ist immer leer
+ws.Range("C1").EntireColumn.Delete Shift:=xlLeft        'Next Destination ist immer dasselbe wie Destination Warehouse
+
 End Function
