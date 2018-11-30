@@ -104,6 +104,7 @@ StartTime = Timer
 
     Call fDeleteColumns(importWS)
     importWS.Columns.AutoFit
+    Call fRodeoColumnsWidth(importWS)
     SecondsElapsed = Round(Timer - StartTime, 2)
     Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
 End Sub

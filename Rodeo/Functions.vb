@@ -509,5 +509,12 @@ ws.Range("M1").EntireColumn.Delete Shift:=xlLeft        'Status ist immer Crossd
 ws.Range("H1").EntireColumn.Delete Shift:=xlLeft        'Pick Priority ist immer Min
 ws.Range("G1").EntireColumn.Delete Shift:=xlLeft        'Process Path ist immer leer
 ws.Range("C1").EntireColumn.Delete Shift:=xlLeft        'Next Destination ist immer dasselbe wie Destination Warehouse
+End Function
 
+Function fRodeoColumnsWidth(ws As Worksheet)
+'Use on filtered/deleted columns version of Rodeo
+ws.Columns("A").ColumnWidth = 35
+ws.Columns("B").ColumnWidth = 8
+ws.Columns("G").ColumnWidth = 20
+ws.Columns("L").ColumnWidth = 10
 End Function
