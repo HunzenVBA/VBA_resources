@@ -5,6 +5,7 @@ Option Explicit
 '************** /Subs in this Module ****************
 
 Sub RodeoAddWorkpool()
+StartTime = Timer
 Application.ScreenUpdating = False
     Dim importWS As Worksheet
     Dim lastrow As Long
@@ -20,7 +21,7 @@ Application.ScreenUpdating = False
 '    Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks(strRodeoWorkpoolFileName)
     ImportWbk.Worksheets.Add ImportWbk.Worksheets(1)
-    Set importWS = ActiveSheet
+    Set importWS = ImportWbk.Worksheets(1)
 '    Set importWS = ThisWorkbook.Worksheets("RodeoTotal")
     'Initialize error handling
         On Error GoTo Whoa
@@ -71,11 +72,14 @@ Application.ScreenUpdating = False
     importWS.Rows(lastrow & ":" & importWS.Rows.Count).Delete 'Zeilen ab der letzten geschriebenen Zeile löschen um Blattgröße zu minimieren
     importWS.Cells(lastrow + 2, 1).Value = URL
     importWS.Cells(lastrow + 3, 1).Value = Format(Now, "DD.MM.YYYY HH:MM") 'Zeitstempel Werte eintragen
-    qtDeleteInAllWbks
+'    qtDeleteInAllWbks
     counter = Format(Now, "DD.MM_HH.mm.ss")
     importWS.Name = "RodeoWkpool" & counter
+    Call fDeleteColumns(importWS)
     importWS.Columns.AutoFit
 '    ImportWbk.Save
+SecondsElapsed = Round(Timer - StartTime, 2)
+    Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
     Exit Sub
 Whoa:
     MsgBox Err.Description
@@ -84,17 +88,18 @@ End Sub
 
 Sub UpdateRodeoWorkpool()
 StartTime = Timer
-    Dim ws As Worksheet
+    Dim importWS As Worksheet
     Dim qt As QueryTable
     Dim ImportWbk As Workbook
     Set ImportWbk = Workbooks(strRodeoWorkpoolFileName)
-    Set ws = ImportWbk.Worksheets(1)
-    Set qt = ImportWbk.ws.QueryTables(1)
+    Set importWS = ImportWbk.Worksheets(1)
+    Set qt = importWS.QueryTables(1)
 
     With qt
         .Refresh
     End With
-
+    Call fDeleteColumns(importWS)
+    importWS.Columns.AutoFit
     SecondsElapsed = Round(Timer - StartTime, 2)
     Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
 End Sub
