@@ -473,7 +473,7 @@ Function fJoinDictionaries(collOfDicts As Collection, collOfDictNames As Collect
 
     Set wbkCsxByDict = Workbooks("CsxByDict.xlsm")
     Set currSheet = wbkCsxByDict.Worksheets("SliceCSX")
-    wbkCsxByDict.Worksheets("SliceCSX").Range("A2:BB" & fLastWrittenRow(currSheet, 1)).ClearContents
+    wbkCsxByDict.Worksheets("SliceCSX").Range("A1:BB" & fLastWrittenRow(currSheet, 1)).ClearContents
 
     Set result = New Dictionary
     Set holdDict = New Dictionary
@@ -482,7 +482,9 @@ Function fJoinDictionaries(collOfDicts As Collection, collOfDictNames As Collect
     cDict = 0
     For Each DictInColl In collOfDicts
         If cDict < 1 Then                   'für den ersten Durchgang Holddict mit DictinColl füllen
-        Set holdDict = DictInColl           'first Dict is a hold dict. All csx of this will remain, but only if they can be found in all other Dicts in Coll
+            Set holdDict = DictInColl           'first Dict is a hold dict. All csx of this will remain, but only if they can be found in all other Dicts in Coll
+'            Set collOfDictNames = fInvertCollectionItems(collOfDictNames)
+
         End If
         For Each dict1key In holdDict.Keys
 
@@ -492,12 +494,13 @@ Function fJoinDictionaries(collOfDicts As Collection, collOfDictNames As Collect
                     holdDict.Remove (dict1key)
             End If
         Next dict1key
-    cDict = cDict + 1
-'    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
-    Set collOfDictNames = fInvertCollectionItems(collOfDictNames)
-    wbkCsxByDict.Worksheets("SliceCSX").Cells(1, cDict).Value2 = collOfDictNames(cDict)
-    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
+
+        cDict = cDict + 1
+        wbkCsxByDict.Worksheets("SliceCSX").Cells(1, cDict).Value2 = collOfDictNames(cDict)             'Tabellennamen/Zeitstempel schreiben
+    '    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
+        wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
     Next DictInColl
+
     Set result = holdDict
     Set fJoinDictionaries = result                                      'output result as function value
 '    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("SliceCSX"))         'deactivated for the moment
