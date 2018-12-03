@@ -468,6 +468,7 @@ Function fJoinDictionaries(collOfDicts As Collection, collOfDictNames As Collect
     Dim dict2key As Variant
     Dim cDict As Integer
     Dim currSheet As Worksheet
+    Dim currDictName As String
 
     Dim wbkCsxByDict As Workbook
 
@@ -484,19 +485,17 @@ Function fJoinDictionaries(collOfDicts As Collection, collOfDictNames As Collect
         If cDict < 1 Then                   'für den ersten Durchgang Holddict mit DictinColl füllen
             Set holdDict = DictInColl           'first Dict is a hold dict. All csx of this will remain, but only if they can be found in all other Dicts in Coll
 '            Set collOfDictNames = fInvertCollectionItems(collOfDictNames)
-
         End If
         For Each dict1key In holdDict.Keys
-
 '        Debug.Print dict1key
             If Not DictInColl.Exists(dict1key) Then       'must not exist in result Dict
-                    counter = counter + 1
-                    holdDict.Remove (dict1key)
+                counter = counter + 1
+                holdDict.Remove (dict1key)
             End If
         Next dict1key
-
         cDict = cDict + 1
-        wbkCsxByDict.Worksheets("SliceCSX").Cells(1, cDict).Value2 = collOfDictNames(cDict)             'Tabellennamen/Zeitstempel schreiben
+        currDictName = collOfDictNames(cDict)
+        wbkCsxByDict.Worksheets("SliceCSX").Cells(1, cDict).Value2 = currDictName             'Tabellennamen/Zeitstempel schreiben
     '    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
         wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
     Next DictInColl
