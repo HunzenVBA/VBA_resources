@@ -468,13 +468,12 @@ Function fJoinDictionaries(collOfDicts As Collection, collOfDictNames As Collect
     Dim dict2key As Variant
     Dim cDict As Integer
     Dim currSheet As Worksheet
-    Dim currDictName As String
 
     Dim wbkCsxByDict As Workbook
 
     Set wbkCsxByDict = Workbooks("CsxByDict.xlsm")
-    Set currSheet = wbkCsxByDict.Worksheets("SliceCSX")
-    wbkCsxByDict.Worksheets("SliceCSX").Range("A1:BB" & fLastWrittenRow(currSheet, 1)).ClearContents
+    Set currSheet = wbkCsxByDict.Worksheets("Slice1minCSX")
+    wbkCsxByDict.Worksheets("Slice1minCSX").Range("A2:BB" & fLastWrittenRow(currSheet, 1)).ClearContents
 
     Set result = New Dictionary
     Set holdDict = New Dictionary
@@ -483,29 +482,69 @@ Function fJoinDictionaries(collOfDicts As Collection, collOfDictNames As Collect
     cDict = 0
     For Each DictInColl In collOfDicts
         If cDict < 1 Then                   'für den ersten Durchgang Holddict mit DictinColl füllen
-            Set holdDict = DictInColl           'first Dict is a hold dict. All csx of this will remain, but only if they can be found in all other Dicts in Coll
-'            Set collOfDictNames = fInvertCollectionItems(collOfDictNames)
+        Set holdDict = DictInColl           'first Dict is a hold dict. All csx of this will remain, but only if they can be found in all other Dicts in Coll
         End If
         For Each dict1key In holdDict.Keys
+
 '        Debug.Print dict1key
             If Not DictInColl.Exists(dict1key) Then       'must not exist in result Dict
-                counter = counter + 1
-                holdDict.Remove (dict1key)
+                    counter = counter + 1
+                    holdDict.Remove (dict1key)
             End If
         Next dict1key
-        cDict = cDict + 1
-        currDictName = collOfDictNames(cDict)
-        wbkCsxByDict.Worksheets("SliceCSX").Cells(1, cDict).Value2 = currDictName             'Tabellennamen/Zeitstempel schreiben
-    '    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
-        wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
+    cDict = cDict + 1
+'    wbkCsxByDict.Worksheets("Slice1minCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
+    wbkCsxByDict.Worksheets("Slice1minCSX").Cells(1, cDict).Value2 = collOfDictNames(cDict)
+    wbkCsxByDict.Worksheets("Slice1minCSX").Cells(2, cDict).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
     Next DictInColl
+    Set result = holdDict
+    Set fJoinDictionaries = result                                      'output result as function value
+'    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("Slice1minCSX"))         'deactivated for the moment
+End Function
 
+Function fJoinDictionariesSlice(collOfDicts As Collection, collOfDictNames As Collection) As Dictionary
+    Dim result As Dictionary
+    Dim counter As Long
+    Dim uniqueRow As Long
+    Dim DictInColl As Dictionary
+    Dim holdDict As Dictionary
+    Dim dict1key As Variant
+    Dim dict2key As Variant
+    Dim cDict As Integer
+    Dim currSheet As Worksheet
+
+    Dim wbkCsxByDict As Workbook
+
+    Set wbkCsxByDict = Workbooks("CsxByDict.xlsm")
+    Set currSheet = wbkCsxByDict.Worksheets("SliceCSX")
+    wbkCsxByDict.Worksheets("SliceCSX").Range("A2:BB" & fLastWrittenRow(currSheet, 1)).ClearContents
+
+    Set result = New Dictionary
+    Set holdDict = New Dictionary
+'    Debug.Print dict1.Items()(1), dict1.Keys()(1)
+    counter = 0
+    cDict = 0
+    For Each DictInColl In collOfDicts
+        If cDict < 1 Then                   'für den ersten Durchgang Holddict mit DictinColl füllen
+        Set holdDict = DictInColl           'first Dict is a hold dict. All csx of this will remain, but only if they can be found in all other Dicts in Coll
+        End If
+        For Each dict1key In holdDict.Keys
+
+'        Debug.Print dict1key
+            If Not DictInColl.Exists(dict1key) Then       'must not exist in result Dict
+                    counter = counter + 1
+                    holdDict.Remove (dict1key)
+            End If
+        Next dict1key
+    cDict = cDict + 1
+'    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
+    wbkCsxByDict.Worksheets("SliceCSX").Cells(1, cDict).Value2 = collOfDictNames(cDict)
+    wbkCsxByDict.Worksheets("SliceCSX").Cells(2, cDict).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
+    Next DictInColl
     Set result = holdDict
     Set fJoinDictionaries = result                                      'output result as function value
 '    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("SliceCSX"))         'deactivated for the moment
 End Function
-
-
 Function fDeleteColumns(ws As Worksheet)
 'Delete Status and Process Path columns = because useless
 ws.Range("M1").EntireColumn.Delete Shift:=xlLeft        'Status ist immer Crossdock
@@ -522,19 +561,4 @@ ws.Columns("G").ColumnWidth = 20        'Scannable ID
 ws.Columns("H").ColumnWidth = 20        'Outer Container Type
 ws.Columns("i").ColumnWidth = 13        'Container Type
 ws.Columns("L").ColumnWidth = 10        'Dwell Time
-End Function
-
-
-Function fInvertCollectionItems(coll As Collection) As Collection
-Dim MyNewCol As New Collection
-Dim obj As Variant
-
-For Each obj In coll
-    If MyNewCol.Count > 0 Then
-        MyNewCol.Add Item:=obj, before:=1
-    Else
-        MyNewCol.Add Item:=obj
-    End If
-Next
-Set fInvertCollectionItems = MyNewCol
 End Function
