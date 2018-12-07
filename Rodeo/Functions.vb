@@ -562,3 +562,48 @@ ws.Columns("H").ColumnWidth = 20        'Outer Container Type
 ws.Columns("i").ColumnWidth = 13        'Container Type
 ws.Columns("L").ColumnWidth = 10        'Dwell Time
 End Function
+
+
+Function fJoinOnTimestamps(collOfDicts As Collection, collOfDictNames As Collection) As Dictionary
+    Dim result As Dictionary
+    Dim counter As Long
+    Dim uniqueRow As Long
+    Dim DictInColl As Dictionary
+    Dim holdDict As Dictionary
+    Dim dict1key As Variant
+    Dim dict2key As Variant
+    Dim cDict As Integer
+    Dim currSheet As Worksheet
+
+    Dim wbkCsxByDict As Workbook
+
+    Set wbkCsxByDict = Workbooks("CsxByDict.xlsm")
+    Set currSheet = wbkCsxByDict.Worksheets("SliceLastTimestamp")
+    wbkCsxByDict.Worksheets("SliceLastTimestamp").Range("A2:BB" & fLastWrittenRow(currSheet, 1)).ClearContents
+
+    Set result = New Dictionary
+    Set holdDict = New Dictionary
+'    Debug.Print dict1.Items()(1), dict1.Keys()(1)
+    counter = 0
+    cDict = 0
+    For Each DictInColl In collOfDicts
+        If cDict < 1 Then                   'für den ersten Durchgang Holddict mit DictinColl füllen
+        Set holdDict = DictInColl           'first Dict is a hold dict. All csx of this will remain, but only if they can be found in all other Dicts in Coll
+        End If
+        For Each dict1key In holdDict.Keys
+
+'        Debug.Print dict1key
+            If Not DictInColl.Exists(dict1key) Then       'must not exist in result Dict
+                    counter = counter + 1
+                    holdDict.Remove (dict1key)
+            End If
+        Next dict1key
+    cDict = cDict + 1
+'    wbkCsxByDict.Worksheets("SliceLastTimestamp").Cells(2, cDict).Resize(DictInColl.Count, 1) = Application.Transpose(DictInColl.Keys)
+    wbkCsxByDict.Worksheets("SliceLastTimestamp").Cells(1, cDict).Value2 = collOfDictNames(cDict)
+    wbkCsxByDict.Worksheets("SliceLastTimestamp").Cells(2, cDict).Resize(holdDict.Count, 1) = Application.Transpose(holdDict.Keys)
+    Next DictInColl
+    Set result = holdDict
+    Set fJoinDictionaries = result                                      'output result as function value
+'    Call fSortColumnsIndividually(wbkCsxByDict.Worksheets("SliceLastTimestamp"))         'deactivated for the moment
+End Function
