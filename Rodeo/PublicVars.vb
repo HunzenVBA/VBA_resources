@@ -1,18 +1,27 @@
 Option Explicit
 
 'Work
-Public Const strRodeoHistoryFile As String = "C:\Users\denizku\Documents\Rodeo\RodeoImportHistory.xlsm"
-Public Const strcsxStampsFile As String = "C:\Users\denizku\Documents\Rodeo\csxStamps.xlsx"
-Public Const strRodeoHistoryFileName As String = "RodeoImportHistory.xlsm"
-Public Const strcsxStampsFileName As String = "csxStamps.xlsx"
-Public Const strRodeoPath As String = "C:\Users\denizku\Documents\Rodeo\"
-Public Const strRodeoFiltered1 As String = "C:\Users\denizku\Documents\Rodeo\RodeoOhneLoadedundPalletized.xlsx"
-Public Const strRodeoWorkpoolFileName As String = "RodeoWorkpoolFiltered.xlsx"
+'Public Const strRodeoHistoryFile As String = "C:\Users\denizku\Documents\Rodeo\RodeoImportHistory.xlsm"
+'Public Const strcsxStampsFile As String = "C:\Users\denizku\Documents\Rodeo\csxStamps.xlsx"
+'Public Const strRodeoHistoryFileName As String = "RodeoImportHistory.xlsm"
+'Public Const strcsxStampsFileName As String = "csxStamps.xlsx"
+'Public Const strRodeoPath As String = "C:\Users\denizku\Documents\Rodeo\"
+'Public Const strRodeoFiltered1 As String = "C:\Users\denizku\Documents\Rodeo\RodeoOhneLoadedundPalletized.xlsx"
+'Public Const strRodeoWorkpoolFileName As String = "RodeoWorkpoolFiltered.xlsx"
+'Public Const strRodeo1minFile As String = "C:\Users\denizku\Documents\Rodeo\RodeoImport1min.xlsm"
+'Public Const strRodeo1minFileName As String = "RodeoImport1min.xlsm"
+
 
 'Home'
-'Public Const strRodeoHistoryFile As String = "C:\Users\Apr17\Documents\VBA\Rodeo\RodeoImportHistory.xlsx"
-'Public Const strcsxStampsFile As String = "C:\Users\Apr17\Documents\VBA\Rodeo\csxStamps.xlsx"
-
+Public Const strRodeoHistoryFile As String = "C:\Users\Apr17\Documents\VBA\Rodeo\RodeoImportHistory.xlsx"
+Public Const strcsxStampsFile As String = "C:\Users\Apr17\Documents\VBA\Rodeo\csxStamps.xlsx"
+Public Const strRodeoHistoryFileName As String = "RodeoImportHistory.xlsm"
+Public Const strcsxStampsFileName As String = "csxStamps.xlsx"
+Public Const strRodeoPath As String = "C:\Users\Apr17\Documents\VBA\Rodeo\"
+Public Const strRodeoFiltered1 As String = "C:\Users\Apr17\Documents\VBA\Rodeo\RodeoOhneLoadedundPalletized.xlsx"
+Public Const strRodeoWorkpoolFileName As String = "RodeoWorkpoolFiltered.xlsx"
+Public Const strRodeo1minFile As String = "C:\Users\Apr17\Documents\VBA\Rodeo\RodeoImport1min.xlsm"
+Public Const strRodeo1minFileName As String = "RodeoImport1min.xlsm"
 
 
 Public ws                           As Worksheet
