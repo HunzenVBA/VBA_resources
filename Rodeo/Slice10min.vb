@@ -63,7 +63,7 @@ StartTime = Timer
             Set csxDict = fCreateUniqueCSXDict(csxData)     'get a Dict of unique values
 '            Set collUniqeCSXCounter = fAddUniqueCSXcounterToACollection(csxDict)
                 'WriteActualData of CSX
-                Set csx = fWriteCSXData(
+
                 'Collections to track data on each repeat step
                 collUniqueCounter.Add csxDict.Count
                 collImportWSnames.Add importWS.Name
@@ -80,7 +80,7 @@ StartTime = Timer
             Set csxDict = New Dictionary
             cTimestamp = cTimestamp + 1
         Next importWS
-    Set csxBetweenDicts = fJoinDictionaries(collUniqueDicts, collImportWSnames)
+'    Set csxBetweenDicts = fJoinDictionaries(collUniqueDicts, collImportWSnames)
 '    For Each ws In csxWbk.Worksheets
 '        ws.Cells.Columns.AutoFit
 '    Next ws
