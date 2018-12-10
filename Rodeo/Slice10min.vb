@@ -24,6 +24,7 @@ StartTime = Timer
     Dim timeStampscsx As String
     Dim csxDict As Dictionary
     Dim csxBetweenDicts As Dictionary
+    Dim csx As clsCsx
 
     Set csxDict = New Dictionary
     Set csxBetweenDicts = New Dictionary
@@ -36,7 +37,7 @@ StartTime = Timer
 '    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks(strRodeo1minFileName)
     For Each importWS In ImportWbk.Worksheets
-        timeStampscsx = Right(importWS.Name, 9)
+        timeStampscsx = Right(importWS.Name, 8)
         lastrow = fLastWrittenRow(importWS, 1)
         'Original Data
         ReDim csxData(1 To lastrow, 1)
