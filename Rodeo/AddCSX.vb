@@ -77,7 +77,6 @@ StartTime = Timer
                 'WriteActualData of CSX
 
                 'Collections to track data on each repeat step
-                collUniqueCounter.Add csxDict.Count
                 collImportWSnames.Add importWS.Name
                 SecondsElapsed = Round(Timer - StartTime, 0)
                 collRuntimes.Add SecondsElapsed
@@ -85,25 +84,20 @@ StartTime = Timer
 
                 Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
                 Erase csxData
-'                Erase OuterScannableDataFiltered
-'                Erase OuterContainerDataFiltered
-'                Erase WorkpoolDataFiltered
+
 '            csxDict.RemoveAll
             Set csxDict = New Dictionary
 '            Set collCsx = New Collection
             cTimestamp = cTimestamp + 1
         Next importWS
 '    Set csxBetweenDicts = fJoinDictionaries(collUniqueDicts, collImportWSnames)
-'    For Each ws In csxWbk.Worksheets
-'        ws.Cells.Columns.AutoFit
-'    Next ws
 
 '    wbkcsxObj.Worksheets("csx").Cells(1, cDict).Value2 = collOfDictNames(cDict)
 
     For Each csx In collCsx
-        wbkcsxObj.Worksheets("csx").Range("A1").Offset(1, 0).Value2 = csx.csxID
-        wbkcsxObj.Worksheets("csx").Range("B1").Offset(1, 0).Value2 = csx.Location
-        wbkcsxObj.Worksheets("csx").Range("C1").Offset(1, 0).Value2 = csx.LastTimestamp
+        wbkcsxObj.Worksheets("csx").Range("A" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 1)).Offset(1, 0).Value2 = csx.csxID
+        wbkcsxObj.Worksheets("csx").Range("B" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 2)).Offset(1, 0).Value2 = csx.Location
+        wbkcsxObj.Worksheets("csx").Range("C" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 3)).Offset(1, 0).Value2 = csx.LastTimestamp
     Next csx
 
 End Sub
