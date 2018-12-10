@@ -27,8 +27,10 @@ StartTime = Timer
     Dim csx As clsCsx
     Dim collCsx As Collection
     Dim wbkcsxObj As Workbook
+    Dim dictCsxUpdated As Dictionary
 
 
+    Set dictCsxUpdated = New Dictionary
     Set collCsx = New Collection
     Set csxDict = New Dictionary
     Set csxBetweenDicts = New Dictionary
@@ -55,6 +57,7 @@ StartTime = Timer
 
         For currentrow = 1 To lastrow
             Set csx = New clsCsx
+            Set csxDict = fCreateUniqueCSXDict(csxData)     'get a Dict of unique values
 
             'Timestamp
                 If cTimestamp < 1 Then
@@ -62,18 +65,22 @@ StartTime = Timer
                     csx.Location = OuterScannableData(currentrow, 1)
                     csx.csxID = csxData(currentrow, 1)
                     collCsx.Add csx
+                    dictCsxUpdated.Add csx.csxID, csx.LastTimestamp
                 End If
                 If csx.LastTimestamp < timeStampscsx Then           'neuere timestamp 'nur noch Loc und ID adden
-                    csx.LastTimestamp = timeStampscsx
-                    csx.Location = OuterScannableData(currentrow, 1)
-                    csx.csxID = csxData(currentrow, 1)
+
+                    If dictCsxUpdated.Exists(csx.csxID) Then
+                        csx.LastTimestamp = timeStampscsx
+                        csx.Location = OuterScannableData(currentrow, 1)
+                        csx.csxID = csxData(currentrow, 1)
+                    End If
                     collCsx.Add csx
                 End If
 
         Next currentrow
 
         counter = 0
-            Set csxDict = fCreateUniqueCSXDict(csxData)     'get a Dict of unique values
+
 '            Set collUniqeCSXCounter = fAddUniqueCSXcounterToACollection(csxDict)
                 'WriteActualData of CSX
 
