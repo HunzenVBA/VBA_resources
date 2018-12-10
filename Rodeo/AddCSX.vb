@@ -40,10 +40,10 @@ StartTime = Timer
     Set app = Application
     Set wbkcsxObj = Workbooks("AllCsxObjects.xlsm")
 '    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
-    Set ImportWbk = Workbooks(strRodeo10minFileName)
+    Set ImportWbk = Workbooks("RodeoImport10minTestData.xlsm")
     For Each importWS In ImportWbk.Worksheets
         timeStampscsx = fConvertTimestampToDate(Right(importWS.Name, 8))
-        lastrow = fLastWrittenRow(importWS, 1)
+        lastrow = fLastWrittenRow(importWS, 2)
         'Original Data
         ReDim csxData(1 To lastrow, 1)
         ReDim OuterScannableData(1 To lastrow, 1)
@@ -67,8 +67,9 @@ StartTime = Timer
                     csx.LastTimestamp = timeStampscsx
                     csx.Location = OuterScannableData(currentrow, 1)
                     csx.csxID = csxData(currentrow, 1)
+                    collCsx.Add csx
                 End If
-                collCsx.Add csx
+
         Next currentrow
 
         counter = 0
@@ -93,7 +94,7 @@ StartTime = Timer
 '    Set csxBetweenDicts = fJoinDictionaries(collUniqueDicts, collImportWSnames)
 
 '    wbkcsxObj.Worksheets("csx").Cells(1, cDict).Value2 = collOfDictNames(cDict)
-
+    wbkcsxObj.Worksheets("csx").UsedRange.ClearContents
     For Each csx In collCsx
         wbkcsxObj.Worksheets("csx").Range("A" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 1)).Offset(1, 0).Value2 = csx.csxID
         wbkcsxObj.Worksheets("csx").Range("B" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 2)).Offset(1, 0).Value2 = csx.Location
