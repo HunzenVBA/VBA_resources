@@ -562,3 +562,23 @@ ws.Columns("H").ColumnWidth = 20        'Outer Container Type
 ws.Columns("i").ColumnWidth = 13        'Container Type
 ws.Columns("L").ColumnWidth = 10        'Dwell Time
 End Function
+
+
+Function fConvertTimestampToDate(inputString As String) As Date
+Dim formatted As String
+Dim result As Date
+formatted = Replace(inputString, ".", ":")
+result = TimeValue(formatted)
+fConvertTimestampToDate = result
+End Function
+
+Function fWriteCSXData(location As String, csxID As String, csxLastTimeStamp) As clsCsx
+
+Dim csx As clsCsx
+Set csx = New clsCsx
+
+csx.csxID = csxID
+csx.location = location
+csx.LastTimestamp = csxLastTimeStamp
+fWriteCSXData = csx
+End Function
