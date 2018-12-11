@@ -1,6 +1,6 @@
 Option Explicit
 
-Sub BuildCSXdict()
+Sub BuildCSXdictTest()
 Application.ScreenUpdating = False
 StartTime = Timer
     Dim cTimestamp As Integer
@@ -29,12 +29,18 @@ StartTime = Timer
     Dim wbkcsxObj As Workbook
     Dim dictCsxUpdatedLastTimestamp As Dictionary
     Dim dictCsxUpdatedLastLocation As Dictionary
+    Dim dictCsxUpdatedOutCont As Dictionary
+    Dim dictCsxUpdatedDwell As Dictionary
     Dim tempTimstampDict As Date
     Dim csxKey As Variant
+    Dim csxDwell As Variant
+
 
 
     Set dictCsxUpdatedLastTimestamp = New Dictionary
     Set dictCsxUpdatedLastLocation = New Dictionary
+    Set dictCsxUpdatedOutCont = New Dictionary
+    Set dictCsxUpdatedDwell = New Dictionary
     Set collCsx = New Collection
     Set csxDict = New Dictionary
     Set csxBetweenDicts = New Dictionary
@@ -54,25 +60,33 @@ StartTime = Timer
         ReDim csxData(1 To lastrow, 1)
         ReDim OuterScannableData(1 To lastrow, 1)
         ReDim OuterContainerData(1 To lastrow, 1)
+        ReDim DwellData(1 To lastrow, 1)
         'Fill arrays with values'
         csxData = importWS.Range("f1:f" & lastrow).Value2
         OuterScannableData = importWS.Range("g1:g" & lastrow).Value2
-        OuterContainerData = importWS.Range("j1:j" & lastrow).Value2
+        OuterContainerData = importWS.Range("h1:h" & lastrow).Value2
+        DwellData = importWS.Range("l1:l" & lastrow).Value2
 
         For currentrow = 1 To lastrow
             Set csx = New clsCsx
             Set csxDict = fCreateUniqueCSXDict(csxData)     'get a Dict of unique values
             csx.csxID = csxData(currentrow, 1)
+            csx.DwellTime = DwellData(currentrow, 1)
             csxKey = csx.csxID
+            csxDwell = csx.DwellTime
 
             'Timestamp
                 If cTimestamp < 1 Then
                     csx.LastTimestamp = timeStampscsx
                     csx.Location = OuterScannableData(currentrow, 1)
+                    csx.OutContainer = OuterContainerData(currentrow, 1)
                     csx.csxID = csxData(currentrow, 1)
+                    csx.DwellTime = DwellData(currentrow, 1)
                     collCsx.Add csx
                     dictCsxUpdatedLastTimestamp.Add csx.csxID, csx.LastTimestamp
                     dictCsxUpdatedLastLocation.Add csx.csxID, csx.Location
+                    dictCsxUpdatedOutCont.Add csx.csxID, csx.OutContainer
+                    dictCsxUpdatedDwell.Add csx.csxID, csx.DwellTime
                     tempTimstampDict = csx.LastTimestamp
                 End If
                 If csx.LastTimestamp < timeStampscsx Then           'neuere timestamp 'nur noch Loc und ID adden
@@ -80,19 +94,19 @@ StartTime = Timer
                     If dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
                         csx.LastTimestamp = timeStampscsx
                         csx.Location = OuterScannableData(currentrow, 1)
+                        csx.OutContainer = OuterContainerData(currentrow, 1)
                         csx.csxID = csxData(currentrow, 1)
                         dictCsxUpdatedLastTimestamp.Item(csx.csxID) = csx.LastTimestamp
                         dictCsxUpdatedLastLocation.Item(csx.csxID) = csx.Location
+                        dictCsxUpdatedOutCont(csx.csxID) = csx.OutContainer
+                        dictCsxUpdatedDwell.Item(csx.csxID) = csx.DwellTime
                         collCsx.Add csx
                         tempTimstampDict = csx.LastTimestamp
                     End If
                 Next csxKey
                 End If
-
         Next currentrow
-
         counter = 0
-
 '            Set collUniqeCSXCounter = fAddUniqueCSXcounterToACollection(csxDict)
                 'WriteActualData of CSX
 
@@ -104,15 +118,10 @@ StartTime = Timer
 
                 Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
                 Erase csxData
-
-'            csxDict.RemoveAll
             Set csxDict = New Dictionary
-'            Set collCsx = New Collection
             cTimestamp = cTimestamp + 1
         Next importWS
 '    Set csxBetweenDicts = fJoinDictionaries(collUniqueDicts, collImportWSnames)
-
-'    wbkcsxObj.Worksheets("csx").Cells(1, cDict).Value2 = collOfDictNames(cDict)
     wbkcsxObj.Worksheets("csx").UsedRange.ClearContents
     For Each csx In collCsx
         wbkcsxObj.Worksheets("csx").Range("A" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 1)).Offset(1, 0).Value2 = csx.csxID
@@ -120,7 +129,11 @@ StartTime = Timer
         wbkcsxObj.Worksheets("csx").Range("C" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 3)).Offset(1, 0).Value2 = csx.LastTimestamp
         wbkcsxObj.Worksheets("csx").Cells(2, 4).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Keys)
         wbkcsxObj.Worksheets("csx").Cells(2, 5).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastLocation.Items)
-        wbkcsxObj.Worksheets("csx").Cells(2, 6).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Items)
+        wbkcsxObj.Worksheets("csx").Cells(2, 6).Resize(dictCsxUpdatedOutCont.Count, 1) = Application.Transpose(dictCsxUpdatedOutCont.Items)
+        wbkcsxObj.Worksheets("csx").Cells(2, 7).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Items)
+        wbkcsxObj.Worksheets("csx").Cells(2, 8).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedDwell.Items)
+
+        wbkcsxObj.Worksheets("csx").Cells(2, 7).Value2 = "LastTimestamp"
 
     Next csx
 End Sub
