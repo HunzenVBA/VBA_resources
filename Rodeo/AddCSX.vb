@@ -27,10 +27,14 @@ StartTime = Timer
     Dim csx As clsCsx
     Dim collCsx As Collection
     Dim wbkcsxObj As Workbook
-    Dim dictCsxUpdated As Dictionary
+    Dim dictCsxUpdatedLastTimestamp As Dictionary
+    Dim dictCsxUpdatedLastLocation As Dictionary
+    Dim tempTimstampDict As Date
+    Dim csxKey As Variant
 
 
-    Set dictCsxUpdated = New Dictionary
+    Set dictCsxUpdatedLastTimestamp = New Dictionary
+    Set dictCsxUpdatedLastLocation = New Dictionary
     Set collCsx = New Collection
     Set csxDict = New Dictionary
     Set csxBetweenDicts = New Dictionary
@@ -58,6 +62,8 @@ StartTime = Timer
         For currentrow = 1 To lastrow
             Set csx = New clsCsx
             Set csxDict = fCreateUniqueCSXDict(csxData)     'get a Dict of unique values
+            csx.csxID = csxData(currentrow, 1)
+            csxKey = csx.csxID
 
             'Timestamp
                 If cTimestamp < 1 Then
@@ -65,17 +71,22 @@ StartTime = Timer
                     csx.Location = OuterScannableData(currentrow, 1)
                     csx.csxID = csxData(currentrow, 1)
                     collCsx.Add csx
-                    dictCsxUpdated.Add csx.csxID, csx.LastTimestamp
+                    dictCsxUpdatedLastTimestamp.Add csx.csxID, csx.LastTimestamp
+                    dictCsxUpdatedLastLocation.Add csx.csxID, csx.Location
+                    tempTimstampDict = csx.LastTimestamp
                 End If
                 If csx.LastTimestamp < timeStampscsx Then           'neuere timestamp 'nur noch Loc und ID adden
-
-                    If dictCsxUpdated.Exists(csx.csxID) Then
+                For Each csxKey In dictCsxUpdatedLastTimestamp
+                    If dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
                         csx.LastTimestamp = timeStampscsx
                         csx.Location = OuterScannableData(currentrow, 1)
                         csx.csxID = csxData(currentrow, 1)
+                        dictCsxUpdatedLastTimestamp.Item(csx.csxID) = csx.LastTimestamp
+                        dictCsxUpdatedLastLocation.Item(csx.csxID) = csx.Location
+                        collCsx.Add csx
+                        tempTimstampDict = csx.LastTimestamp
                     End If
-                    dictCsxUpdated.Item(csx.csxID) = csx.LastTimestamp
-                    collCsx.Add csx
+                Next csxKey
                 End If
 
         Next currentrow
@@ -107,8 +118,9 @@ StartTime = Timer
         wbkcsxObj.Worksheets("csx").Range("A" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 1)).Offset(1, 0).Value2 = csx.csxID
         wbkcsxObj.Worksheets("csx").Range("B" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 2)).Offset(1, 0).Value2 = csx.Location
         wbkcsxObj.Worksheets("csx").Range("C" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 3)).Offset(1, 0).Value2 = csx.LastTimestamp
-        wbkcsxObj.Worksheets("csx").Cells(2, 4).Resize(dictCsxUpdated.Count, 1) = Application.Transpose(dictCsxUpdated.Keys)
-        wbkcsxObj.Worksheets("csx").Cells(2, 5).Resize(dictCsxUpdated.Count, 1) = Application.Transpose(dictCsxUpdated.Items)
-    Next csx
+        wbkcsxObj.Worksheets("csx").Cells(2, 4).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Keys)
+        wbkcsxObj.Worksheets("csx").Cells(2, 5).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastLocation.Items)
+        wbkcsxObj.Worksheets("csx").Cells(2, 6).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Items)
 
+    Next csx
 End Sub
