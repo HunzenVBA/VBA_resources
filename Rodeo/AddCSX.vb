@@ -130,10 +130,6 @@ StartTime = Timer
 
 End Sub
 
-
-
-
-
 Sub BuildCSXdict()
 Application.ScreenUpdating = False
 StartTime = Timer
@@ -207,41 +203,43 @@ StartTime = Timer
             Set csxDict = fCreateUniqueCSXDict(csxData)     'get a Dict of unique values
             csx.csxID = csxData(currentrow, 1)
             csx.DwellTime = DwellData(currentrow, 1)
-            csxKey = csx.csxID
-            csxDwell = csx.DwellTime
+            If OuterContainerData(currentrow, 1) <> "PALLET" Then
+                csxKey = csx.csxID
+                csxDwell = csx.DwellTime
 
-            'Timestamp
-                If cTimestamp < 1 Then
-                    If Not dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
-                        csx.LastTimestamp = timeStampscsx
-                        csx.Location = OuterScannableData(currentrow, 1)
-                        csx.OutContainer = OuterContainerData(currentrow, 1)
-                        csx.csxID = csxData(currentrow, 1)
-                        csx.DwellTime = DwellData(currentrow, 1)
-                        collCsx.Add csx
-                        dictCsxUpdatedLastTimestamp.Add csx.csxID, csx.LastTimestamp
-                        dictCsxUpdatedLastLocation.Add csx.csxID, csx.Location
-                        dictCsxUpdatedOutCont.Add csx.csxID, csx.OutContainer
-                        dictCsxUpdatedDwell.Add csx.csxID, csx.DwellTime
-                        tempTimstampDict = csx.LastTimestamp
-                        End If
-                End If
-                If csx.LastTimestamp < timeStampscsx Then           'neuere timestamp 'nur noch Loc und ID adden
-                For Each csxKey In dictCsxUpdatedLastTimestamp
-                    If dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
-                        csx.LastTimestamp = timeStampscsx
-                        csx.Location = OuterScannableData(currentrow, 1)
-                        csx.OutContainer = OuterContainerData(currentrow, 1)
-                        csx.csxID = csxData(currentrow, 1)
-                        dictCsxUpdatedLastTimestamp.Item(csx.csxID) = csx.LastTimestamp
-                        dictCsxUpdatedLastLocation.Item(csx.csxID) = csx.Location
-                        dictCsxUpdatedOutCont(csx.csxID) = csx.OutContainer
-                        dictCsxUpdatedDwell.Item(csx.csxID) = csx.DwellTime
-                        collCsx.Add csx
-                        tempTimstampDict = csx.LastTimestamp
+                'Timestamp
+                    If cTimestamp < 1 Then
+                        If Not dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
+
+                            csx.LastTimestamp = timeStampscsx
+                            csx.Location = OuterScannableData(currentrow, 1)
+                            csx.OutContainer = OuterContainerData(currentrow, 1)
+                            csx.csxID = csxData(currentrow, 1)
+                            csx.DwellTime = DwellData(currentrow, 1)
+                            dictCsxUpdatedLastTimestamp.Add csx.csxID, csx.LastTimestamp
+                            dictCsxUpdatedLastLocation.Add csx.csxID, csx.Location
+                            dictCsxUpdatedOutCont.Add csx.csxID, csx.OutContainer
+                            dictCsxUpdatedDwell.Add csx.csxID, csx.DwellTime
+                            collCsx.Add csx
+
+                            tempTimstampDict = csx.LastTimestamp
+                            End If
                     End If
-                Next csxKey
-                End If
+                    If csx.LastTimestamp < timeStampscsx Then           'neuere timestamp 'nur noch Loc und ID adden
+                        If dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
+                            csx.LastTimestamp = timeStampscsx
+                            csx.Location = OuterScannableData(currentrow, 1)
+                            csx.OutContainer = OuterContainerData(currentrow, 1)
+                            csx.csxID = csxData(currentrow, 1)
+                            dictCsxUpdatedLastTimestamp.Item(csx.csxID) = csx.LastTimestamp
+                            dictCsxUpdatedLastLocation.Item(csx.csxID) = csx.Location
+                            dictCsxUpdatedOutCont(csx.csxID) = csx.OutContainer
+                            dictCsxUpdatedDwell.Item(csx.csxID) = csx.DwellTime
+                            collCsx.Add csx
+                            tempTimstampDict = csx.LastTimestamp
+                        End If
+                    End If
+            End If
         Next currentrow
         counter = 0
 
