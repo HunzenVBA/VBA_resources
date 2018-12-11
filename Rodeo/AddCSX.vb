@@ -107,21 +107,16 @@ StartTime = Timer
                 End If
         Next currentrow
         counter = 0
-'            Set collUniqeCSXCounter = fAddUniqueCSXcounterToACollection(csxDict)
-                'WriteActualData of CSX
 
                 'Collections to track data on each repeat step
                 collImportWSnames.Add importWS.Name
                 SecondsElapsed = Round(Timer - StartTime, 0)
                 collRuntimes.Add SecondsElapsed
-'                collUniqueDicts.Add csxDict, timeStampscsx
-
                 Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
                 Erase csxData
             Set csxDict = New Dictionary
             cTimestamp = cTimestamp + 1
         Next importWS
-'    Set csxBetweenDicts = fJoinDictionaries(collUniqueDicts, collImportWSnames)
     wbkcsxObj.Worksheets("csx").UsedRange.ClearContents
 
         wbkcsxObj.Worksheets("csx").Cells(2, 4).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Keys)
