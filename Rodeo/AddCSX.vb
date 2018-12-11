@@ -74,6 +74,7 @@ StartTime = Timer
                         csx.Location = OuterScannableData(currentrow, 1)
                         csx.csxID = csxData(currentrow, 1)
                     End If
+                    dictCsxUpdated.Item(csx.csxID) = csx.LastTimestamp
                     collCsx.Add csx
                 End If
 
@@ -106,6 +107,8 @@ StartTime = Timer
         wbkcsxObj.Worksheets("csx").Range("A" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 1)).Offset(1, 0).Value2 = csx.csxID
         wbkcsxObj.Worksheets("csx").Range("B" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 2)).Offset(1, 0).Value2 = csx.Location
         wbkcsxObj.Worksheets("csx").Range("C" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 3)).Offset(1, 0).Value2 = csx.LastTimestamp
+        wbkcsxObj.Worksheets("csx").Cells(2, 4).Resize(dictCsxUpdated.Count, 1) = Application.Transpose(dictCsxUpdated.Keys)
+        wbkcsxObj.Worksheets("csx").Cells(2, 5).Resize(dictCsxUpdated.Count, 1) = Application.Transpose(dictCsxUpdated.Items)
     Next csx
 
 End Sub
