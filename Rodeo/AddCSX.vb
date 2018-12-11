@@ -123,10 +123,7 @@ StartTime = Timer
         Next importWS
 '    Set csxBetweenDicts = fJoinDictionaries(collUniqueDicts, collImportWSnames)
     wbkcsxObj.Worksheets("csx").UsedRange.ClearContents
-    For Each csx In collCsx
-        wbkcsxObj.Worksheets("csx").Range("A" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 1)).Offset(1, 0).Value2 = csx.csxID
-        wbkcsxObj.Worksheets("csx").Range("B" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 2)).Offset(1, 0).Value2 = csx.Location
-        wbkcsxObj.Worksheets("csx").Range("C" & fLastWrittenRow(wbkcsxObj.Worksheets("csx"), 3)).Offset(1, 0).Value2 = csx.LastTimestamp
+
         wbkcsxObj.Worksheets("csx").Cells(2, 4).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Keys)
         wbkcsxObj.Worksheets("csx").Cells(2, 5).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastLocation.Items)
         wbkcsxObj.Worksheets("csx").Cells(2, 6).Resize(dictCsxUpdatedOutCont.Count, 1) = Application.Transpose(dictCsxUpdatedOutCont.Items)
@@ -135,5 +132,4 @@ StartTime = Timer
 
         wbkcsxObj.Worksheets("csx").Cells(2, 7).Value2 = "LastTimestamp"
 
-    Next csx
 End Sub
