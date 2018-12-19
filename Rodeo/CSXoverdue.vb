@@ -3,6 +3,7 @@ Option Explicit
 Sub BuildCSXdictTest()
 Application.ScreenUpdating = False
 StartTime = Timer
+    Dim currRow As Long
     Dim cTimestamp As Integer
     Dim importWS As Worksheet
     Dim lastrow As Long
@@ -130,9 +131,10 @@ StartTime = Timer
 
 End Sub
 
-Sub BuildCSXdict()
+Sub BuildCSXdictOverDue()
 Application.ScreenUpdating = False
 StartTime = Timer
+    Dim currRow As Long
     Dim cTimestamp As Integer
     Dim importWS As Worksheet
     Dim lastrow As Long
@@ -181,9 +183,11 @@ StartTime = Timer
     Set collRuntimes = New Collection
     Set collUniqeCSXCounter = New Collection
     Set app = Application
-    Set wbkcsxObj = Workbooks("AllCsxObjects.xlsm")
+'    Set wbkcsxObj = Workbooks("AllCsxObjects.xlsm")
+    Set wbkcsxObj = Workbooks.Open(strRodeoPath & "AllCsxObjects.xlsm")
 '    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
-    Set ImportWbk = Workbooks("RodeoImport10min.xlsm")
+'    Set ImportWbk = Workbooks("RodeoImport4h.xlsm")
+    Set ImportWbk = Workbooks.Open(strRodeoPath & "RodeoImport4h.xlsm")
     For Each importWS In ImportWbk.Worksheets
         timeStampscsx = fConvertTimestampToDate(Right(importWS.Name, 8))
         lastrow = fLastWrittenRow(importWS, 2)
@@ -223,7 +227,7 @@ StartTime = Timer
                             collCsx.Add csx
 
                             tempTimstampDict = csx.LastTimestamp
-                            End If
+                        End If
                     End If
                     If csx.LastTimestamp < timeStampscsx Then           'neuere timestamp 'nur noch Loc und ID adden
                         If dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
@@ -240,6 +244,11 @@ StartTime = Timer
                         End If
                     End If
             End If
+        If currentrow = lastrow / 2 Then
+            Stop
+        End If
+                SecondsElapsed = Round(Timer - StartTime, 0)
+                collRuntimes.Add SecondsElapsed             'hinzufügen runtime pro Zeile
         Next currentrow
         counter = 0
 
@@ -263,4 +272,7 @@ StartTime = Timer
 
         wbkcsxObj.Worksheets("csx4h").Cells(1, 7).Value2 = "LastTimestamp"
 
+        For currRow = 2 To collRuntimes.Count
+        wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currRow, 1).Value2 = collRuntimes(currRow)
+        Next currRow
 End Sub
