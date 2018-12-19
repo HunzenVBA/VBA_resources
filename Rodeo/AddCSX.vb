@@ -240,6 +240,8 @@ StartTime = Timer
                         End If
                     End If
             End If
+            SecondsElapsed = Round(Timer - StartTime, 0)
+            collRuntimes.Add SecondsElapsed             'hinzufügen runtime pro Zeile
         Next currentrow
         counter = 0
 
@@ -262,5 +264,8 @@ StartTime = Timer
         wbkcsxObj.Worksheets("csx").Cells(2, 8).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedDwell.Items)
 
         wbkcsxObj.Worksheets("csx").Cells(2, 7).Value2 = "LastTimestamp"
+        For currRow = 2 To collRuntimes.Count
+        wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currRow, 1).Value2 = collRuntimes(currRow)
+        Next currRow
 
 End Sub
