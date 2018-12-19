@@ -133,6 +133,7 @@ End Sub
 Sub BuildCSXdict()
 Application.ScreenUpdating = False
 StartTime = Timer
+    Dim currrow As Long
     Dim cTimestamp As Integer
     Dim importWS As Worksheet
     Dim lastrow As Long
@@ -185,6 +186,7 @@ StartTime = Timer
 '    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks("RodeoImport10min.xlsm")
     For Each importWS In ImportWbk.Worksheets
+    If Left(inputString, 7) <> "Tabelle" Then
         timeStampscsx = fConvertTimestampToDate(Right(importWS.Name, 8))
         lastrow = fLastWrittenRow(importWS, 2)
         'Original Data
@@ -254,6 +256,7 @@ StartTime = Timer
             Set csxDict = New Dictionary
             cTimestamp = cTimestamp + 1
             importWSname = importWS.Name
+        End If
         Next importWS
     wbkcsxObj.Worksheets("csx").UsedRange.ClearContents
 
@@ -264,8 +267,8 @@ StartTime = Timer
         wbkcsxObj.Worksheets("csx").Cells(2, 8).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedDwell.Items)
 
         wbkcsxObj.Worksheets("csx").Cells(2, 7).Value2 = "LastTimestamp"
-        For currRow = 2 To collRuntimes.Count
-        wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currRow, 1).Value2 = collRuntimes(currRow)
-        Next currRow
+        For currrow = 2 To collRuntimes.Count
+        wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currrow, 1).Value2 = collRuntimes(currrow)
+        Next currrow
 
 End Sub

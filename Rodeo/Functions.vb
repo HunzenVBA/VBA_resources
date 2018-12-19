@@ -8,47 +8,7 @@ Option Explicit
 
 '************** /Subs in this Module ****************
 
-Sub runStacker()
 
-    Dim StartTimeAll        As Double
-    Dim SecondsElapsedAll   As Double
-
-    StartTimeAll = Timer
-
-'    Namensausgabe des Subs im Direktfenster, zur Info/Debugging
-    currProcedureName = "NameWorksheets"
-    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
-    Debug.Print Now
-    Call NameWorksheets
-
-    currProcedureName = "PrintWSnames"
-    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
-    Debug.Print Now
-    Call PrintWSnames
-
-    currProcedureName = "UpdateRodeoTotal"
-    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
-    Debug.Print Now
-    Call UpdateRodeoTotal
-
-    currProcedureName = "DeleteEmptyRows"
-    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
-    Debug.Print Now
-    Call DeleteEmptyRows
-
-'    currProcedureName = "DeleteEmptyRows"
-'    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
-'    Debug.Print Now
-'    Call DeleteEmptyRows
-
-
-
-'Determine how many seconds code took to run
-  SecondsElapsedAll = Round(Timer - StartTimeAll, 1)
-
-'Notify user in seconds
-  Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
-End Sub
 
 
 Sub PrintWSnames()
@@ -567,18 +527,20 @@ End Function
 Function fConvertTimestampToDate(inputString As String) As Date
 Dim formatted As String
 Dim result As Date
+If Left(inputString, 7) <> "Tabelle" Then
 formatted = Replace(inputString, ".", ":")
 result = TimeValue(formatted)
 fConvertTimestampToDate = result
+End If
 End Function
 
-Function fWriteCSXData(location As String, csxID As String, csxLastTimeStamp) As clsCsx
+Function fWriteCSXData(Location As String, csxID As String, csxLastTimeStamp) As clsCsx
 
 Dim csx As clsCsx
 Set csx = New clsCsx
 
 csx.csxID = csxID
-csx.location = location
+csx.Location = Location
 csx.LastTimestamp = csxLastTimeStamp
 fWriteCSXData = csx
 End Function
