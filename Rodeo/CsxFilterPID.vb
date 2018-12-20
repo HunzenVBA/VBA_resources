@@ -139,11 +139,14 @@ StartTime = Timer
 
         wbkcsxObj.Worksheets("csx").Cells(2, 4).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Keys)
         wbkcsxObj.Worksheets("csx").Cells(2, 5).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastLocation.Items)
-        wbkcsxObj.Worksheets("csx").Cells(2, 6).Resize(dictCsxUpdatedOutCont.Count, 1) = Application.Transpose(dictCsxUpdatedOutCont.Items)
+        wbkcsxObj.Worksheets("csx").Cells(2, 6).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedOutCont.Items)
         wbkcsxObj.Worksheets("csx").Cells(2, 7).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Items)
         wbkcsxObj.Worksheets("csx").Cells(2, 8).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedDwell.Items)
 
-        wbkcsxObj.Worksheets("csx").Cells(2, 7).Value2 = "LastTimestamp"
+        wbkcsxObj.Worksheets("csx").Cells(1, 7).Value2 = "LastTimestamp"
+        wbkcsxObj.Worksheets("csx").Cells(1, 6).Value2 = "OuterContainer"
+        wbkcsxObj.Worksheets("csx").Cells(1, 5).Value2 = "OuterScannable"
+        wbkcsxObj.Worksheets("csx").Cells(1, 4).Value2 = "ScannableID"
         wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Range("A2:A" & fLastWrittenRow(wbkcsxObj.Worksheets("RuntimeBuildCsxDict"), 1)).ClearContents
         For currrow = 2 To collRuntimes.Count
         wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currrow, 1).Value2 = collRuntimes(currrow)
