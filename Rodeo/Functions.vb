@@ -545,14 +545,13 @@ csx.LastTimestamp = csxLastTimeStamp
 fWriteCSXData = csx
 End Function
 
-Function fDeleteRowsInArray(inputarray As Variant, DeleteCondition As Variant) As Variant
+Function fDeleteRowsInArray(inputarray As Variant, SelectCondition As Variant) As Variant
 
 Const COMPARE_COL As Long = 1
 Dim a, aNew(), nr As Long, nc As Long
 Dim r As Long, c As Long, rNew As Long
 Dim tmp As Variant
 
-    inputarray = Selection.Value
     nr = UBound(inputarray, 1)
     nc = UBound(inputarray, 2)
 
@@ -561,7 +560,7 @@ Dim tmp As Variant
 
     For r = 1 To nr
         tmp = inputarray(r, COMPARE_COL)
-        If tmp <> DeleteCondition Then
+        If tmp = SelectCondition Then
             rNew = rNew + 1
             For c = 1 To nc
                 aNew(rNew, c) = inputarray(r, c)

@@ -23,7 +23,7 @@ StartTime = Timer
     Dim csxWbk As Workbook
     Dim slice
     Dim app As Application
-    Dim testarray As Variant
+    Dim testArray As Variant
     Dim timeStampscsx As Date
     Dim csxDict As Dictionary
     Dim csxBetweenDicts As Dictionary
@@ -38,7 +38,6 @@ StartTime = Timer
     Dim csxKey As Variant
     Dim csxDwell As Variant
     Dim importWSname As String
-
 
 
     Set dictCsxUpdatedLastTimestamp = New Dictionary
@@ -71,6 +70,10 @@ StartTime = Timer
         OuterScannableData = importWS.Range("g1:g" & lastrow).Value2
         OuterContainerData = importWS.Range("h1:h" & lastrow).Value2
         DwellData = importWS.Range("l1:l" & lastrow).Value2
+
+        testArray = fDeleteRowsInArray(OuterScannableData, "ws-rcv-pid-1")
+
+        wbkcsxObj.Worksheets("Filtered").Range("A1:A" & UBound(testArray)).Value2 = testArray
 
         For currentrow = 1 To lastrow
             Set csx = New clsCsx
