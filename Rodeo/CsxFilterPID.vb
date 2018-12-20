@@ -5,6 +5,7 @@ Option Explicit
 Sub BuildCSXdictPIDFilter()
 Application.ScreenUpdating = False
 StartTime = Timer
+    Dim cRow As Long
     Dim currrow As Long
     Dim cTimestamp As Integer
     Dim importWS As Worksheet
@@ -81,6 +82,7 @@ StartTime = Timer
             csx.csxID = csxData(currentrow, 1)
             csx.DwellTime = DwellData(currentrow, 1)
             If Left(OuterScannableData(currentrow, 1), 10) = "ws-rcv-pid" Then
+                cRow = cRow + 1
                 csxKey = csx.csxID
                 csxDwell = csx.DwellTime
 
