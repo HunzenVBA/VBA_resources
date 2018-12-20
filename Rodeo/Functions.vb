@@ -263,7 +263,7 @@ On Error Resume Next
 fWorkbookIsOpen = Workbooks(WorkbookName).Name = WorkbookName
 End Function
 
-Function fCreateUniqueCSXDict(inputArray As Variant) As Dictionary
+Function fCreateUniqueCSXDict(inputarray As Variant) As Dictionary
     Dim result As Dictionary
     Dim counter As Long
     Dim uniqueRow As Long
@@ -271,12 +271,12 @@ Function fCreateUniqueCSXDict(inputArray As Variant) As Dictionary
     Set result = New Dictionary
 
     counter = 0
-        For uniqueRow = LBound(inputArray, 1) To UBound(inputArray, 1)
-            If Not result.Exists(inputArray(uniqueRow, 1)) Then
+        For uniqueRow = LBound(inputarray, 1) To UBound(inputarray, 1)
+            If Not result.Exists(inputarray(uniqueRow, 1)) Then
                 counter = counter + 1
                 globalcounter = globalcounter + 1
                 'Add to Dictionary
-                result.Add inputArray(uniqueRow, 1), globalcounter
+                result.Add inputarray(uniqueRow, 1), globalcounter
             End If
         Next uniqueRow
     Set fCreateUniqueCSXDict = result
@@ -543,4 +543,33 @@ csx.csxID = csxID
 csx.Location = Location
 csx.LastTimestamp = csxLastTimeStamp
 fWriteCSXData = csx
+End Function
+
+Function fDeleteRowsInArray(inputarray As Variant, DeleteCondition As String) As Variant
+
+Sub RemoveDups()
+Const COMPARE_COL As Long = 1
+Dim a, aNew(), nr As Long, nc As Long
+Dim r As Long, c As Long, rNew As Long
+Dim tmp As String
+
+    a = Selection.Value
+    nr = UBound(a, 1)
+    nc = UBound(a, 2)
+
+    ReDim aNew(1 To nr, 1 To nc)
+    rNew = 0
+    DeleteCondition = Chr(0)
+
+    For r = 1 To nr
+        tmp = a(r, COMPARE_COL)
+        If tmp <> DeleteCondition Then
+            rNew = rNew + 1
+            For c = 1 To nc
+                aNew(rNew, c) = a(r, c)
+            Next c
+        End If
+    Next r
+
+    fDeleteRowsInArray = aNew
 End Function
