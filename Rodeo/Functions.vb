@@ -552,19 +552,19 @@ Dim a, aNew(), nr As Long, nc As Long
 Dim r As Long, c As Long, rNew As Long
 Dim tmp As Variant
 
-    a = Selection.Value
-    nr = UBound(a, 1)
-    nc = UBound(a, 2)
+    inputarray = Selection.Value
+    nr = UBound(inputarray, 1)
+    nc = UBound(inputarray, 2)
 
     ReDim aNew(1 To nr, 1 To nc)
     rNew = 0
 
     For r = 1 To nr
-        tmp = a(r, COMPARE_COL)
+        tmp = inputarray(r, COMPARE_COL)
         If tmp <> DeleteCondition Then
             rNew = rNew + 1
             For c = 1 To nc
-                aNew(rNew, c) = a(r, c)
+                aNew(rNew, c) = inputarray(r, c)
             Next c
         End If
     Next r
