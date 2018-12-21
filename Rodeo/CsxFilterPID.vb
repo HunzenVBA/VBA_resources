@@ -48,6 +48,7 @@ StartTime = Timer
     Set dictCsxUpdatedOutCont = New Dictionary
     Set dictCsxUpdatedDwell = New Dictionary
     Set collCsx = New Collection
+    Set collOutputDicts = New Collection
     Set csxDict = New Dictionary
     Set csxBetweenDicts = New Dictionary
     Set collUniqueCounter = New Collection
@@ -138,14 +139,15 @@ StartTime = Timer
         End If
         Next importWS
 
-        Set outputWS = wbkcsxObj.Worksheets("csx")
+    Set outputWS = wbkcsxObj.Worksheets("csx")
     outputWS.UsedRange.ClearContents
-    collOutputDicts.Add = dictCsxUpdatedLastTimestamp
-    collOutputDicts.Add = dictCsxUpdatedLastLocation
-    collOutputDicts.Add = dictCsxUpdatedOutCont
-    collOutputDicts.Add = dictCsxUpdatedDwell
+    collOutputDicts.Add dictCsxUpdatedLastTimestamp
+    collOutputDicts.Add dictCsxUpdatedLastLocation
+    collOutputDicts.Add dictCsxUpdatedOutCont
+    collOutputDicts.Add dictCsxUpdatedDwell
 
     Call fWriteDictionariesToWS(outputWS, collOutputDicts)
+        wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Range("A2:A" & fLastWrittenRow(wbkcsxObj.Worksheets("RuntimeBuildCsxDict"), 1)).ClearContents
 
         For currrow = 2 To collRuntimes.Count
         wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currrow, 1).Value2 = collRuntimes(currrow)

@@ -572,7 +572,15 @@ Dim tmp As Variant
 End Function
 
 Function fWriteDictionariesToWS(ws As Worksheet, collOfDicts As Collection)
+Dim dictCsxUpdatedLastTimestamp as Dictionary
+Dim dictCsxUpdatedLastLocation as Dictionary
+Dim dictCsxUpdatedOutCont as Dictionary
+Dim dictCsxUpdatedDwell as Dictionary
 
+Set dictCsxUpdatedLastTimestamp = collOfDicts(1)
+Set dictCsxUpdatedLastLocation = collOfDicts(2)
+Set dictCsxUpdatedOutCont = collOfDicts(3)
+Set dictCsxUpdatedDwell = collOfDicts(4)
 
     ws.Cells(2, 4).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Keys)
     ws.Cells(2, 5).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastLocation.Items)
