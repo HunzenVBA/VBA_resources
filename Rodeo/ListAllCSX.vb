@@ -109,21 +109,17 @@ StartTime = Timer
                                 currentCSXTimeStamp = csx.LastTimestamp
                             End If
                         End If
-'                        If csx.LastTimestamp < TimeStampImportWS Then           'neuere timestamp 'nur noch Loc und ID adden
-                            If dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
+                        If dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
 '                            Stop
-                                csx.LastTimestamp = TimeStampImportWS
-                                dictCsxUpdatedLastTimestamp.Item(csx.csxID) = csx.LastTimestamp
-                                dictCsxUpdatedLastLocation.Item(csx.csxID) = csx.Location
-                                dictCsxUpdatedOutCont(csx.csxID) = csx.OutContainer
-                                dictCsxUpdatedDwell.Item(csx.csxID) = csx.DwellTime
-                                collCsx.Add csx
-                                currentCSXTimeStamp = csx.LastTimestamp
-                            End If
-'                        Else
-'
-''                            Stop    'currentCSXTimeStamp >= TimeStampImportWS
-'                        End If
+                            csx.LastTimestamp = TimeStampImportWS
+                            dictCsxUpdatedLastTimestamp.Item(csx.csxID) = csx.LastTimestamp
+                            dictCsxUpdatedLastLocation.Item(csx.csxID) = csx.Location
+                            dictCsxUpdatedOutCont(csx.csxID) = csx.OutContainer
+                            dictCsxUpdatedDwell.Item(csx.csxID) = csx.DwellTime
+                            collCsx.Add csx
+                            currentCSXTimeStamp = csx.LastTimestamp
+                        End If
+
                 SecondsElapsed = Round(Timer - StartTime, 0)
                 collRuntimes.Add SecondsElapsed             'hinzufügen runtime pro Zeile
                 End If
