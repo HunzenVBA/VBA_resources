@@ -75,7 +75,7 @@ StartTime = Timer
         OuterContainerData = importWS.Range("h1:h" & lastrow).Value2
         DwellData = importWS.Range("l1:l" & lastrow).Value2
 
-        testArray = fDeleteRowsInArray(OuterScannableData, "ws-rcv-pid-1")
+        testArray = fDeleteRowsInArray(OuterScannableData, "ws-rcv-pid-1")          'Filterkriterium
 
         wbkcsxObj.Worksheets("Filtered").Range("A1:A" & UBound(testArray)).Value2 = testArray
 
@@ -127,17 +127,17 @@ StartTime = Timer
         Next currentrow
         counter = 0
 
-                'Collections to track data on each repeat step
-                collImportWSnames.Add importWS.Name
-                SecondsElapsed = Round(Timer - StartTime, 0)
-                collRuntimes.Add SecondsElapsed
-                Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
-                Erase csxData
+            'Collections to track data on each repeat step
+            collImportWSnames.Add importWS.Name
+            SecondsElapsed = Round(Timer - StartTime, 0)
+            collRuntimes.Add SecondsElapsed
+            Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
+            Erase csxData
             Set csxDict = New Dictionary
             cTimestamp = cTimestamp + 1
             importWSname = importWS.Name
         End If
-        Next importWS
+    Next importWS
 
     Set outputWS = wbkcsxObj.Worksheets("csx")
     outputWS.UsedRange.ClearContents
@@ -147,10 +147,10 @@ StartTime = Timer
     collOutputDicts.Add dictCsxUpdatedDwell
 
     Call fWriteDictionariesToWS(outputWS, collOutputDicts)
-        wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Range("A2:A" & fLastWrittenRow(wbkcsxObj.Worksheets("RuntimeBuildCsxDict"), 1)).ClearContents
+    wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Range("A2:A" & fLastWrittenRow(wbkcsxObj.Worksheets("RuntimeBuildCsxDict"), 1)).ClearContents
 
-        For currrow = 2 To collRuntimes.Count
-        wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currrow, 1).Value2 = collRuntimes(currrow)
-        Next currrow
+    For currrow = 2 To collRuntimes.Count
+    wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currrow, 1).Value2 = collRuntimes(currrow)
+    Next currrow
 
 End Sub
