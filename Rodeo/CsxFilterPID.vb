@@ -9,12 +9,14 @@ StartTime = Timer
     Dim currrow As Long
     Dim cTimestamp As Integer
     Dim importWS As Worksheet
+    Dim outputWS As Worksheet
     Dim lastrow As Long
     Dim currentrow As Long
     Dim lrow As Long
     Dim dataSetcsx As String
     Dim uniqueRow As Long
 '    Dim collUniqueDicts As Dictionary
+    Dim collOutputDicts As Collection
     Dim collUniqueCounter As Collection
     Dim collImportWSnames As Collection
     Dim collRuntimes As Collection
@@ -135,19 +137,16 @@ StartTime = Timer
             importWSname = importWS.Name
         End If
         Next importWS
-    wbkcsxObj.Worksheets("csx").UsedRange.ClearContents
 
-        wbkcsxObj.Worksheets("csx").Cells(2, 4).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Keys)
-        wbkcsxObj.Worksheets("csx").Cells(2, 5).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastLocation.Items)
-        wbkcsxObj.Worksheets("csx").Cells(2, 6).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedOutCont.Items)
-        wbkcsxObj.Worksheets("csx").Cells(2, 7).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Items)
-        wbkcsxObj.Worksheets("csx").Cells(2, 8).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedDwell.Items)
+        Set outputWS = wbkcsxObj.Worksheets("csx")
+    outputWS.UsedRange.ClearContents
+    collOutputDicts.Add = dictCsxUpdatedLastTimestamp
+    collOutputDicts.Add = dictCsxUpdatedLastLocation
+    collOutputDicts.Add = dictCsxUpdatedOutCont
+    collOutputDicts.Add = dictCsxUpdatedDwell
 
-        wbkcsxObj.Worksheets("csx").Cells(1, 7).Value2 = "LastTimestamp"
-        wbkcsxObj.Worksheets("csx").Cells(1, 6).Value2 = "OuterContainer"
-        wbkcsxObj.Worksheets("csx").Cells(1, 5).Value2 = "OuterScannable"
-        wbkcsxObj.Worksheets("csx").Cells(1, 4).Value2 = "ScannableID"
-        wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Range("A2:A" & fLastWrittenRow(wbkcsxObj.Worksheets("RuntimeBuildCsxDict"), 1)).ClearContents
+    Call fWriteDictionariesToWS(outputWS, collOutputDicts)
+
         For currrow = 2 To collRuntimes.Count
         wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currrow, 1).Value2 = collRuntimes(currrow)
         Next currrow
