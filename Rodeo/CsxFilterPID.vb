@@ -92,7 +92,6 @@ StartTime = Timer
                 'Timestamp
                     If cTimestamp < 1 Then
                         If Not dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
-
                             csx.LastTimestamp = timeStampscsx
                             csx.Location = OuterScannableData(currentrow, 1)
                             csx.OutContainer = OuterContainerData(currentrow, 1)
@@ -136,7 +135,7 @@ StartTime = Timer
             Set csxDict = New Dictionary
             cTimestamp = cTimestamp + 1
             importWSname = importWS.Name
-        End If
+        End If      'This If clause is to sort out any "Tabelle..." sheets that return error anyways
     Next importWS
 
     Set outputWS = wbkcsxObj.Worksheets("csx")
