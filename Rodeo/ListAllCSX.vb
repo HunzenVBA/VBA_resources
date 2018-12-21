@@ -26,8 +26,8 @@ StartTime = Timer
     Dim csxWbk As Workbook
     Dim slice
     Dim app As Application
-    Dim testArray As Variant
-    Dim timeStampscsx As Date
+    Dim testarray As Variant
+    Dim TimeStampImportWS As Date
     Dim csxDict As Dictionary
     Dim csxBetweenDicts As Dictionary
     Dim csx As clsCsx
@@ -37,7 +37,7 @@ StartTime = Timer
     Dim dictCsxUpdatedLastLocation As Dictionary
     Dim dictCsxUpdatedOutCont As Dictionary
     Dim dictCsxUpdatedDwell As Dictionary
-    Dim tempTimstampDict As Date
+    Dim currentCSXTimeStamp As Date
     Dim csxKey As Variant
     Dim csxDwell As Variant
     Dim importWSname As String
@@ -64,7 +64,7 @@ StartTime = Timer
         For Each importWS In ImportWbk.Worksheets       'fängt immer bei worksheets(1) an, also ganz links
         countImportWS = countImportWS + 1
         If Left(importWS.Name, 7) <> "Tabelle" Then
-            timeStampscsx = fConvertTimestampToDate(Right(importWS.Name, 8))
+            TimeStampImportWS = fConvertTimestampToDate(Right(importWS.Name, 8))
             lastrow = fLastWrittenRow(importWS, 2)
             'Original Data
             ReDim csxData(1 To lastrow, 1)
@@ -77,12 +77,12 @@ StartTime = Timer
             OuterContainerData = importWS.Range("h1:h" & lastrow).Value2
             DwellData = importWS.Range("l1:l" & lastrow).Value2
 
-            testArray = fDeleteRowsInArray(OuterScannableData, "ws-rcv-pid-1")          'Filterkriterium
+            testarray = fDeleteRowsInArray(OuterScannableData, "ws-rcv-pid-1")          'Filterkriterium
 
-            wbkcsxObj.Worksheets("Filtered").Range("A1:A" & UBound(testArray)).Value2 = testArray
+            wbkcsxObj.Worksheets("Filtered").Range("A1:A" & UBound(testarray)).Value2 = testarray
 
 '            For currentrow = 1 To lastrow
-            For currentrow = 1 To 11
+            For currentrow = 1 To 5
                 Set csx = New clsCsx
                 Set csxDict = fCreateUniqueCSXDict(csxData)     'get a Dict of unique values
                 csx.csxID = csxData(currentrow, 1)
@@ -91,7 +91,7 @@ StartTime = Timer
                 csx.OutContainer = OuterContainerData(currentrow, 1)
                 strCSXID = csx.csxID
                 If csx.OutContainer <> "PALLET" Then
-                                                                'Location filter here
+                                            'Location filter here
                     cRow = cRow + 1
                     csxKey = csx.csxID
                     csxDwell = csx.DwellTime
@@ -100,28 +100,28 @@ StartTime = Timer
                         If cTimestamp < 1 Then
                             If Not dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
                             Stop
-                                csx.LastTimestamp = timeStampscsx
+                                csx.LastTimestamp = TimeStampImportWS
                                 dictCsxUpdatedLastTimestamp.Add csx.csxID, csx.LastTimestamp
                                 dictCsxUpdatedLastLocation.Add csx.csxID, csx.Location
                                 dictCsxUpdatedOutCont.Add csx.csxID, csx.OutContainer
                                 dictCsxUpdatedDwell.Add csx.csxID, csx.DwellTime
                                 collCsx.Add csx
-                                tempTimstampDict = csx.LastTimestamp
+                                currentCSXTimeStamp = csx.LastTimestamp
                             End If
                         End If
-                        If csx.LastTimestamp < timeStampscsx Then           'neuere timestamp 'nur noch Loc und ID adden
+                        If csx.LastTimestamp > TimeStampImportWS Then           'neuere timestamp 'nur noch Loc und ID adden
                             If dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
-                            Stop
-'                                csx.LastTimestamp = timeStampscsx
+'                            Stop
+                                csx.LastTimestamp = TimeStampImportWS
                                 dictCsxUpdatedLastTimestamp.Item(csx.csxID) = csx.LastTimestamp
                                 dictCsxUpdatedLastLocation.Item(csx.csxID) = csx.Location
                                 dictCsxUpdatedOutCont(csx.csxID) = csx.OutContainer
                                 dictCsxUpdatedDwell.Item(csx.csxID) = csx.DwellTime
                                 collCsx.Add csx
-                                tempTimstampDict = csx.LastTimestamp
+                                currentCSXTimeStamp = csx.LastTimestamp
                             End If
                         Else
-                            Stop    'csx.Last >= timeStampcsx
+'                            Stop    'currentCSXTimeStamp >= TimeStampImportWS
                         End If
                 SecondsElapsed = Round(Timer - StartTime, 0)
                 collRuntimes.Add SecondsElapsed             'hinzufügen runtime pro Zeile
