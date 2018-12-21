@@ -570,3 +570,20 @@ Dim tmp As Variant
 
     fDeleteRowsInArray = aNew
 End Function
+
+Function fWriteDictionariesToWS(ws As Worksheet, collOfDicts As Collection)
+
+
+    ws.Cells(2, 4).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Keys)
+    ws.Cells(2, 5).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastLocation.Items)
+    ws.Cells(2, 6).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedOutCont.Items)
+    ws.Cells(2, 7).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Items)
+    ws.Cells(2, 8).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedDwell.Items)
+
+    ws.Cells(1, 7).Value2 = "LastTimestamp"
+    ws.Cells(1, 6).Value2 = "OuterContainer"
+    ws.Cells(1, 5).Value2 = "OuterScannable"
+    ws.Cells(1, 4).Value2 = "ScannableID"
+    ws.Cells(1, 8).Value2 = "dwellTime"
+
+End Function
