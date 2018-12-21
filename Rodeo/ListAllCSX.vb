@@ -60,9 +60,9 @@ StartTime = Timer
 '    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks("RodeoImport10min.xlsm")
     'Insert filter for count of Import Sheets
-    Do While countImportWS < 3
-        For Each importWS In ImportWbk.Worksheets       'fängt immer bei worksheets(1) an, also ganz links
-        countImportWS = countImportWS + 1
+    For countImportWS = 3 To 1 Step -1
+'        For Each importWS In ImportWbk.Worksheets       'fängt immer bei worksheets(1) an, also ganz links
+        Set importWS = ImportWbk.Worksheets(countImportWS)
         If Left(importWS.Name, 7) <> "Tabelle" Then
             TimeStampImportWS = fConvertTimestampToDate(Right(importWS.Name, 8))
             lastrow = fLastWrittenRow(importWS, 2)
@@ -82,7 +82,7 @@ StartTime = Timer
             wbkcsxObj.Worksheets("Filtered").Range("A1:A" & UBound(testarray)).Value2 = testarray
 
 '            For currentrow = 1 To lastrow
-            For currentrow = 1 To 5
+            For currentrow = 1 To lastrow
                 Set csx = New clsCsx
                 Set csxDict = fCreateUniqueCSXDict(csxData)     'get a Dict of unique values
                 csx.csxID = csxData(currentrow, 1)
@@ -99,7 +99,7 @@ StartTime = Timer
                     'Timestamp
                         If cTimestamp < 1 Then
                             If Not dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
-                            Stop
+'                            Stop
                                 csx.LastTimestamp = TimeStampImportWS
                                 dictCsxUpdatedLastTimestamp.Add csx.csxID, csx.LastTimestamp
                                 dictCsxUpdatedLastLocation.Add csx.csxID, csx.Location
@@ -109,7 +109,7 @@ StartTime = Timer
                                 currentCSXTimeStamp = csx.LastTimestamp
                             End If
                         End If
-                        If csx.LastTimestamp > TimeStampImportWS Then           'neuere timestamp 'nur noch Loc und ID adden
+'                        If csx.LastTimestamp < TimeStampImportWS Then           'neuere timestamp 'nur noch Loc und ID adden
                             If dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
 '                            Stop
                                 csx.LastTimestamp = TimeStampImportWS
@@ -120,9 +120,10 @@ StartTime = Timer
                                 collCsx.Add csx
                                 currentCSXTimeStamp = csx.LastTimestamp
                             End If
-                        Else
-'                            Stop    'currentCSXTimeStamp >= TimeStampImportWS
-                        End If
+'                        Else
+'
+''                            Stop    'currentCSXTimeStamp >= TimeStampImportWS
+'                        End If
                 SecondsElapsed = Round(Timer - StartTime, 0)
                 collRuntimes.Add SecondsElapsed             'hinzufügen runtime pro Zeile
                 End If
@@ -139,8 +140,9 @@ StartTime = Timer
                 cTimestamp = cTimestamp + 1
                 importWSname = importWS.Name
             End If      'This If clause is to sort out any "Tabelle..." sheets that return error anyways
-        Next importWS
-    Loop    'counter for amount of importWS
+'        Next importWS
+'    Loop    'counter for amount of importWS
+    Next countImportWS
 
     Set outputWS = wbkcsxObj.Worksheets("Allcsx")
     outputWS.UsedRange.ClearContents
@@ -153,7 +155,7 @@ StartTime = Timer
     wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Range("A2:A" & fLastWrittenRow(wbkcsxObj.Worksheets("RuntimeBuildCsxDict"), 1)).ClearContents
 
     For currrow = 2 To collRuntimes.Count
-    wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currrow, 1).Value2 = collRuntimes(currrow)
+        wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currrow, 1).Value2 = collRuntimes(currrow)
     Next currrow
 
 End Sub

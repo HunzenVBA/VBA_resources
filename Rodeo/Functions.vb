@@ -114,8 +114,8 @@ Function fDeleteEmptyRows(Optional AllWorksheets As Boolean = False)
         .ScreenUpdating = True
     End With
 End Function
-Function PopulateFullColumn(Col As String)
-    ThisWorkbook.ActiveSheet.Range(Col & ":" & Col).Value = "DummyValue"
+Function PopulateFullColumn(col As String)
+    ThisWorkbook.ActiveSheet.Range(col & ":" & col).Value = "DummyValue"
 End Function
 Function fLastWrittenRow(ws As Worksheet, Column As Long) As Long
     fLastWrittenRow = ws.Cells(Rows.Count, Column).End(xlUp).Row
@@ -549,7 +549,7 @@ Function fDeleteRowsInArray(inputarray As Variant, SelectCondition As Variant) A
 
 Const COMPARE_COL As Long = 1
 Dim a, aNew(), nr As Long, nc As Long
-Dim r As Long, c As Long, rNew As Long
+Dim r As Long, col As Long, rNew As Long
 Dim tmp As Variant
 
     nr = UBound(inputarray, 1)
@@ -562,9 +562,9 @@ Dim tmp As Variant
         tmp = inputarray(r, COMPARE_COL)
         If tmp = SelectCondition Then
             rNew = rNew + 1
-            For c = 1 To nc
-                aNew(rNew, c) = inputarray(r, c)
-            Next c
+            For col = 1 To nc
+                aNew(rNew, col) = inputarray(r, col)
+            Next col
         End If
     Next r
 
@@ -572,10 +572,10 @@ Dim tmp As Variant
 End Function
 
 Function fWriteDictionariesToWS(ws As Worksheet, collOfDicts As Collection)
-Dim dictCsxUpdatedLastTimestamp as Dictionary
-Dim dictCsxUpdatedLastLocation as Dictionary
-Dim dictCsxUpdatedOutCont as Dictionary
-Dim dictCsxUpdatedDwell as Dictionary
+Dim dictCsxUpdatedLastTimestamp As Dictionary
+Dim dictCsxUpdatedLastLocation As Dictionary
+Dim dictCsxUpdatedOutCont As Dictionary
+Dim dictCsxUpdatedDwell As Dictionary
 
 Set dictCsxUpdatedLastTimestamp = collOfDicts(1)
 Set dictCsxUpdatedLastLocation = collOfDicts(2)
@@ -592,6 +592,6 @@ Set dictCsxUpdatedDwell = collOfDicts(4)
     ws.Cells(1, 6).Value2 = "OuterContainer"
     ws.Cells(1, 5).Value2 = "OuterScannable"
     ws.Cells(1, 4).Value2 = "ScannableID"
-    ws.Cells(1, 8).Value2 = "dwellTime"
+    ws.Cells(1, 8).Value2 = "Dwell Time (hours)"
 
 End Function
