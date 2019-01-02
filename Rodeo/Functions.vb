@@ -595,3 +595,34 @@ Set dictCsxUpdatedDwell = collOfDicts(4)
     ws.Cells(1, 8).Value2 = "Dwell Time (hours)"
 
 End Function
+
+Function fWriteLocationMapping(outputws As Worksheet, dictOutContIDs As Dictionary) As Dictionary
+Dim currentrow As Long
+Dim lastrow As Long
+Dim strOwner As String
+Dim strOutContID As String
+Dim wsMapping As Worksheet
+Dim key As Variant
+Dim result As Dictionary
+
+Set result = New Dictionary
+'Dim outputws As Worksheet
+
+Set wsMapping = ThisWorkbook.Worksheets("LocationMapping")
+'Set outputws = ThisWorkbook.Worksheets("AllCsx")
+
+lastrow = dictOutContIDs.Count
+
+
+    For Each key In dictOutContIDs.Keys
+        currentrow = currentrow + 1
+        strOutContID = dictOutContIDs(key)
+        If strOutContID <> "" Then
+            strOwner = WorksheetFunction.VLookup(strOutContID, wsMapping.Range("A1:C" & fLastWrittenRow(wsMapping, 1)), 3)
+            result.Add currentrow, strOwner
+        End If
+    Next key
+
+    Set fWriteLocationMapping = result
+    outputws.Cells(2, 9).Resize(result.Count, 1) = Application.Transpose(result.Items)
+End Function

@@ -9,7 +9,7 @@ StartTime = Timer
     Dim cTimestamp As Integer
     Dim countImportWS As Integer
     Dim importWS As Worksheet
-    Dim outputWS As Worksheet
+    Dim outputws As Worksheet
     Dim lastrow As Long
     Dim currentrow As Long
     Dim lrow As Long
@@ -140,18 +140,21 @@ StartTime = Timer
 '    Loop    'counter for amount of importWS
     Next countImportWS
 
-    Set outputWS = wbkcsxObj.Worksheets("Allcsx")
-    outputWS.UsedRange.ClearContents
+    Set outputws = wbkcsxObj.Worksheets("Allcsx")
+    outputws.UsedRange.ClearContents
     collOutputDicts.Add dictCsxUpdatedLastTimestamp
     collOutputDicts.Add dictCsxUpdatedLastLocation
     collOutputDicts.Add dictCsxUpdatedOutCont
     collOutputDicts.Add dictCsxUpdatedDwell
 
-    Call fWriteDictionariesToWS(outputWS, collOutputDicts)          'Write all data to output WS
+    Call fWriteDictionariesToWS(outputws, collOutputDicts)          'Write all data to output WS
     wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Range("A2:A" & fLastWrittenRow(wbkcsxObj.Worksheets("RuntimeBuildCsxDict"), 1)).ClearContents
 
     For currrow = 2 To collRuntimes.Count
         wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currrow, 1).Value2 = collRuntimes(currrow)
     Next currrow
+    'LocationMapping
+    fWriteLocationMapping outputws, dictCsxUpdatedOutCont
+
 
 End Sub
