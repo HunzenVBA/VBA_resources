@@ -653,5 +653,6 @@ lastrow = dictOutContIDs.Count
     Next key
 
     Set fWriteLocationMapping = result
-    outputws.Cells(3, 9).Resize(result.Count, 1) = Application.Transpose(result.Items)
+    outputws.Cells(2, 9).Resize(result.Count, 1) = Application.Transpose(result.Items)
+    outputws.Cells(2, 9).Value = "Process Owner"
 End Function
