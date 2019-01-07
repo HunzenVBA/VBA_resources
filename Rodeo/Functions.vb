@@ -588,11 +588,12 @@ Set dictCsxUpdatedDwell = collOfDicts(4)
     ws.Cells(2, 7).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Items)
     ws.Cells(2, 8).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedDwell.Items)
 
-    ws.Cells(1, 7).Value2 = "LastTimestamp"
-    ws.Cells(1, 6).Value2 = "OuterContainer"
-    ws.Cells(1, 5).Value2 = "OuterScannable"
-    ws.Cells(1, 4).Value2 = "ScannableID"
-    ws.Cells(1, 8).Value2 = "Dwell Time (hours)"
+    ws.Cells(2, 7).Value2 = "LastTimestamp"
+'    ws.Cells(1, 6).Value2 = "OuterContainer"
+'    ws.Cells(1, 5).Value2 = "OuterScannable"
+'    ws.Cells(1, 4).Value2 = "ScannableID"
+'    ws.Cells(1, 8).Value2 = "Dwell Time (hours)"
+    ws.Cells(2, 9).Value2 = "Process"
 
 End Function
 
@@ -604,11 +605,17 @@ Dim strOutContID As String
 Dim wsMapping As Worksheet
 Dim key As Variant
 Dim result As Dictionary
+Dim strResultAdress As Variant
+Dim rngSearchRange As Range
+Dim collOutput As Collection
 
 Set result = New Dictionary
 'Dim outputws As Worksheet
 
+Set collOutput = New Collection
+
 Set wsMapping = ThisWorkbook.Worksheets("LocationMapping")
+Set rngSearchRange = Range("A1:A" & fLastWrittenRow(wsMapping, 1))
 'Set outputws = ThisWorkbook.Worksheets("AllCsx")
 
 lastrow = dictOutContIDs.Count
@@ -620,9 +627,20 @@ lastrow = dictOutContIDs.Count
         If strOutContID <> "" Then
             strOwner = WorksheetFunction.VLookup(strOutContID, wsMapping.Range("A1:C" & fLastWrittenRow(wsMapping, 1)), 3)
             result.Add currentrow, strOwner
+            collOutput.Add strOutContID
+            collOutput.Add strOwner
+            strResultAdress = Application.Match(strOutContID, rngSearchRange, 0)
+            If Err.Number <> 0 Then
+                Stop
+                Debug.Print Err.Number
+                Err.Clear
+            Else
+                collOutput.Add strResultAdress
+                Err.Clear
+            End If
         End If
     Next key
 
     Set fWriteLocationMapping = result
-    outputws.Cells(2, 9).Resize(result.Count, 1) = Application.Transpose(result.Items)
+    outputws.Cells(3, 9).Resize(result.Count, 1) = Application.Transpose(result.Items)
 End Function
