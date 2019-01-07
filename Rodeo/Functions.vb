@@ -610,6 +610,7 @@ Dim rngSearchRange As Range
 Dim collOutput As Collection
 Dim collMissingOwner As Collection
 Dim dictMissingOwners As Dictionary
+Dim collResultReverse As Collection
 
 Set result = New Dictionary
 'Dim outputws As Worksheet
@@ -617,13 +618,13 @@ Set result = New Dictionary
 Set collOutput = New Collection
 Set collMissingOwner = New Collection
 Set dictMissingOwners = New Dictionary
+Set collResultReverse = New Collection
 
 Set wsMapping = ThisWorkbook.Worksheets("LocationMapping")
 Set rngSearchRange = wsMapping.Range("A1:A" & fLastWrittenRow(wsMapping, 1))
 'Set outputws = ThisWorkbook.Worksheets("AllCsx")
 
 lastrow = dictOutContIDs.Count
-
 
     For Each key In dictOutContIDs.Keys
         currentrow = currentrow + 1
@@ -632,19 +633,22 @@ lastrow = dictOutContIDs.Count
             strOwner = WorksheetFunction.VLookup(strOutContID, wsMapping.Range("A1:C" & fLastWrittenRow(wsMapping, 1)), 3)
             result.Add currentrow, strOwner
             collOutput.Add strOutContID
-            collOutput.Add strOwner
-
+            collResultReverse.Add strOwner
             Set strResultAdress = rngSearchRange.Find(strOutContID)
             If Not strResultAdress Is Nothing Then
-                    collOutput.Add strResultAdress.Address
+                collOutput.Add strResultAdress.Address                          'Location gefunden
             Else
-                    Debug.Print strOutContID
-                    collMissingOwner.Add strOutContID
-                    If dictMissingOwners.Exists(strOutContID) Then
-                    Else
-                        dictMissingOwners.Add strOutContID, strOutContID & "_missing"
-                    End If
+                collMissingOwner.Add strOutContID
+                If dictMissingOwners.Exists(strOutContID) Then
+                Else
+                    dictMissingOwners.Add strOutContID, strOutContID & "_missing"   'Aufbau Dict mit missing location descriptions
+                End If
             End If
+        Else
+'        Stop
+            currentrow = currentrow + 1
+            strOwner = "empty location"
+             result.Add currentrow, strOwner
         End If
     Next key
 
