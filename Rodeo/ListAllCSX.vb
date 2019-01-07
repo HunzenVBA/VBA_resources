@@ -41,6 +41,7 @@ StartTime = Timer
     Dim csxKey As Variant
     Dim csxDwell As Variant
     Dim importWSname As String
+    Dim maxcountImportWS As Integer
 
     Set dictCsxUpdatedLastTimestamp = New Dictionary
     Set dictCsxUpdatedLastLocation = New Dictionary
@@ -60,7 +61,8 @@ StartTime = Timer
 '    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks("RodeoImport10min.xlsm")
     'Insert filter for count of Import Sheets
-    For countImportWS = 3 To 1 Step -1
+    maxcountImportWS = 3        'Select this via UI later
+    For countImportWS = maxcountImportWS To 1 Step -1
 '        For Each importWS In ImportWbk.Worksheets       'fängt immer bei worksheets(1) an, also ganz links
         Set importWS = ImportWbk.Worksheets(countImportWS)
         If Left(importWS.Name, 7) <> "Tabelle" Then
@@ -154,7 +156,8 @@ StartTime = Timer
         wbkcsxObj.Worksheets("RuntimeBuildCsxDict").Cells(currrow, 1).Value2 = collRuntimes(currrow)
     Next currrow
     'LocationMapping
-    fWriteLocationMapping outputws, dictCsxUpdatedOutCont
+    fWriteLocationMapping outputws, dictCsxUpdatedLastLocation
+'    fWriteLocationMapping outputws, dictCsxUpdatedOutCont
 
 
 End Sub
