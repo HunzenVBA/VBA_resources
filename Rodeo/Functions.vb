@@ -605,17 +605,21 @@ Dim strOutContID As String
 Dim wsMapping As Worksheet
 Dim key As Variant
 Dim result As Dictionary
-Dim strResultAdress As Variant
+Dim strResultAdress As Range
 Dim rngSearchRange As Range
 Dim collOutput As Collection
+Dim collMissingOwner As Collection
+Dim dictMissingOwners As Dictionary
 
 Set result = New Dictionary
 'Dim outputws As Worksheet
 
 Set collOutput = New Collection
+Set collMissingOwner = New Collection
+Set dictMissingOwners = New Dictionary
 
 Set wsMapping = ThisWorkbook.Worksheets("LocationMapping")
-Set rngSearchRange = Range("A1:A" & fLastWrittenRow(wsMapping, 1))
+Set rngSearchRange = wsMapping.Range("A1:A" & fLastWrittenRow(wsMapping, 1))
 'Set outputws = ThisWorkbook.Worksheets("AllCsx")
 
 lastrow = dictOutContIDs.Count
@@ -629,14 +633,17 @@ lastrow = dictOutContIDs.Count
             result.Add currentrow, strOwner
             collOutput.Add strOutContID
             collOutput.Add strOwner
-            strResultAdress = Application.Match(strOutContID, rngSearchRange, 0)
-            If Err.Number <> 0 Then
-                Stop
-                Debug.Print Err.Number
-                Err.Clear
+
+            Set strResultAdress = rngSearchRange.Find(strOutContID)
+            If Not strResultAdress Is Nothing Then
+                    collOutput.Add strResultAdress.Address
             Else
-                collOutput.Add strResultAdress
-                Err.Clear
+                    Debug.Print strOutContID
+                    collMissingOwner.Add strOutContID
+                    If dictMissingOwners.Exists(strOutContID) Then
+                    Else
+                        dictMissingOwners.Add strOutContID, strOutContID & "_missing"
+                    End If
             End If
         End If
     Next key
