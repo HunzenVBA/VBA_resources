@@ -1,6 +1,6 @@
 Option Explicit
 
-Sub BuildCSXdictPIDFilter()
+Sub BuildCSXdictAll()
 Application.ScreenUpdating = False
 StartTime = Timer
     Dim strCSXID As String
@@ -41,7 +41,6 @@ StartTime = Timer
     Dim csxKey As Variant
     Dim csxDwell As Variant
     Dim importWSname As String
-    Dim maxcountImportWS As Integer
 
     Set dictCsxUpdatedLastTimestamp = New Dictionary
     Set dictCsxUpdatedLastLocation = New Dictionary
