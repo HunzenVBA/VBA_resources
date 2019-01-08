@@ -8,6 +8,9 @@ Public Const strcsxStampsFileName As String = "csxStamps.xlsx"
 Public Const strRodeoPath As String = "C:\Users\denizku\Documents\Rodeo\"
 Public Const strRodeoFiltered1 As String = "C:\Users\denizku\Documents\Rodeo\RodeoOhneLoadedundPalletized.xlsx"
 Public Const strRodeoWorkpoolFileName As String = "RodeoWorkpoolFiltered.xlsx"
+Public Const strRodeo1minFile As String = "C:\Users\denizku\Documents\Rodeo\RodeoImport1min.xlsm"
+Public Const strRodeo1minFileName As String = "RodeoImport1min.xlsm"
+Public Const strRodeo10minFileName As String = "RodeoImport10min.xlsm"
 
 'Home'
 'Public Const strRodeoHistoryFile As String = "C:\Users\Apr17\Documents\VBA\Rodeo\RodeoImportHistory.xlsx"
@@ -36,3 +39,5 @@ Public StartTimerVar                As Date
 Public globalcounter                As Long
 Public collAllUniqeCSX              As Collection
 Public collUniqueDicts              As Collection
+Public Const vbDoubleQuote          As String = """"
+Public maxcountImportWS             As Integer
