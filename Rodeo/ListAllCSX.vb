@@ -7,7 +7,6 @@ StartTime = Timer
     Dim cRow As Long
     Dim currrow As Long
     Dim cTimestamp As Integer
-    Dim countImportWS As Integer
     Dim importWS As Worksheet
     Dim outputws As Worksheet
     Dim lastrow As Long
@@ -15,6 +14,7 @@ StartTime = Timer
     Dim lrow As Long
     Dim dataSetcsx As String
     Dim uniqueRow As Long
+    Dim countImportWS As Integer
 '    Dim collUniqueDicts As Dictionary
     Dim collOutputDicts As Collection
     Dim collUniqueCounter As Collection
@@ -102,7 +102,7 @@ StartTime = Timer
                         If cTimestamp < 1 Then
                             If Not dictCsxUpdatedLastTimestamp.Exists(csx.csxID) Then
 '                            Stop
-                                csx.LastTimestamp = TimeStampImportWS
+                                csx.LastTimestamp = TimeStampImportWS                       'Populate initially dictionary
                                 dictCsxUpdatedLastTimestamp.Add csx.csxID, csx.LastTimestamp
                                 dictCsxUpdatedLastLocation.Add csx.csxID, csx.Location
                                 dictCsxUpdatedOutCont.Add csx.csxID, csx.OutContainer
