@@ -620,7 +620,7 @@ Set collMissingOwner = New Collection
 Set dictMissingOwners = New Dictionary
 Set collResultReverse = New Collection
 
-Set wsMapping = ThisWorkbook.Worksheets("LocationMapping")
+Set wsMapping = ThisWorkbook.Worksheets("LocationMapping Peculiar")
 Set rngSearchRange = wsMapping.Range("A1:A" & fLastWrittenRow(wsMapping, 1))
 'Set outputws = ThisWorkbook.Worksheets("AllCsx")
 
@@ -680,7 +680,7 @@ Set collMissingOwner = New Collection
 Set dictMissingOwners = New Dictionary
 Set collResultReverse = New Collection
 
-Set wsMapping = ThisWorkbook.Worksheets("LocationMapping")
+Set wsMapping = LocationCodes
 Set rngSearchRange = wsMapping.Range("A1:A" & fLastWrittenRow(wsMapping, 1))
 'Set outputws = ThisWorkbook.Worksheets("AllCsx")
 
@@ -690,7 +690,7 @@ lastrow = dictOutContIDs.Count
         currentrow = currentrow + 1
         strOutContID = dictOutContIDs(key)
         If strOutContID <> "" Then
-            strOwner = WorksheetFunction.VLookup(strOutContID, wsMapping.Range("A1:C" & fLastWrittenRow(wsMapping, 1)), 3)
+            strOwner = WorksheetFunction.VLookup(strOutContID, wsMapping.Range("A1:E" & fLastWrittenRow(wsMapping, 1)), 5)
             result.Add currentrow, strOwner
             collOutput.Add strOutContID
             collResultReverse.Add strOwner
@@ -713,6 +713,6 @@ lastrow = dictOutContIDs.Count
     Next key
 
     Set fWriteProcessMapping = result
-    outputws.Cells(2, 9).Resize(result.Count, 1) = Application.Transpose(result.Items)
+    outputws.Cells(2, 10).Resize(result.Count, 1) = Application.Transpose(result.Items)
     outputws.Cells(2, 10).Value = "Process"        'ersten Wert überschreiben
 End Function

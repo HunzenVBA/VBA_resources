@@ -58,9 +58,12 @@ StartTime = Timer
     Set app = Application
     Set wbkcsxObj = Workbooks("AllCsxObjects.xlsm")
 '    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
-    Set ImportWbk = Workbooks("RodeoImport10min.xlsm")
+
+    On Error GoTo WbkFehler
+        Set ImportWbk = Workbooks("RodeoImport10min.xlsm")
+WbkFehler:
     'Insert filter for count of Import Sheets
-    maxcountImportWS = 3        'Select this via UI later
+    maxcountImportWS = 1        'Select this via UI later
     For countImportWS = maxcountImportWS To 1 Step -1
 '        For Each importWS In ImportWbk.Worksheets       'fängt immer bei worksheets(1) an, also ganz links
         Set importWS = ImportWbk.Worksheets(countImportWS)
@@ -156,6 +159,7 @@ StartTime = Timer
     Next currrow
     'LocationMapping
     fWriteLocationMapping outputws, dictCsxUpdatedLastLocation
+    fWriteProcessMapping outputws, dictCsxUpdatedLastLocation
 '    fWriteLocationMapping outputws, dictCsxUpdatedOutCont
 
 
