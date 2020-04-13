@@ -238,7 +238,7 @@ Function IsWorkBookOpen(FileName As String)
     Case Else: Error ErrNo
     End Select
 End Function
-Sub test()
+Sub Test()
     Dim wb As Workbook
     Set wb = GetWorkbook("C:\Users\dick\Dropbox\Excel\Hoops.xls")
     If Not wb Is Nothing Then
@@ -545,7 +545,7 @@ csx.LastTimestamp = csxLastTimeStamp
 fWriteCSXData = csx
 End Function
 
-Function fDeleteRowsInArray(inputarray As Variant, SelectCondition As Variant) As Variant
+Function fDeleteRowsInArray2D(inputarray As Variant, SelectCondition As Variant) As Variant
 
 Const COMPARE_COL As Long = 1
 Dim a, aNew(), nr As Long, nc As Long
@@ -568,10 +568,36 @@ Dim tmp As Variant
         End If
     Next r
 
-    fDeleteRowsInArray = aNew
+    fDeleteRowsInArray2D = aNew
+End Function
+Function fSelectRowsInArray(inputarray As Variant, SelectCondition As Variant) As Variant
+
+Const COMPARE_COL As Long = 1
+Dim a, aNew(), nr As Long, nc As Long
+Dim r As Long, col As Long, rNew As Long
+Dim tmp As Variant
+
+    nr = UBound(inputarray, 1)
+    nc = UBound(inputarray, 2)
+
+    ReDim aNew(1 To nr, 1 To nc)
+    rNew = 0
+
+    For r = 1 To nr
+        tmp = inputarray(r, COMPARE_COL)
+        If tmp <> SelectCondition Then
+            rNew = rNew + 1
+            For col = 1 To nc
+                aNew(rNew, col) = inputarray(r, col)
+            Next col
+        End If
+    Next r
+
+    fSelectRowsInArray = aNew
 End Function
 
 Function fWriteDictionariesToWS(ws As Worksheet, collOfDicts As Collection)
+Dim dictCsxUpdatedContainer As Dictionary
 Dim dictCsxUpdatedLastTimestamp As Dictionary
 Dim dictCsxUpdatedLastLocation As Dictionary
 Dim dictCsxUpdatedOutCont As Dictionary
@@ -581,18 +607,22 @@ Set dictCsxUpdatedLastTimestamp = collOfDicts(1)
 Set dictCsxUpdatedLastLocation = collOfDicts(2)
 Set dictCsxUpdatedOutCont = collOfDicts(3)
 Set dictCsxUpdatedDwell = collOfDicts(4)
+Set dictCsxUpdatedContainer = collOfDicts(5)
 
     ws.Cells(2, 4).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Keys)
     ws.Cells(2, 5).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastLocation.Items)
     ws.Cells(2, 6).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedOutCont.Items)
     ws.Cells(2, 7).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedLastTimestamp.Items)
     ws.Cells(2, 8).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedDwell.Items)
+    ws.Cells(2, 11).Resize(dictCsxUpdatedLastTimestamp.Count, 1) = Application.Transpose(dictCsxUpdatedContainer.Items)
 
-    ws.Cells(1, 7).Value2 = "LastTimestamp"
-    ws.Cells(1, 6).Value2 = "OuterContainer"
-    ws.Cells(1, 5).Value2 = "OuterScannable"
-    ws.Cells(1, 4).Value2 = "ScannableID"
-    ws.Cells(1, 8).Value2 = "Dwell Time (hours)"
+    ws.Cells(2, 7).Value2 = "LastTimestamp"
+'    ws.Cells(1, 6).Value2 = "OuterContainer"
+'    ws.Cells(1, 5).Value2 = "OuterScannable"
+'    ws.Cells(1, 4).Value2 = "ScannableID"
+'    ws.Cells(1, 8).Value2 = "Dwell Time (hours)"
+    ws.Cells(2, 9).Value2 = "Process"
+    ws.Cells(2, 11).Value2 = "Container"
 
 End Function
 
@@ -604,15 +634,26 @@ Dim strOutContID As String
 Dim wsMapping As Worksheet
 Dim key As Variant
 Dim result As Dictionary
+Dim strResultAdress As Range
+Dim rngSearchRange As Range
+Dim collOutput As Collection
+Dim collMissingOwner As Collection
+Dim dictMissingOwners As Dictionary
+Dim collResultReverse As Collection
 
 Set result = New Dictionary
 'Dim outputws As Worksheet
 
-Set wsMapping = ThisWorkbook.Worksheets("LocationMapping")
+Set collOutput = New Collection
+Set collMissingOwner = New Collection
+Set dictMissingOwners = New Dictionary
+Set collResultReverse = New Collection
+
+Set wsMapping = ThisWorkbook.Worksheets("LocationMapping Peculiar")
+Set rngSearchRange = wsMapping.Range("A1:A" & fLastWrittenRow(wsMapping, 1))
 'Set outputws = ThisWorkbook.Worksheets("AllCsx")
 
 lastrow = dictOutContIDs.Count
-
 
     For Each key In dictOutContIDs.Keys
         currentrow = currentrow + 1
@@ -620,9 +661,180 @@ lastrow = dictOutContIDs.Count
         If strOutContID <> "" Then
             strOwner = WorksheetFunction.VLookup(strOutContID, wsMapping.Range("A1:C" & fLastWrittenRow(wsMapping, 1)), 3)
             result.Add currentrow, strOwner
+            collOutput.Add strOutContID
+            collResultReverse.Add strOwner
+            Set strResultAdress = rngSearchRange.Find(strOutContID)
+            If Not strResultAdress Is Nothing Then
+                collOutput.Add strResultAdress.Address                          'Location gefunden
+            Else
+                collMissingOwner.Add strOutContID
+                If dictMissingOwners.Exists(strOutContID) Then
+                Else
+                    dictMissingOwners.Add strOutContID, strOutContID & "_missing"   'Aufbau Dict mit missing location descriptions
+                End If
+            End If
+        Else
+'        Stop
+            currentrow = currentrow + 1
+            strOwner = "empty location"
+             result.Add currentrow, strOwner
         End If
     Next key
 
     Set fWriteLocationMapping = result
     outputws.Cells(2, 9).Resize(result.Count, 1) = Application.Transpose(result.Items)
+    outputws.Cells(2, 9).Value = "Process Owner"        'ersten Wert überschreiben
+End Function
+
+Function fWriteProcessMapping(outputws As Worksheet, dictOutContIDs As Dictionary) As Dictionary
+Dim currentrow As Long
+Dim lastrow As Long
+Dim strOwner As String
+Dim strOutContID As String
+Dim wsMapping As Worksheet
+Dim key As Variant
+Dim result As Dictionary
+Dim strResultAdress As Range
+Dim rngSearchRange As Range
+Dim collOutput As Collection
+Dim collMissingOwner As Collection
+Dim dictMissingOwners As Dictionary
+Dim collResultReverse As Collection
+
+Set result = New Dictionary
+'Dim outputws As Worksheet
+
+Set collOutput = New Collection
+Set collMissingOwner = New Collection
+Set dictMissingOwners = New Dictionary
+Set collResultReverse = New Collection
+
+Set wsMapping = LocationCodes
+Set rngSearchRange = wsMapping.Range("A1:A" & fLastWrittenRow(wsMapping, 1))
+'Set outputws = ThisWorkbook.Worksheets("AllCsx")
+
+lastrow = dictOutContIDs.Count
+
+    For Each key In dictOutContIDs.Keys
+        currentrow = currentrow + 1
+        strOutContID = dictOutContIDs(key)
+        If strOutContID <> "" Then
+            strOwner = WorksheetFunction.VLookup(strOutContID, wsMapping.Range("A1:E" & fLastWrittenRow(wsMapping, 1)), 5)
+            result.Add currentrow, strOwner
+            collOutput.Add strOutContID
+            collResultReverse.Add strOwner
+            Set strResultAdress = rngSearchRange.Find(strOutContID)
+            If Not strResultAdress Is Nothing Then
+                collOutput.Add strResultAdress.Address                          'Location gefunden
+            Else
+                collMissingOwner.Add strOutContID
+                If dictMissingOwners.Exists(strOutContID) Then
+                Else
+                    dictMissingOwners.Add strOutContID, strOutContID & "_missing"   'Aufbau Dict mit missing location descriptions
+                End If
+            End If
+        Else
+'        Stop
+            currentrow = currentrow + 1
+            strOwner = "empty location"
+             result.Add currentrow, strOwner
+        End If
+    Next key
+
+    Set fWriteProcessMapping = result
+    outputws.Cells(2, 10).Resize(result.Count, 1) = Application.Transpose(result.Items)
+    outputws.Cells(2, 10).Value = "Process"        'ersten Wert überschreiben
+End Function
+Function fWriteDescriptionMapping(outputws As Worksheet, dictOutContIDs As Dictionary) As Dictionary
+Dim currentrow As Long
+Dim lastrow As Long
+Dim strOwner As String
+Dim strOutContID As String
+Dim wsMapping As Worksheet
+Dim key As Variant
+Dim result As Dictionary
+Dim strResultAdress As Range
+Dim rngSearchRange As Range
+Dim collOutput As Collection
+Dim collMissingOwner As Collection
+Dim dictMissingOwners As Dictionary
+Dim collResultReverse As Collection
+
+Set result = New Dictionary
+'Dim outputws As Worksheet
+
+Set collOutput = New Collection
+Set collMissingOwner = New Collection
+Set dictMissingOwners = New Dictionary
+Set collResultReverse = New Collection
+
+Set wsMapping = LocationCodes
+Set rngSearchRange = wsMapping.Range("B1:B" & fLastWrittenRow(wsMapping, 1))
+'Set outputws = ThisWorkbook.Worksheets("AllCsx")
+
+lastrow = dictOutContIDs.Count
+
+    For Each key In dictOutContIDs.Keys
+        currentrow = currentrow + 1
+        strOutContID = dictOutContIDs(key)
+        If strOutContID <> "" Then
+            strOwner = WorksheetFunction.VLookup(strOutContID, wsMapping.Range("A1:F" & fLastWrittenRow(wsMapping, 1)), 6)
+            result.Add currentrow, strOwner
+            collOutput.Add strOutContID
+            collResultReverse.Add strOwner
+            Set strResultAdress = rngSearchRange.Find(strOutContID)
+            If Not strResultAdress Is Nothing Then
+                collOutput.Add strResultAdress.Address                          'Location gefunden
+            Else
+                collMissingOwner.Add strOutContID
+                If dictMissingOwners.Exists(strOutContID) Then
+                Else
+                    dictMissingOwners.Add strOutContID, strOutContID & "_missing"   'Aufbau Dict mit missing location descriptions
+                End If
+            End If
+        Else
+'        Stop
+            currentrow = currentrow + 1
+            strOwner = "empty location"
+             result.Add currentrow, strOwner
+        End If
+    Next key
+
+    Set fWriteDescriptionMapping = result
+    outputws.Cells(2, 12).Resize(result.Count, 1) = Application.Transpose(result.Items)
+    outputws.Cells(2, 12).Value = "Description"        'ersten Wert überschreiben
+End Function
+
+
+Sub FormatRangeAsTable(rng As Range, ws As Worksheet)
+    Dim tbl As ListObject
+
+    Set tbl = ws.ListObjects.Add(xlSrcRange, rng, , xlYes)
+    tbl.TableStyle = "TableStyleMedium15"
+End Sub
+
+Function fDeleteRowsInArray1D(inputarray As Variant, SelectCondition As Variant) As Variant
+
+Const COMPARE_COL As Long = 1
+Dim a, aNew(), nr As Long, nc As Long
+Dim r As Long, col As Long, rNew As Long
+Dim tmp As String
+
+    nr = UBound(inputarray)
+'    nc = UBound(inputarray, 2)
+
+    ReDim aNew(1 To nr)
+    rNew = 0
+
+    For r = 1 To nr
+        tmp = inputarray(r)
+        If tmp = SelectCondition Then
+            rNew = rNew + 1
+'            For col = 1 To nc
+'                aNew(rNew, col) = inputarray(r, col)
+'            Next col
+        End If
+    Next r
+
+    fDeleteRowsInArray1D = aNew
 End Function

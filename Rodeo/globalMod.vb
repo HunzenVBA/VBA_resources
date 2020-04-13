@@ -1,34 +1,71 @@
 Option Explicit
 
+Sub runStacker()
+
+    Dim StartTimeAll        As Double
+    Dim SecondsElapsedAll   As Double
+
+    StartTimeAll = Timer
+
+'    Namensausgabe des Subs im Direktfenster, zur Info/Debugging
+    currProcedureName = "NameWorksheets"
+    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
+    Debug.Print Now
+    Call NameWorksheets
+
+    currProcedureName = "PrintWSnames"
+    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
+    Debug.Print Now
+    Call PrintWSnames
+
+    currProcedureName = "UpdateRodeoTotal"
+    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
+    Debug.Print Now
+    Call UpdateRodeoTotal
+
+    currProcedureName = "DeleteEmptyRows"
+    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
+    Debug.Print Now
+    Call DeleteEmptyRows
+
+'    currProcedureName = "DeleteEmptyRows"
+'    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
+'    Debug.Print Now
+'    Call DeleteEmptyRows
+
+
+
+'Determine how many seconds code took to run
+  SecondsElapsedAll = Round(Timer - StartTimeAll, 1)
+
+'Notify user in seconds
+  Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
+End Sub
+
 Sub RepeatImportTotal()
 
     Dim lAnzahl As String
     Dim i As Long
-
-Anf:
-    lAnzahl = InputBox("Wie oft soll das Makro laufen ?", , 3)
-
-    If lAnzahl = "" Then Exit Sub
+    Dim tStop As Date
+    tStop = TimeValue(Now)
 
     'Prüfen ob eine Zahl eingegeben wurde
-    If IsNumeric(lAnzahl) Then
-        For i = 1 To CLng(lAnzahl)
+    Do While tStop < TimeValue("22:00:00")
+    tStop = TimeValue(Now)
+        i = i + 1
                 StartTimeAll = Timer
-                currProcedureName = "RodeoAddQueryTotal"
+                currProcedureName = "Rodeo10minDwell"
                 Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
                 Debug.Print Now
-                Call RodeoAddQueryTotal
+                Call Rodeo10minDwell
                 'Determine how many seconds code took to run
                 SecondsElapsedAll = Round(Timer - StartTimeAll, 1)
                 'Notify user in seconds
                 'Debug.Print "This code ran successfully in " & SecondsElapsedAll & " seconds"
                 Application.Wait (Now + TimeValue("0:01:00"))      '10 seconds delay between queries
                 Debug.Print "Makro Start Nr.: " & i
-        Next i
-    Else
-    MsgBox "Bitte ein Zahl eingeben !", vbInformation
-    GoTo Anf
-    End If
+    Loop
+
 
 End Sub
 
@@ -87,7 +124,7 @@ Anf:
                 'Notify user in seconds
                 'Debug.Print "This code ran successfully in " & SecondsElapsedAll & " seconds"
                 Debug.Print "Makro Start Nr.: " & i
-                Application.Wait (Now + TimeValue("0:00:10"))      '10 seconds delay between queries
+                Application.Wait (Now + TimeValue("0:00:08"))      '10 seconds delay between queries
         Next i
     Else
     MsgBox "Bitte ein Zahl eingeben !", vbInformation
