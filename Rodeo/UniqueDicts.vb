@@ -3,7 +3,7 @@ Option Explicit
 Sub CopycsxAndTimestamp()
 Application.ScreenUpdating = False
 StartTime = Timer
-
+    Dim cTimestamp As Integer
     Dim importWS As Worksheet
     Dim lastrow As Long
     Dim currentrow As Long
@@ -13,10 +13,12 @@ StartTime = Timer
     Dim dataSetoutScan As String
     Dim dataSetoutCont As String
     Dim uniqueRow As Long
+'    Dim collUniqueDicts As Dictionary
     Dim collUniqueCounter As Collection
     Dim collImportWSnames As Collection
     Dim collRuntimes As Collection
     Dim collWorkpool As Collection
+    Dim collUniqeCSXCounter As Collection
     Dim ImportWbk As Workbook
     Dim counter As Long
     Dim csxWbk As Workbook
@@ -29,17 +31,21 @@ StartTime = Timer
     Dim outScanDict As Dictionary
     Dim outContDict As Dictionary
     Dim workpoolDict As Dictionary
+    Dim csxBetweenDicts As Dictionary
 
     Set csxDict = New Dictionary
     Set outScanDict = New Dictionary
     Set outContDict = New Dictionary
     Set workpoolDict = New Dictionary
+    Set csxBetweenDicts = New Dictionary
     Set collUniqueCounter = New Collection
     Set collImportWSnames = New Collection
+    Set collUniqueDicts = New Collection
     Set collRuntimes = New Collection
     Set collWorkpool = New Collection
+    Set collUniqeCSXCounter = New Collection
     Set app = Application
-    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
+'    Set csxWbk = Workbooks.Open(FileName:=strcsxStampsFile, UpdateLinks:=False)
     Set ImportWbk = Workbooks(strRodeoHistoryFileName)
     For Each importWS In ImportWbk.Worksheets
         timeStampscsx = Right(importWS.Name, 9)
@@ -94,47 +100,25 @@ StartTime = Timer
                 End If
             Next lrow
             counter = 0
-            For uniqueRow = LBound(csxDataFiltered, 2) To UBound(csxDataFiltered, 2)
-                If Not csxDict.Exists(csxDataFiltered(1, uniqueRow)) Then
-                    counter = counter + 1
-                    globalcounter = globalcounter + 1
-                    dataSetcsx = csxDataFiltered(1, counter)
-                    dataSetoutScan = OuterScannableDataFiltered(1, counter)
-                    dataSetoutCont = OuterContainerDataFiltered(1, counter)
-                    dataSetWorkpool = WorkpoolDataFiltered(1, counter)
-                    'Add to Dictionaries
-                    csxDict.Add csxDataFiltered(1, uniqueRow), globalcounter
-                    outScanDict.Add globalcounter, OuterScannableDataFiltered(1, uniqueRow)
-                    outContDict.Add globalcounter, OuterContainerDataFiltered(1, uniqueRow)
-                    workpoolDict.Add globalcounter, WorkpoolDataFiltered(1, uniqueRow)
-                End If
-            Next uniqueRow
+            Set csxDict = fCreateUniqueCSXDict(csxDataFiltered)     'get a Dict of unique values
+'            Set collUniqeCSXCounter = fAddUniqueCSXcounterToACollection(csxDict)
                 'Collections to track data on each repeat step
                 collUniqueCounter.Add csxDict.Count
                 collImportWSnames.Add importWS.Name
                 SecondsElapsed = Round(Timer - StartTime, 0)
                 collRuntimes.Add SecondsElapsed
+                collUniqueDicts.Add csxDict, timeStampscsx
+
                 Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
                 Erase csxDataFiltered
-                Erase OuterScannableDataFiltered
-                Erase OuterContainerDataFiltered
-                Erase WorkpoolDataFiltered
-        '        Erase timeStampscsx
+'                Erase OuterScannableDataFiltered
+'                Erase OuterContainerDataFiltered
+'                Erase WorkpoolDataFiltered
+'            csxDict.RemoveAll
+            Set csxDict = New Dictionary
+            cTimestamp = cTimestamp + 1
         Next importWS
-    With csxDict
-        csxWbk.Worksheets("FilteredUnique").Cells.Clear
-        csxWbk.Worksheets("FilteredUnique").Cells(1, 2).Resize(.Count, 1) = Application.Transpose(.Keys)
-        csxWbk.Worksheets("FilteredUnique").Cells(1, 1).Resize(.Count, 1) = Application.Transpose(.Items)
-    End With
-    With outScanDict
-        csxWbk.Worksheets("FilteredUnique").Cells(1, 4).Resize(.Count, 1) = Application.Transpose(.Items)
-    End With
-    With outContDict
-        csxWbk.Worksheets("FilteredUnique").Cells(1, 6).Resize(.Count, 1) = Application.Transpose(.Items)
-    End With
-    With workpoolDict
-        csxWbk.Worksheets("FilteredUnique").Cells(1, 8).Resize(.Count, 1) = Application.Transpose(.Items)
-    End With
+    Set csxBetweenDicts = fJoinDictionaries(collUniqueDicts)
     For Each ws In csxWbk.Worksheets
         ws.Cells.Columns.AutoFit
     Next ws

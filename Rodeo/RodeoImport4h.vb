@@ -4,7 +4,8 @@ Option Explicit
 
 '************** /Subs in this Module ****************
 
-Sub RodeoAddQueryTotal()
+Sub Rodeo4h()
+StartTime = Timer
 Application.ScreenUpdating = False
     Dim importWS As Worksheet
     Dim lastrow As Long
@@ -18,27 +19,25 @@ Application.ScreenUpdating = False
 
     'assign importWS = Importsheet
 '    Set ImportWbk = Workbooks.Open(FileName:=strRodeoHistoryFile, UpdateLinks:=False)
-    Set ImportWbk = Workbooks(strRodeoHistoryFileName)
+    Set ImportWbk = Workbooks("RodeoImport4h.xlsm")
     ImportWbk.Worksheets.Add ImportWbk.Worksheets(1)
-    Set importWS = ActiveSheet
+    Set importWS = ImportWbk.Worksheets(1)
 '    Set importWS = ThisWorkbook.Worksheets("RodeoTotal")
     'Initialize error handling
         On Error GoTo Whoa
-    'Löschen alter Daten auf dem Rodeo Tabellenblatt
-'        importWS.UsedRange.Delete xlUp
-'        importWS.Activate
 
     'Web Query
 '**********************************************************************************************************************************
 '   Rodeo link with parameters as shown
 '   URL = "https://tiny.amazon.com/17n4oyxa8/rodeamazDTM2Item"  'dwelling time < 1h
-    URL = "https://tiny.amazon.com/ejyw3yjp/rodeamazDTM2Item" 'dwell time <30min
+'    URL = "https://tiny.amazon.com/md8cl8ex/rodeamazDTM2Item" 'dwell time <1min
+    URL = "https://tiny.amazon.com/1a0f446iv/rodeamazDTM2Item" '30min < dewll <4h
 
     Debug.Print "URL = " & URL
     Set qtRodeoTotal = importWS.QueryTables.Add(Connection:="URL;" & URL, Destination:=Range("A1"))
         With qtRodeoTotal  'Datei und Zielort auswählen
 '        Spaltenbreiten bleiben aktuell erhalten
-            .Name = "qTRodeoTotal"
+            .Name = "qTRodeoWorkpool"
             .FieldNames = True
             .RowNumbers = False
             .FillAdjacentFormulas = True
@@ -71,34 +70,40 @@ Application.ScreenUpdating = False
     importWS.Rows(lastrow & ":" & importWS.Rows.Count).Delete 'Zeilen ab der letzten geschriebenen Zeile löschen um Blattgröße zu minimieren
     importWS.Cells(lastrow + 2, 1).Value = URL
     importWS.Cells(lastrow + 3, 1).Value = Format(Now, "DD.MM.YYYY HH:MM") 'Zeitstempel Werte eintragen
-    qtDeleteInAllWbks
+'    qtDeleteInAllWbks
     counter = Format(Now, "DD.MM_HH.mm.ss")
-    importWS.Name = "RodeoTotal" & counter
+    importWS.Name = "Rodeo10min" & counter
     Call fDeleteColumns(importWS)
     importWS.Columns.AutoFit
     Call fRodeoColumnsWidth(importWS)
 '    ImportWbk.Save
-
+SecondsElapsed = Round(Timer - StartTime, 1)
+    Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
     Exit Sub
-
 Whoa:
     MsgBox Err.Description
-
     Exit Sub
 End Sub
 
-Sub UpdateRodeoTotal()
-'    Runtime Start
-    StartTime = Timer
-    currProcedureName = "UpdateRodeoTotal"
-    Debug.Print "============================ Beginn Sub " & currProcedureName & " ============================"
-    Debug.Print Now
-    With qtRodeoTotal
-        ThisWorkbook.Worksheets("4RodeoTotalImport").QueryTables(1).Refresh
+Sub UpdateRodeoWorkpool()
+StartTime = Timer
+    Dim importWS As Worksheet
+    Dim qt As QueryTable
+    Dim ImportWbk As Workbook
+    Dim counter As String
+    Set ImportWbk = Workbooks(strRodeoWorkpoolFileName)
+    Set importWS = ImportWbk.Worksheets(1)
+    Set qt = importWS.QueryTables(1)
+
+    With qt
+        .Refresh
     End With
-'    Timer end and print
-'************************************************************
-    SecondsElapsed = Round(Timer - StartTime, 2)
-'    Notify user in seconds
+    counter = Format(Now, "DD.MM_HH.mm.ss")
+    importWS.Name = "RodeoWkpool" & counter
+
+    Call fDeleteColumns(importWS)
+    importWS.Columns.AutoFit
+    Call fRodeoColumnsWidth(importWS)
+    SecondsElapsed = Round(Timer - StartTime, 1)
     Debug.Print "This code ran successfully in " & SecondsElapsed & " seconds"
 End Sub
