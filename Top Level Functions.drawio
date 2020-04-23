@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-04-23T20:06:53.804Z" agent="5.0 (Windows)" etag="aGjgBmNbUh0EnIPrmrxc" version="13.0.1" type="github">
+<mxfile host="app.diagrams.net" modified="2020-04-23T20:12:13.968Z" agent="5.0 (Windows)" etag="Vx4mJv5ZwOlRgf-8LMQk" version="13.0.1" type="github">
   <diagram id="jBZET01vkPqpSTQxdn9G" name="Page-1">
     <mxGraphModel dx="1212" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#000000" math="0" shadow="0">
       <root>
@@ -51,8 +51,8 @@
         <mxCell id="9UISh3da6Qj7bdewT5Nb-7" value="&lt;div&gt;Error detection&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;-Overflow (limit data)&lt;/div&gt;&lt;div&gt;-Forbidden characters&lt;/div&gt;&lt;div&gt;-Blank space&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;" vertex="1" parent="1">
           <mxGeometry x="980" y="294" width="180" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="9UISh3da6Qj7bdewT5Nb-9" value="&lt;ul style=&quot;font-size: 14px&quot;&gt;&lt;li&gt;Selection Screen for Structure&lt;br&gt;&lt;/li&gt;&lt;li&gt;Menu similar to polarion → select which attributes from import&lt;/li&gt;&lt;li&gt;&lt;br&gt;&lt;/li&gt;&lt;li&gt;&lt;br&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;fontColor=#FFFFFF;fontStyle=1;fontSize=20;" vertex="1" parent="1">
-          <mxGeometry x="260" y="268" width="170" height="310" as="geometry" />
+        <mxCell id="9UISh3da6Qj7bdewT5Nb-9" value="&lt;ul style=&quot;font-size: 14px&quot;&gt;&lt;li&gt;Selection Screen for Structure&lt;br&gt;&lt;/li&gt;&lt;li&gt;If via import: Menu similar to polarion → select which attributes &lt;br&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;fontColor=#FFFFFF;fontStyle=1;fontSize=20;spacing=0;labelBorderColor=#97D077;labelBackgroundColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="265" y="200" width="170" height="310" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
