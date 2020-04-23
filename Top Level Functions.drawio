@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2020-04-23T19:35:56.748Z" agent="5.0 (Windows)" etag="qP8xTR8Jfd_PeFJ6mJHI" version="13.0.1" type="github">
+<mxfile host="app.diagrams.net" modified="2020-04-23T20:06:53.804Z" agent="5.0 (Windows)" etag="aGjgBmNbUh0EnIPrmrxc" version="13.0.1" type="github">
   <diagram id="jBZET01vkPqpSTQxdn9G" name="Page-1">
-    <mxGraphModel dx="1160" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#000000" math="0" shadow="0">
+    <mxGraphModel dx="1212" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#000000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -13,23 +13,46 @@
             </Array>
           </mxGeometry>
         </mxCell>
+        <mxCell id="9UISh3da6Qj7bdewT5Nb-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#6a00ff;strokeColor=#3700CC;strokeWidth=6;curved=1;" edge="1" parent="1" source="C136vvrKEtoOyAXJBIPy-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="270" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="C136vvrKEtoOyAXJBIPy-1" value="Read Master Data Structure" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;" parent="1" vertex="1">
           <mxGeometry x="20" y="80" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="9UISh3da6Qj7bdewT5Nb-3" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3700CC;strokeWidth=6;fillColor=#6a00ff;" edge="1" parent="1" source="C136vvrKEtoOyAXJBIPy-2" target="C136vvrKEtoOyAXJBIPy-4">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="C136vvrKEtoOyAXJBIPy-2" value="&lt;div&gt;Generate Master Data Structure&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;" parent="1" vertex="1">
           <mxGeometry x="260" y="80" width="180" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="C136vvrKEtoOyAXJBIPy-3" value="Populate Table" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;" parent="1" vertex="1">
-          <mxGeometry x="500" y="80" width="180" height="120" as="geometry" />
+        <mxCell id="9UISh3da6Qj7bdewT5Nb-4" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3700CC;strokeWidth=6;fillColor=#6a00ff;" edge="1" parent="1" source="C136vvrKEtoOyAXJBIPy-3" target="C136vvrKEtoOyAXJBIPy-5">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="C136vvrKEtoOyAXJBIPy-4" value="Validate Data Fields" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;" parent="1" vertex="1">
-          <mxGeometry x="740" y="80" width="180" height="120" as="geometry" />
+        <mxCell id="9UISh3da6Qj7bdewT5Nb-8" value="" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3700CC;strokeWidth=6;fillColor=#6a00ff;fontColor=#FFFFFF;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="C136vvrKEtoOyAXJBIPy-3" target="C136vvrKEtoOyAXJBIPy-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C136vvrKEtoOyAXJBIPy-3" value="Populate Table" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;" parent="1" vertex="1">
+          <mxGeometry x="750" y="80" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="9UISh3da6Qj7bdewT5Nb-5" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3700CC;strokeWidth=6;fillColor=#6a00ff;" edge="1" parent="1" source="C136vvrKEtoOyAXJBIPy-4" target="C136vvrKEtoOyAXJBIPy-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C136vvrKEtoOyAXJBIPy-4" value="Validate Structure" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;" parent="1" vertex="1">
+          <mxGeometry x="510" y="80" width="180" height="120" as="geometry" />
         </mxCell>
         <mxCell id="C136vvrKEtoOyAXJBIPy-5" value="Validate Data Fields" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;" parent="1" vertex="1">
           <mxGeometry x="980" y="80" width="180" height="120" as="geometry" />
         </mxCell>
         <mxCell id="9UISh3da6Qj7bdewT5Nb-1" value="&lt;b&gt;&lt;font style=&quot;font-size: 24px&quot; color=&quot;#FFFFFF&quot;&gt;SAP compliant data tables&lt;br&gt;&lt;/font&gt;&lt;/b&gt;" style="ellipse;html=1;shape=endState;fillColor=#67AB9F;strokeColor=#ff0000;" vertex="1" parent="1">
           <mxGeometry x="570" y="700" width="120" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="9UISh3da6Qj7bdewT5Nb-7" value="&lt;div&gt;Error detection&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;-Overflow (limit data)&lt;/div&gt;&lt;div&gt;-Forbidden characters&lt;/div&gt;&lt;div&gt;-Blank space&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;" vertex="1" parent="1">
+          <mxGeometry x="980" y="294" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="9UISh3da6Qj7bdewT5Nb-9" value="&lt;ul style=&quot;font-size: 14px&quot;&gt;&lt;li&gt;Selection Screen for Structure&lt;br&gt;&lt;/li&gt;&lt;li&gt;Menu similar to polarion → select which attributes from import&lt;/li&gt;&lt;li&gt;&lt;br&gt;&lt;/li&gt;&lt;li&gt;&lt;br&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;fontColor=#FFFFFF;fontStyle=1;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="260" y="268" width="170" height="310" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
