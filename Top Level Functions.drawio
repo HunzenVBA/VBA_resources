@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-04-23T19:18:23.278Z" agent="5.0 (Windows)" etag="xcClAJlV5qfWHgWfIKJ5" version="13.0.1" type="github">
+<mxfile host="app.diagrams.net" modified="2020-04-23T19:35:56.748Z" agent="5.0 (Windows)" etag="qP8xTR8Jfd_PeFJ6mJHI" version="13.0.1" type="github">
   <diagram id="jBZET01vkPqpSTQxdn9G" name="Page-1">
     <mxGraphModel dx="1160" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#000000" math="0" shadow="0">
       <root>
@@ -27,6 +27,9 @@
         </mxCell>
         <mxCell id="C136vvrKEtoOyAXJBIPy-5" value="Validate Data Fields" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;" parent="1" vertex="1">
           <mxGeometry x="980" y="80" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="9UISh3da6Qj7bdewT5Nb-1" value="&lt;b&gt;&lt;font style=&quot;font-size: 24px&quot; color=&quot;#FFFFFF&quot;&gt;SAP compliant data tables&lt;br&gt;&lt;/font&gt;&lt;/b&gt;" style="ellipse;html=1;shape=endState;fillColor=#67AB9F;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="570" y="700" width="120" height="90" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
